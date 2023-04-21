@@ -292,7 +292,7 @@
 											"font": "Arial;13;0",
 											"left": -67,
 											"top": 584,
-											"width": 224.21044921875,
+											"width": 228.53955078125,
 											"height": 13
 										},
 										{
@@ -1064,20 +1064,35 @@
 											"top": 589,
 											"width": 246,
 											"height": 13
+										},
+										{
+											"_type": "ERDColumnView",
+											"_id": "AAAAAAGHorROKW5nAzo=",
+											"_parent": {
+												"$ref": "AAAAAAGHTLG3DmJufsk="
+											},
+											"model": {
+												"$ref": "AAAAAAGHorROHm5kH9U="
+											},
+											"font": "Arial;13;0",
+											"left": 837,
+											"top": 604,
+											"width": 246,
+											"height": 13
 										}
 									],
 									"font": "Arial;13;0",
 									"left": 832,
 									"top": 479,
 									"width": 256,
-									"height": 128
+									"height": 143
 								}
 							],
 							"font": "Arial;13;0",
 							"left": 832,
 							"top": 456,
 							"width": 256,
-							"height": 153,
+							"height": 166,
 							"nameLabel": {
 								"$ref": "AAAAAAGHTLG3DmJtcP4="
 							},
@@ -1492,7 +1507,7 @@
 									},
 									"font": "Arial;13;0",
 									"left": 1063,
-									"top": 627,
+									"top": 640,
 									"height": 13,
 									"alpha": 0.5235987755982988,
 									"distance": 30,
@@ -1526,7 +1541,7 @@
 								"$ref": "AAAAAAGHTLG3DmJsvgw="
 							},
 							"lineStyle": 2,
-							"points": "1048:608;1048:696;927:696",
+							"points": "1048:621;1048:696;927:696",
 							"nameLabel": {
 								"$ref": "AAAAAAGHUedXFObEBMk="
 							},
@@ -2101,7 +2116,7 @@
 							"name": "email",
 							"type": "VARCHAR",
 							"length": "100",
-							"unique": true
+							"primaryKey": true
 						},
 						{
 							"_type": "ERDColumn",
@@ -2111,8 +2126,7 @@
 							},
 							"name": "password",
 							"type": "VARCHAR",
-							"length": "100",
-							"nullable": true
+							"length": "100"
 						},
 						{
 							"_type": "ERDColumn",
@@ -2171,7 +2185,10 @@
 							"name": "grade_id",
 							"type": "DECIMAL",
 							"length": "2,0",
-							"foreignKey": true
+							"foreignKey": true,
+							"referenceTo": {
+								"$ref": "AAAAAAGHTJQjXGCjFc0="
+							}
 						},
 						{
 							"_type": "ERDColumn",
@@ -2182,7 +2199,10 @@
 							"name": "groupt_id",
 							"type": "DECIMAL",
 							"length": "3,0",
-							"foreignKey": true
+							"foreignKey": true,
+							"referenceTo": {
+								"$ref": "AAAAAAGHTJeCw2DR1kQ="
+							}
 						}
 					]
 				},
@@ -2214,7 +2234,10 @@
 							"name": "member_id",
 							"type": "DECIMAL",
 							"length": "10,0",
-							"foreignKey": true
+							"foreignKey": true,
+							"referenceTo": {
+								"$ref": "AAAAAAGHTJmxdmD3EU0="
+							}
 						}
 					]
 				},
@@ -2375,7 +2398,10 @@
 							"name": "board_tid",
 							"type": "DECIMAL",
 							"length": "3,0",
-							"foreignKey": true
+							"foreignKey": true,
+							"referenceTo": {
+								"$ref": "AAAAAAGHTK8vRGIdl8A="
+							}
 						},
 						{
 							"_type": "ERDColumn",
@@ -2386,7 +2412,10 @@
 							"name": "group_id",
 							"type": "DECIMAL",
 							"length": "3,0",
-							"foreignKey": true
+							"foreignKey": true,
+							"referenceTo": {
+								"$ref": "AAAAAAGHTJeCw2DR1kQ="
+							}
 						}
 					]
 				},
@@ -2458,7 +2487,10 @@
 							"name": "email",
 							"type": "VARCHAR",
 							"length": "300",
-							"foreignKey": true
+							"foreignKey": true,
+							"referenceTo": {
+								"$ref": "AAAAAAGHTJpyf2D/wWg="
+							}
 						},
 						{
 							"_type": "ERDColumn",
@@ -2496,10 +2528,13 @@
 							"_parent": {
 								"$ref": "AAAAAAGHTLG3DmJqox4="
 							},
-							"name": "board_t_id",
+							"name": "board_tid",
 							"type": "DECIMAL",
 							"length": "3,0",
-							"foreignKey": true
+							"foreignKey": true,
+							"referenceTo": {
+								"$ref": "AAAAAAGHTK8vRGIdl8A="
+							}
 						},
 						{
 							"_type": "ERDColumn",
@@ -2510,7 +2545,24 @@
 							"name": "category_tid",
 							"type": "DECIMAL",
 							"length": "3,0",
-							"foreignKey": true
+							"foreignKey": true,
+							"referenceTo": {
+								"$ref": "AAAAAAGHTLAT7GI79zg="
+							}
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "AAAAAAGHorROHm5kH9U=",
+							"_parent": {
+								"$ref": "AAAAAAGHTLG3DmJqox4="
+							},
+							"name": "member_id",
+							"type": "DECIMAL",
+							"length": "10,0",
+							"foreignKey": true,
+							"referenceTo": {
+								"$ref": "AAAAAAGHTJmxdmD3EU0="
+							}
 						}
 					]
 				},
@@ -2591,7 +2643,10 @@
 							"name": "bd_id",
 							"type": "DECIMAL",
 							"length": "10,0",
-							"foreignKey": true
+							"foreignKey": true,
+							"referenceTo": {
+								"$ref": "AAAAAAGHTLHmhmJ395I="
+							}
 						},
 						{
 							"_type": "ERDColumn",
@@ -2602,7 +2657,10 @@
 							"name": "comm_id",
 							"type": "DECIMAL",
 							"length": "10,0",
-							"foreignKey": true
+							"foreignKey": true,
+							"referenceTo": {
+								"$ref": "AAAAAAGHUdpi9+aPA2E="
+							}
 						}
 					]
 				}

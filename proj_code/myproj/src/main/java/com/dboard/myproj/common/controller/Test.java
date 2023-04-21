@@ -13,4 +13,10 @@ public class Test {
     public String test(@ModelAttribute("loginForm") LoginForm loginForm) {
         return "login/loginform";
     }
+
+
+    @GetMapping("/signup")
+    public String test1() {
+        return "login/signupform";
+    }
 }
