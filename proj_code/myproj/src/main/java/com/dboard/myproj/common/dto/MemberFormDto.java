@@ -1,6 +1,8 @@
 package com.dboard.myproj.common.dto;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -8,13 +10,13 @@ import javax.validation.constraints.NotNull;
 @Data
 public class MemberFormDto {
 
-    @NotEmpty
+    //@NotNull
     String email;
 
-    @NotEmpty
+    //@NotEmpty
     String password;
 
-    @NotNull
+    //@NotNull
     String member_name;
 
     String address;
@@ -23,5 +25,5 @@ public class MemberFormDto {
 
     String allias;
 
-    String group_id;
+    Integer groupt_id;
 }

@@ -20,30 +20,44 @@
     <h2>회원가입</h2>
   </div>
 
-  <form action="" method="post">
+  <form action="/signup" th:action th:object="${member}" method="post">
     <div>
-      <label for="loginId">회원 ID</label>
-      <input type="text" id="loginId"  class="form-control">
+      <label for="loginId">회원 ID (email)</label>
+      <input type="text" id="loginId" th:field="*{email}" class="form-control">
     </div>
 
     <div>
       <label for="password">비밀번호</label>
-      <input type="password" id="password"  class="form-control">
+      <input type="password" id="password"  th:field="*{password}" class="form-control">
     </div>
 
     <div>
       <label for="name">회원 이름 </label>
-      <input type="text" id="name"  class="form-control">
+      <input type="text" id="name" th:field="*{member_name}"  class="form-control">
+    </div>
+
+    <div>
+      <label for="allias">회원 별명(닉네임) </label>
+      <input type="text" id="allias" th:field="*{allias}"  class="form-control">
     </div>
 
     <div>
       <label for="address">주소</label>
-      <input type="text" id="address"  class="form-control">
+      <input type="text" id="address" th:field="*{address}"  class="form-control">
     </div>
 
     <div>
       <label for="party">소속</label>
-      <input type="text" id="party"  class="form-control">
+      <input type="text" id="party" th:field="*{party}"  class="form-control">
+    </div>
+
+    <div>
+      <label name="group" >그룹</label>
+      <select th:field="*{groupt_id}">
+        <option th:value="1" >ALL</option>
+        <option th:value="2">BASIC</option>
+      </select>
+
     </div>
 
     <hr class="my-4">
@@ -55,7 +69,6 @@
 
       <div class="col">
         <button class="w-100 btn btn-secondary btn-lg"
-                onclick="location.href='items.html'"
                 th:onclick="|location.href='@{/}'|"
                 type="button">취소</button>
       </div>

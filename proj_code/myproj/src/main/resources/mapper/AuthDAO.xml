@@ -1,0 +1,58 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dboard.myproj.common.dao.AuthDAO">
+    <select id="memberRetrieval" resultType="com.dboard.myproj.data.entity.Member">
+        SELECT
+            `email`         ,
+            `password`      ,
+            `member_name`   ,
+            `address`       ,
+            `party`         ,
+            `allias`        ,
+            `grade_id`      ,
+            `groupt_id`
+        FROM MEMBER
+    </select>
+
+    <insert id="memberSave" parameterType="com.dboard.myproj.common.dto.MemberFormDto" >
+        insert into MEMBER(
+            `email`         ,
+            `password`      ,
+            `member_name`   ,
+            `address`       ,
+            `party`         ,
+            `allias`        ,
+            `grade_id`      ,
+            `groupt_id`
+        )
+        values (
+                   #{email}         ,
+                   #{password}      ,
+                   #{member_name}   ,
+                   #{address}       ,
+                   #{party}         ,
+                   #{allias}        ,
+                   2                ,
+                   #{groupt_id}
+               )
+
+    </insert>
+
+    <select id="memberRetrievalByEmail"
+            parameterType="com.dboard.myproj.common.dto.MemberFormDto"
+            resultType="com.dboard.myproj.data.entity.Member"
+    >
+        SELECT
+            `email`         ,
+            `password`      ,
+            `member_name`   ,
+            `address`       ,
+            `party`         ,
+            `allias`        ,
+            `grade_id`      ,
+            `groupt_id`
+        FROM MEMBER
+        WHERE email=#{email}
+    </select>
+</mapper>
