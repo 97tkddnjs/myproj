@@ -25,6 +25,17 @@ public class AuthenticationController {
 
     @GetMapping("/")
     public String index(
+            @ModelAttribute("memberForm") MemberFormDto memberForm,
+            Model model
+
+    ) {
+//        model.addAttribute("msg", msg);
+        return "login/loginform";
+    }
+    // reload 즉 f5키는 post를 부르게 된다.
+    @PostMapping("/")
+    public String index2(
+            @ModelAttribute("memberForm") MemberFormDto memberForm,
             Model model
 
     ) {
@@ -32,28 +43,36 @@ public class AuthenticationController {
         return "login/loginform";
     }
 
-
-    @PostMapping("/")
-    public String indexPost(
-            @ModelAttribute("loginForm") MemberFormDto loginForm,
+    @PostMapping("/login")
+    public String loginPost(
+            @ModelAttribute("memberForm") MemberFormDto memberForm,
             HttpServletRequest request
             ) {
-
-        Member login_member = authservice.login(loginForm);
-
+        log.info("login "+memberForm);
+        Member login_member = authservice.login(memberForm);
+        log.info("info member "+login_member);
         if(login_member !=null){
             HttpSession session = request.getSession(true);
             session.setAttribute(SessionConst.LOGIN_MEMBER, login_member);
 
             if(login_member.getGrade_id()==1){
-                return "redirect:/mysite/admin";
+                return "redirect:/mysite/admin/";
             }else{
-                return "redirect:/mysite/user";
+                return "redirect:/mysite/user/";
             }
 
         }else{
             return "login/loginform";
         }
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        return "redirect:/";
     }
 
 
@@ -75,7 +94,6 @@ public class AuthenticationController {
 
         boolean sign = authservice.signUp(memberFormDto);
 
-        //https://mine-it-record.tistory.com/416
 
         if (sign) {
             log.info("dddd");

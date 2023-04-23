@@ -34,7 +34,12 @@ public class AuthenticationService {
     @Transactional
     public Member login(MemberFormDto dto) {
 
-        return authDAO.memberRetrievalByEmail(dto);
+        Member member = authDAO.memberRetrievalByEmail(dto);
 
+        if(member.getPassword().equals(dto.getPassword()) ){
+            return member;
+        }else{
+            return null;
+        }
     }
 }
