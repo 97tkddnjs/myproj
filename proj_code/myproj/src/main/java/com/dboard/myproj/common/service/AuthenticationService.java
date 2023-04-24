@@ -1,16 +1,11 @@
 package com.dboard.myproj.common.service;
 
 import com.dboard.myproj.common.dao.AuthDAO;
-import com.dboard.myproj.common.dto.LoginForm;
 import com.dboard.myproj.common.dto.MemberFormDto;
-import com.dboard.myproj.config.SessionConst;
 import com.dboard.myproj.data.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 @Service
 @RequiredArgsConstructor

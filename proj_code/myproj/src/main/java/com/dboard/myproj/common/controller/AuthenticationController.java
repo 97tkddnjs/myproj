@@ -1,9 +1,8 @@
 package com.dboard.myproj.common.controller;
 
-import com.dboard.myproj.common.dto.LoginForm;
 import com.dboard.myproj.common.dto.MemberFormDto;
 import com.dboard.myproj.common.service.AuthenticationService;
-import com.dboard.myproj.config.SessionConst;
+import com.dboard.myproj.config.AuthConst;
 import com.dboard.myproj.data.entity.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -53,7 +52,7 @@ public class AuthenticationController {
         log.info("info member "+login_member);
         if(login_member !=null){
             HttpSession session = request.getSession(true);
-            session.setAttribute(SessionConst.LOGIN_MEMBER, login_member);
+            session.setAttribute(AuthConst.LOGIN_MEMBER, login_member);
 
             if(login_member.getGrade_id()==1){
                 return "redirect:/mysite/admin/";

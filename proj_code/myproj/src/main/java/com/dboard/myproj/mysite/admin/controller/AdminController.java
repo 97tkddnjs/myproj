@@ -11,6 +11,7 @@ public class AdminController {
 
     @GetMapping("/")
     public String index() {
+        System.out.println("inthe =  /" );
         return "mysite/admin/index";
     }
 }
