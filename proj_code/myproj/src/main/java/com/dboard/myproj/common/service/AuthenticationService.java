@@ -1,7 +1,7 @@
 package com.dboard.myproj.common.service;
 
 import com.dboard.myproj.common.dao.AuthDAO;
-import com.dboard.myproj.common.dto.MemberFormDto;
+import com.dboard.myproj.data.dto.MemberFormDto;
 import com.dboard.myproj.data.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

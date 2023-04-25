@@ -1,6 +1,6 @@
 package com.dboard.myproj.common.controller;
 
-import com.dboard.myproj.common.dto.MemberFormDto;
+import com.dboard.myproj.data.dto.MemberFormDto;
 import com.dboard.myproj.common.service.AuthenticationService;
 import com.dboard.myproj.config.AuthConst;
 import com.dboard.myproj.data.entity.Member;
@@ -55,7 +55,7 @@ public class AuthenticationController {
             session.setAttribute(AuthConst.LOGIN_MEMBER, login_member);
 
             if(login_member.getGrade_id()==1){
-                return "redirect:/mysite/admin/";
+                return "redirect:/mysite/admin/home";
             }else{
                 return "redirect:/mysite/user/";
             }

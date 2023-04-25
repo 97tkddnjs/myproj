@@ -1,4 +1,4 @@
-package com.dboard.myproj.common.dto;
+package com.dboard.myproj.data.dto;
 
 import lombok.Data;
 

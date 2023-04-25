@@ -1,8 +1,7 @@
 package com.dboard.myproj.common.dao;
 
-import com.dboard.myproj.common.dto.MemberFormDto;
+import com.dboard.myproj.data.dto.MemberFormDto;
 import com.dboard.myproj.data.entity.Member;
-import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 

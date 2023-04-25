@@ -15,7 +15,7 @@
         FROM MEMBER
     </select>
 
-    <insert id="memberSave" parameterType="com.dboard.myproj.common.dto.MemberFormDto" >
+    <insert id="memberSave" parameterType="com.dboard.myproj.data.dto.MemberFormDto" >
         insert into MEMBER(
             `email`         ,
             `password`      ,
@@ -40,7 +40,7 @@
     </insert>
 
     <select id="memberRetrievalByEmail"
-            parameterType="com.dboard.myproj.common.dto.MemberFormDto"
+            parameterType="com.dboard.myproj.data.dto.MemberFormDto"
             resultType="com.dboard.myproj.data.entity.Member"
     >
         SELECT
