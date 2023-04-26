@@ -1,31 +1,26 @@
 <!doctype html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
-    <!-- sbb CSS -->
-    <!--    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">-->
-    <title>Website!</title>
-    <style>
-        .container {
-            max-width: 900px;
-        }
-    </style>
-</head>
+<nav th:replace="~{mysite/admin/common/header :: adminHead}"></nav>
 <body>
 <nav th:replace="~{mysite/admin/common/navbar :: navbarFragment}"></nav>
 
-<div  class="container my-3">
-        hello everyone admin member page
+<div  class="container my-5">
 
-        <div class="container-fluid my-3">
-            <form class="d-flex">
+        <div class="search my-3">
+
+            <form class="d-inline-flex">
+                    <select class="m-1">
+                        <option value="1" >회원</option>
+                        <option value="2">그룹</option>
+                        <option value="3" >제한 회원</option>
+                    </select>
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                 <button class="btn btn-outline-success" type="submit">Search</button>
+
             </form>
+
+            <button style="float: left"> button</button>
+
         </div>
 
         <table class="table">
@@ -43,5 +38,5 @@
 </div>
 </body>
 
-</div>
+
 </html>
