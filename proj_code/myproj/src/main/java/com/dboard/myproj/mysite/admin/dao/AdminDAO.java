@@ -1,7 +1,10 @@
 package com.dboard.myproj.mysite.admin.dao;
 
 
+import com.dboard.myproj.data.entity.Member;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
  *
@@ -16,6 +19,5 @@ import org.apache.ibatis.annotations.Mapper;
 public interface AdminDAO {
 
 
-
-
+    List<Member> findAllUserMember();
 }

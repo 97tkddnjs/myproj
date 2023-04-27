@@ -6,22 +6,18 @@
 
 <div  class="container my-5">
 
-        <div class="search my-3">
-
-            <form class="d-inline-flex">
-                    <select class="m-1">
-                        <option value="1" >회원</option>
-                        <option value="2">그룹</option>
-                        <option value="3" >제한 회원</option>
-                    </select>
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-
-            </form>
-
-            <button style="float: left"> button</button>
-
-        </div>
+    <div class="search my-3">
+        <form class="d-inline-flex">
+            <select class="m-1">
+                <option value="1">회원</option>
+                <option value="2">그룹</option>
+                <option value="3">제한 회원</option>
+            </select>
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+        <button id="group_b" class="btn btn-primary" >button</button>
+    </div>
 
         <table class="table">
             <thead>
@@ -32,6 +28,13 @@
                 <th> 그룹 </th>
             </thead>
             <tbody>
+                <tr th:each="idx : ${#numbers.sequence(0,#lists.size(allmember) -1)}">
+                    <td th:text="${idx+1}"></td>
+                    <td th:text="${allmember[idx].email}"></td>
+                    <td th:text="${allmember[idx].member_name}"></td>
+                    <td th:text="${allmember[idx].allias}"></td>
+                    <td th:text="${allmember[idx].groupt_id}"></td>
+                </tr>
 
             </tbody>
         </table>
