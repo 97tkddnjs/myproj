@@ -2,17 +2,27 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.dboard.myproj.mysite.admin.dao.AdminDAO">
-    <select id="findAllUserMember" resultType="com.dboard.myproj.data.entity.Member">
+    <select id="findAllUserMember" resultType="com.dboard.myproj.data.dto.AdminMemberDTO">
         SELECT
-            M.`email`         ,
-            `password`      ,
-            `member_name`   ,
-            `address`       ,
-            `party`         ,
-            `allias`        ,
-            `grade_id`      ,
-            `group_type`
-        FROM MEMBER M , `GROUPS` G
-        WHERE M.`groupt_id` = G.`group_id`
+            TMP.`member_id`		,
+            TMP.`email`       	,
+            TMP.`password`      ,
+            TMP.`member_name`   ,
+            TMP.`address`       ,
+            TMP.`party`         ,
+            TMP.`allias`        ,
+            TMP.`grade_id`      ,
+            GR.`grade_type`     ,
+            TMP.`group_type`	,
+            R.`restrict_id`
+
+        FROM
+            (
+                SELECT *
+                FROM MEMBER M inner join `GROUPS` G on  M.`groupt_id` = G.`group_id`
+            ) TMP
+                left outer join `RESTRICT` R on TMP.member_id = R.member_id
+           , GRADE GR
+        WHERE TMP.grade_id = GR.grade_id;
     </select>
 </mapper>

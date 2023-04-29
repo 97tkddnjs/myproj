@@ -16,7 +16,10 @@
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
-        <button id="group_b" class="btn btn-primary" >button</button>
+        <button id="group_b" class="btn btn-primary"  >button</button>
+        <!-- Button trigger modal -->
+
+
     </div>
 
         <table class="table">
@@ -30,15 +33,45 @@
             <tbody>
                 <tr th:each="idx : ${#numbers.sequence(0,#lists.size(allmember) -1)}">
                     <td th:text="${idx+1}"></td>
-                    <td th:text="${allmember[idx].email}"></td>
+                    <td>
+                        <a onclick="fnModuleInfo('dd')">
+                            <i class="fa fa-arrow-circle-right fa-lg"  th:text="${allmember[idx].email}">ddd</i>
+                        </a>
+                    </td>
                     <td th:text="${allmember[idx].member_name}"></td>
                     <td th:text="${allmember[idx].allias}"></td>
-                    <td th:text="${allmember[idx].groupt_id}"></td>
+<!--                    <td th:text="${allmember[idx].groupt_id}"></td>-->
                 </tr>
 
             </tbody>
         </table>
 </div>
+
+
+<script>
+    /*모달*/
+    function fnModuleInfo(str){
+        alert(str)
+        $('#MoaModal .modal-content').load("modal");
+        $('#MoaModal').modal();
+
+    }
+
+</script>
+<!-- Moa Modal Button -->
+<!-- Moa Modal Button -->
+<!-- Moa Modal-->
+<div class="modal fade" id="MoaModal" tabindex="-1" role="dialog" aria-labelledby="historyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+
+        </div>
+    </div>
+</div>
+
+
+
+
 </body>
 
 

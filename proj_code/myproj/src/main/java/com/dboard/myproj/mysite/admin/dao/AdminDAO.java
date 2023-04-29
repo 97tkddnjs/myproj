@@ -1,6 +1,7 @@
 package com.dboard.myproj.mysite.admin.dao;
 
 
+import com.dboard.myproj.data.dto.AdminMemberDTO;
 import com.dboard.myproj.data.entity.Member;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -18,6 +19,5 @@ import java.util.List;
 @Mapper
 public interface AdminDAO {
 
-
-    List<Member> findAllUserMember();
+    List<AdminMemberDTO> findAllUserMember();
 }

@@ -1,6 +1,6 @@
 package com.dboard.myproj.mysite.admin.service;
 
-import com.dboard.myproj.data.entity.Member;
+import com.dboard.myproj.data.dto.AdminMemberDTO;
 import com.dboard.myproj.mysite.admin.dao.AdminDAO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ public class AdminService {
     private final AdminDAO dao;
 
     @Transactional
-    public List<Member> findAllUserMember(){
+    public List<AdminMemberDTO> findAllUserMember(){
 
         return dao.findAllUserMember();
     }

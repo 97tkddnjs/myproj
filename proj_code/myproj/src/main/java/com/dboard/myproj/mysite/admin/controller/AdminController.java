@@ -1,6 +1,7 @@
 package com.dboard.myproj.mysite.admin.controller;
 
 
+import com.dboard.myproj.data.dto.AdminMemberDTO;
 import com.dboard.myproj.data.entity.Member;
 import com.dboard.myproj.mysite.admin.service.AdminService;
 import lombok.RequiredArgsConstructor;
@@ -47,10 +48,18 @@ public class AdminController {
     public String memberAdmin(Model model) {
 
 
-        List<Member> allUserMember = service.findAllUserMember();
+        List<AdminMemberDTO> allUserMember = service.findAllUserMember();
         model.addAttribute("allmember",allUserMember);
 
 
         return "mysite/admin/adminmember";
     }
+    @GetMapping("/modal")
+    public String modal() {
+        //System.out.println("inthe =  /" );
+        log.info("modal page into ");
+
+        return "mysite/admin/modal";
+    }
+
 }
