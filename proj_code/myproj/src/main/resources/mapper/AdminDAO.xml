@@ -2,7 +2,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.dboard.myproj.mysite.admin.dao.AdminDAO">
-    <select id="findAllUserMember" resultType="com.dboard.myproj.data.dto.AdminMemberDTO">
+    <select id="findAllUserMember" parameterType="com.dboard.myproj.config.page.SearchDto"
+            resultType="com.dboard.myproj.data.dto.AdminMemberDTO">
         SELECT
             TMP.`member_id`		,
             TMP.`email`       	,
@@ -23,6 +24,15 @@
             ) TMP
                 left outer join `RESTRICT` R on TMP.member_id = R.member_id
            , GRADE GR
-        WHERE TMP.grade_id = GR.grade_id;
+        WHERE TMP.grade_id = GR.grade_id
+        ORDER BY TMP.`member_id`
+        LIMIT #{pagination.limitStart}, #{recordSize} ;
+    </select>
+
+    <select id="countMember" parameterType="com.dboard.myproj.config.page.SearchDto"
+            resultType="int">
+    SELECT
+        COUNT(*)
+    FROM MEMBER;
     </select>
 </mapper>

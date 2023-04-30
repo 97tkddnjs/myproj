@@ -1,5 +1,7 @@
 package com.dboard.myproj.common.dao;
 
+import com.dboard.myproj.config.page.Pagination;
+import com.dboard.myproj.config.page.SearchDto;
 import com.dboard.myproj.data.dto.AdminMemberDTO;
 import com.dboard.myproj.data.dto.MemberFormDto;
 import com.dboard.myproj.data.entity.Member;
@@ -56,7 +58,12 @@ class AuthDAOTest {
     @DisplayName("bb")
     void test1(){
 
-        List<AdminMemberDTO> allUserMember = adminDAO.findAllUserMember();
+        SearchDto params = new SearchDto();
+        int count = adminDAO.countMember(params);
+        Pagination pagination = new Pagination(count, params);
+        params.setPagination(pagination);
+
+        List<AdminMemberDTO> allUserMember = adminDAO.findAllUserMember(params);
         allUserMember.stream().forEach(
                 member_admin -> System.out.println("member_admin = " + member_admin)
         );
