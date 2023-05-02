@@ -1,7 +1,32 @@
 
-
 <!-- Modal -->
 <!-- histoty Modal-->
+
+<script>
+  function deleteMember(memberId) {
+    var csrfToken = /*[[${_csrf.token}]]*/ '';
+    var csrfHeader = /*[[${_csrf.headerName}]]*/ '';
+    var url = '/members/' + memberId;
+
+    $.ajax({
+      url: url,
+      type: 'DELETE',
+      beforeSend: function(xhr) {
+        xhr.setRequestHeader(csrfHeader, csrfToken);
+      },
+      success: function(data) {
+        if (data.result === 'ok') {
+          alert('삭제가 완료되었습니다.');
+          location.reload();
+        } else {
+          alert('삭제에 실패하였습니다.');
+        }
+      },
+      error: function(xhr, status, error) {
+        alert('삭제 중 오류가 발생하였습니다.');
+      }
+    });
+</script>
 <div class="modal-header">
   <h5 class="modal-title" id="historyModalLabel">ID - Modal</h5>
   <button class="close" type="button" data-dismiss="modal" aria-label="Close">
@@ -11,31 +36,44 @@
 <div class="modal-body">
 
   show please
-  <div class="table-responsive my-4" >
-    <div class="container">
-    </div>
-    <table class="table table-hover">
-      <thead class="text-center">
-      <tr class="content">
-        <th class="text-center">
-          ID
-        </th>
-        <th class="text-center">
-          PassWord
-        </th>
-      </tr>
-      </thead>
-      <tbody class="text-center">
-        <div th:>
-          <td>1</td>
-        </div>
+  <div>
+    <label for="loginId">회원 ID (email)</label>
+    <input type="text" id="loginId"  readonly="true" class="form-control">
+  </div>
 
-      </tbody>
+  <div>
+    <label for="password">비밀번호</label>
+    <input type="password" id="password" class="form-control">
+  </div>
 
-    </table>
+  <div>
+    <label for="name">회원 이름 </label>
+    <input type="text" id="name"   class="form-control">
+  </div>
+
+  <div>
+    <label for="allias">회원 별명(닉네임) </label>
+    <input type="text" id="allias"   class="form-control">
+  </div>
+
+  <div>
+    <label for="address">주소</label>
+    <input type="text" id="address"   class="form-control">
+  </div>
+
+  <div>
+    <label for="party">소속</label>
+    <input type="text" id="party"  class="form-control">
+  </div>
+
+  <div>
+    <label name="group" >그룹</label>
+
+
   </div>
 
 </div>
 <div class="modal-footer">
+  <button class="btn btn-primary" type="button" >수정</button>
   <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
 </div>

@@ -30,23 +30,31 @@
                 <th> 별명 </th>
                 <th> 그룹 </th>
             </thead>
+
+            <!-- /* list 내용 채우는 공간임 */-->
             <tbody id="list">
-<!--                <tr th:each="idx : ${#numbers.sequence(0,#lists.size(allmember.list) -1)}">-->
-<!--                    <td th:text="${idx+1}"></td>-->
-<!--                    <td>-->
-<!--                        <a onclick="fnModuleInfo('dd')">-->
-<!--                            <i class="fa fa-arrow-circle-right fa-lg"  th:text="${allmember.list[idx].email}">ddd</i>-->
-<!--                        </a>-->
-<!--                    </td>-->
-<!--                    <td th:text="${allmember.list[idx].member_name}"></td>-->
-<!--                    <td th:text="${allmember.list[idx].allias}"></td>-->
-<!--                    <td th:text="${allmember[idx].groupt_id}"></td>-->
-<!--                </tr>-->
+
 
             </tbody>
         </table>
-</div>
 
+
+        <!--/* 페이지네이션 렌더링 영역 */-->
+        <div class="paging">
+
+        </div>
+</div>
+<script>
+    /*모달*/
+    function fnModuleInfo(str){
+
+        $('#MoaModal .modal-content').load("modal");
+
+        $('#MoaModal').modal();
+
+    }
+
+</script>
 
     <script th:inline="javascript">
         /*<![CDATA[*/
@@ -62,7 +70,7 @@
 
             // 1. PagingResponse의 멤버인 List<T> 타입의 list를 의미
             const list = [[ ${allmember.list} ]];
-            alert(list);
+            // alert(list);
             // 2. 리스트가 비어있는 경우, 행에 "검색 결과가 없다"는 메시지를 출력하고, 페이지 번호(페이지네이션) HTML을 제거(초기화)한 후 로직을 종료
             if ( !list.length ) {
                 document.getElementById('list').innerHTML = '<td colspan="6"><div className="no_data_msg">검색된 결과가 없습니다.</div></td>';
@@ -96,18 +104,20 @@
              * 2. 기존에 타임리프(Thymeleaf)를 이용해서 리스트 데이터를 그리던 것과 유사한 로직
              *    기존에는 게시글 번호를 (전체 데이터 수 - loop의 인덱스 번호)로 처리했으나, 현재는 (전체 데이터 수 - ((현재 페이지 번호 - 1) * 페이지당 출력할 데이터 개수))로 정밀히 계산
              */
-            list.forEach(row => {
+            list.forEach((row, idx) => {
                 html += `
                   <tr>
-
                     <td>
-                        <a onclick="fnModuleInfo('dd')">
-                            <i class="fa fa-arrow-circle-right fa-lg"  th:text="${row.email}">${row.email}</i>
+                        ${idx+1}
+                    </td>
+                    <td>
+                        <a onclick="fnModuleInfo('${row.email}')">
+                            <i class="fa fa-arrow-circle-right fa-lg"  >${row.email}</i>
                         </a>
                     </td>
-                    <td th:text="${row.member_name}"></td>
-                    <td th:text="${row.allias}"></td>
-
+                    <td>${row.member_name}</td>
+                    <td>${row.allias}</td>
+                    <td>${row.group_type}</td>
                 </tr>
                     `;
             })
@@ -187,16 +197,7 @@
 
 
 
-<script>
-    /*모달*/
-    function fnModuleInfo(str){
-        alert(str)
-        $('#MoaModal .modal-content').load("modal");
-        $('#MoaModal').modal();
 
-    }
-
-</script>
 <!-- Moa Modal Button -->
 <!-- Moa Modal Button -->
 <!-- Moa Modal-->
