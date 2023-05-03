@@ -69,4 +69,14 @@ class AuthDAOTest {
         );
 
     }
+
+
+    @Test
+    void test2() {
+
+        String email = "test@a.com";
+        AdminMemberDTO userMemberByEmail = adminDAO.findUserMemberByEmail(email);
+        System.out.println("userMemberByEmail = " + userMemberByEmail);
+
+    }
 }

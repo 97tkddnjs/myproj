@@ -3,29 +3,7 @@
 <!-- histoty Modal-->
 
 <script>
-  function deleteMember(memberId) {
-    var csrfToken = /*[[${_csrf.token}]]*/ '';
-    var csrfHeader = /*[[${_csrf.headerName}]]*/ '';
-    var url = '/members/' + memberId;
 
-    $.ajax({
-      url: url,
-      type: 'DELETE',
-      beforeSend: function(xhr) {
-        xhr.setRequestHeader(csrfHeader, csrfToken);
-      },
-      success: function(data) {
-        if (data.result === 'ok') {
-          alert('삭제가 완료되었습니다.');
-          location.reload();
-        } else {
-          alert('삭제에 실패하였습니다.');
-        }
-      },
-      error: function(xhr, status, error) {
-        alert('삭제 중 오류가 발생하였습니다.');
-      }
-    });
 </script>
 <div class="modal-header">
   <h5 class="modal-title" id="historyModalLabel">ID - Modal</h5>
@@ -38,7 +16,7 @@
   show please
   <div>
     <label for="loginId">회원 ID (email)</label>
-    <input type="text" id="loginId"  readonly="true" class="form-control">
+    <input type="text" id="loginId" th:field="*{member.email}" readonly="true" class="form-control">
   </div>
 
   <div>
@@ -68,7 +46,13 @@
 
   <div>
     <label name="group" >그룹</label>
+    <input type="text" id="group" th:field="*{member.group_type}" class="form-control">
 
+  </div>
+
+  <div>
+    <label name="restrict" >제한 여부</label>
+    <input type="text" id="restrict" th:field="*{member.restrict_id}" class="form-control">
 
   </div>
 

@@ -45,4 +45,10 @@ public class AdminService {
     }
 
 
+    @Transactional
+    public AdminMemberDTO findUserMemberByEmail(String email) {
+
+        return dao.findUserMemberByEmail(email);
+    }
+
 }

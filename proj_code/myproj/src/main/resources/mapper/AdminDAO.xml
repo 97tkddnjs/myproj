@@ -35,4 +35,31 @@
         COUNT(*)
     FROM MEMBER;
     </select>
+
+    <select id="findUserMemberByEmail" parameterType="String"
+            resultType="com.dboard.myproj.data.dto.AdminMemberDTO">
+
+        SELECT
+            TMP.`member_id`		,
+            TMP.`email`       	,
+            TMP.`password`      ,
+            TMP.`member_name`   ,
+            TMP.`address`       ,
+            TMP.`party`         ,
+            TMP.`allias`        ,
+            TMP.`grade_id`      ,
+            GR.`grade_type`     ,
+            TMP.`group_type`	,
+            R.`restrict_id`
+
+        FROM
+            (
+                SELECT *
+                FROM MEMBER M inner join `GROUPS` G on  M.`groupt_id` = G.`group_id`
+            ) TMP
+                left outer join `RESTRICT` R on TMP.member_id = R.member_id
+           , GRADE GR
+        WHERE TMP.grade_id = GR.grade_id
+        AND TMP.email = #{email};
+    </select>
 </mapper>

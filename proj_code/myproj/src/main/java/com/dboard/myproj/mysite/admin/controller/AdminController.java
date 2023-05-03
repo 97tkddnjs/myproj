@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Map;
@@ -59,10 +60,12 @@ public class AdminController {
         return "mysite/admin/adminmember";
     }
     @GetMapping("/modal")
-    public String modal(Model model ) {
+    public String modal(@RequestParam("email") String email,  Model model ) {
         //System.out.println("inthe =  /" );
-        log.info("modal page into ");
+        log.info("modal page into " + email);
 
+        AdminMemberDTO memberDetail = service.findUserMemberByEmail(email);
+        model.addAttribute("member", memberDetail);
         return "mysite/admin/modal";
     }
 

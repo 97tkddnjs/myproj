@@ -23,4 +23,6 @@ public interface AdminDAO {
     List<AdminMemberDTO> findAllUserMember(SearchDto params);
 
     int countMember(SearchDto params);
+
+    AdminMemberDTO findUserMemberByEmail(String email);
 }

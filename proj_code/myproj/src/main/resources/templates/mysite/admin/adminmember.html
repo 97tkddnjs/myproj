@@ -48,8 +48,7 @@
     /*모달*/
     function fnModuleInfo(str){
 
-        $('#MoaModal .modal-content').load("modal");
-
+        $('#MoaModal .modal-content').load("modal?email="+str);
         $('#MoaModal').modal();
 
     }
