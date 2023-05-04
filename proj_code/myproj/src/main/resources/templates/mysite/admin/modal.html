@@ -3,7 +3,37 @@
 <!-- histoty Modal-->
 
 <script>
+  $(document).ready(function() {
+			$("#writeBtn").click(function() {
 
+				// Javascript 객체로 전달해야해서
+				$.ajax({
+					type:"POST"
+					//, encType:"multipart/form-data"
+					, url:"${pageContext.request.contextPath}/dynamicboard/boardupload"
+					, data : form
+					, processData : false
+					, contentType : false
+					, cache : false
+					, success : function(result) {
+						if(result=="")
+							alert("yes");
+						if(result > 0) {
+							alert(result)
+							alert("게시글 작성 성공");
+						} else {
+							alert(result)
+							alert("게시글 작성 실패 \n 관리자에게 문의 바랍니다");
+						}
+						location.href="./dynamicboard/home";
+					} //call back function
+					, error : function(xhr) {
+						alert(xhr)
+						alert("통신 실패");
+					} //call back function
+				}); // ajax
+			}); // click
+		}); // ready
 </script>
 <div class="modal-header">
   <h5 class="modal-title" id="historyModalLabel">ID - Modal</h5>
@@ -14,50 +44,54 @@
 <div class="modal-body">
 
   show please
-  <div>
-    <label for="loginId">회원 ID (email)</label>
-    <input type="text" id="loginId" th:field="*{member.email}" readonly="true" class="form-control">
-  </div>
+  <form  th:object="${member}">
+    <div>
+      <label for="loginId">회원 ID (email)</label>
+      <input type="text" id="loginId" th:field="*{email}" readonly="true" class="form-control">
+    </div>
 
-  <div>
-    <label for="password">비밀번호</label>
-    <input type="password" id="password" class="form-control">
-  </div>
+    <div>
+      <label for="password">비밀번호</label>
+      <input type="password" id="password" th:field="*{email}" class="form-control">
+    </div>
 
-  <div>
-    <label for="name">회원 이름 </label>
-    <input type="text" id="name"   class="form-control">
-  </div>
+    <div>
+      <label for="name">회원 이름 </label>
+      <input type="text" id="name"  th:field="*{email}" class="form-control">
+    </div>
 
-  <div>
-    <label for="allias">회원 별명(닉네임) </label>
-    <input type="text" id="allias"   class="form-control">
-  </div>
+    <div>
+      <label for="allias">회원 별명(닉네임) </label>
+      <input type="text" id="allias"  th:field="*{email}" class="form-control">
+    </div>
 
-  <div>
-    <label for="address">주소</label>
-    <input type="text" id="address"   class="form-control">
-  </div>
+    <div>
+      <label for="address">주소</label>
+      <input type="text" id="address" th:field="*{email}"  class="form-control">
+    </div>
 
-  <div>
-    <label for="party">소속</label>
-    <input type="text" id="party"  class="form-control">
-  </div>
+    <div>
+      <label for="party">소속</label>
+      <input type="text" id="party" th:field="*{email}" class="form-control">
+    </div>
 
-  <div>
-    <label name="group" >그룹</label>
-    <input type="text" id="group" th:field="*{member.group_type}" class="form-control">
+    <div>
+      <label name="group" >그룹</label>
+      <input type="text" id="group" th:field="*{group_type}" class="form-control">
 
-  </div>
+    </div>
 
-  <div>
-    <label name="restrict" >제한 여부</label>
-    <input type="text" id="restrict" th:field="*{member.restrict_id}" class="form-control">
+    <div>
+      <label name="restrict" >제한 여부</label>
+      <input type="text" id="restrict" th:field="*{restrict_id}" class="form-control">
 
-  </div>
+    </div>
 
+    <div class="modal-footer">
+      <button class="btn btn-primary" id="writeBtn" type="button">수정</button>
+      <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+    </div>
+
+  </form>
 </div>
-<div class="modal-footer">
-  <button class="btn btn-primary" type="button" >수정</button>
-  <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-</div>
+

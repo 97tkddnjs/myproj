@@ -4,6 +4,7 @@ import com.dboard.myproj.config.page.Pagination;
 import com.dboard.myproj.config.page.PagingResponse;
 import com.dboard.myproj.config.page.SearchDto;
 import com.dboard.myproj.data.dto.AdminMemberDTO;
+import com.dboard.myproj.data.entity.Group;
 import com.dboard.myproj.mysite.admin.dao.AdminDAO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -51,4 +52,9 @@ public class AdminService {
         return dao.findUserMemberByEmail(email);
     }
 
+
+    public List<Group> findAllGroup() {
+
+        return dao.findAllGroup();
+    }
 }

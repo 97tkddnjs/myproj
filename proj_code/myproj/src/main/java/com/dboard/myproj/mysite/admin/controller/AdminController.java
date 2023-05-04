@@ -59,6 +59,11 @@ public class AdminController {
 
         return "mysite/admin/adminmember";
     }
+
+    /**
+     *  그룹이랑 제한 여부 정도만 건들일 수 있음....
+     *
+     * */
     @GetMapping("/modal")
     public String modal(@RequestParam("email") String email,  Model model ) {
         //System.out.println("inthe =  /" );
@@ -69,4 +74,11 @@ public class AdminController {
         return "mysite/admin/modal";
     }
 
+
+    @GetMapping("/group")
+    public String makeGroup() {
+
+        service.findAllGroup();
+        return "";
+    }
 }
