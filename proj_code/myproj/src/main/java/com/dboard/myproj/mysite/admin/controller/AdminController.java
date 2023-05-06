@@ -70,6 +70,8 @@ public class AdminController {
         log.info("modal page into " + email);
 
         AdminMemberDTO memberDetail = service.findUserMemberByEmail(email);
+
+        log.info("send modal info : " + memberDetail);
         model.addAttribute("member", memberDetail);
         return "mysite/admin/modal";
     }
