@@ -57,4 +57,9 @@ public class AdminService {
 
         return dao.findAllGroup();
     }
+
+    @Transactional
+    public int updateMemberByEmail(AdminMemberDTO member) {
+            return dao.updateMemberByEmail(member);
+    }
 }

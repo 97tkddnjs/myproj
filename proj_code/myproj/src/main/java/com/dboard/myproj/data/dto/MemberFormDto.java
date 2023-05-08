@@ -25,5 +25,5 @@ public class MemberFormDto {
 
     String allias;
 
-    Integer groupt_id;
+    Integer group_id;
 }

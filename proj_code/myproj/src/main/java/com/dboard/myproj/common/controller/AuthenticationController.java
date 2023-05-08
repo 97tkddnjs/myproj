@@ -82,7 +82,7 @@ public class AuthenticationController {
         return "login/signupform";
     }
 
-    @PostMapping("signup")
+    @PostMapping("/signup")
     public String signupPost(
             @ModelAttribute("member") MemberFormDto memberFormDto,
             RedirectAttributes re

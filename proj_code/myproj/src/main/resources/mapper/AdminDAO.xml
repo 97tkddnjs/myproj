@@ -20,7 +20,7 @@
         FROM
             (
                 SELECT *
-                FROM MEMBER M inner join `GROUPS` G on  M.`groupt_id` = G.`group_id`
+                FROM MEMBER M inner join `GROUPS` G on  M.`group_id` = G.`group_id`
             ) TMP
                 left outer join `RESTRICT` R on TMP.member_id = R.member_id
            , GRADE GR
@@ -55,7 +55,7 @@
         FROM
             (
                 SELECT *
-                FROM MEMBER M inner join `GROUPS` G on  M.`groupt_id` = G.`group_id`
+                FROM MEMBER M inner join `GROUPS` G on  M.`group_id` = G.`group_id`
             ) TMP
                 left outer join `RESTRICT` R on TMP.member_id = R.member_id
            , GRADE GR

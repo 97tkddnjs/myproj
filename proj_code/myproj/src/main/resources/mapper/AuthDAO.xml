@@ -11,7 +11,7 @@
             `party`         ,
             `allias`        ,
             `grade_id`      ,
-            `groupt_id`
+            `group_id`
         FROM MEMBER
     </select>
 
@@ -24,7 +24,7 @@
             `party`         ,
             `allias`        ,
             `grade_id`      ,
-            `groupt_id`
+            `group_id`
         )
         values (
                    #{email}         ,
@@ -34,7 +34,7 @@
                    #{party}         ,
                    #{allias}        ,
                    2                ,
-                   #{groupt_id}
+                   #{group_id}
                )
 
     </insert>
@@ -51,7 +51,7 @@
             `party`         ,
             `allias`        ,
             `grade_id`      ,
-            `groupt_id`
+            `group_id`
         FROM MEMBER
         WHERE email=#{email}
     </select>

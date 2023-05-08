@@ -19,26 +19,17 @@ public class RestAdminController {
 
     private final AdminService service;
 
+
     @PostMapping (value = "/meber/update")
     Map<String, String> updateMember(@RequestBody AdminMemberDTO member) {
 
         log.info("rest check "+member);
-
+        service.updateMemberByEmail(member);
         Map<String, String> response = new HashMap<>();
         response.put("result","ok" );
 
         return response;
     }
 
-    @GetMapping (value = "/meber/update")
-    Map<String, String> updateMember2(AdminMemberDTO member) {
-
-        log.info("rest check "+member);
-
-        Map<String, String> response = new HashMap<>();
-        response.put("result","ok" );
-
-        return response;
-    }
 
 }

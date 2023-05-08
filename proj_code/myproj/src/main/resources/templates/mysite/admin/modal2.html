@@ -1,0 +1,132 @@
+
+<!-- Modal -->
+<!-- histoty Modal-->
+
+<script>
+
+
+  $(document).ready(function() {
+			$("#putBtn").click(function() {
+
+				// Javascript 객체로 전달해야해서
+                var form = $("#memberDetail").serialize();
+                alert(form);
+                var searchObj = JSON.parse('{"' + decodeURI(form).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
+                form = (JSON.stringify(searchObj));
+                alert(form);
+                // test={
+                //   //member_id : 1,
+                //   email : $("#loginId").val(),
+                //   password : $("#password").val(),
+                //   member_name : $("#name").val(),
+                //   address : $("#address").val()
+                //
+                // }
+                //alert(JSON.stringify(test))
+                // form = JSON.stringify(form);
+                //alert(form)
+				$.ajax({
+
+					type:"POST"
+					//, encType:"multipart/form-data"
+					, url:"/mysite/admin/rest/meber/update"
+					, data : form
+					, processData : false
+                  , contentType :  "application/json; charset=utf-8"
+                  //, contentType :  false
+                    , cache : false
+					, success : function(result) {
+						if(result=="")
+							alert("yes");
+						if(result > 0) {
+							alert(result)
+							alert("게시글 작성 성공");
+						} else {
+							alert(result)
+							alert("게시글 작성 실패 \n 관리자에게 문의 바랍니다");
+						}
+						location.href="/mysite/admin/member";
+					} //call back function
+					, error : function(xhr) {
+						alert(xhr)
+						alert("통신 실패");
+					} //call back function
+				}); // ajax
+			}); // click
+		}); // ready
+</script>
+<!-- Moa Modal-->
+
+    <div class="modal-header">
+      <h5 class="modal-title" id="historyModalLabel">ID - Modal</h5>
+      <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <div class="modal-body">
+
+    show please
+      <form id="memberDetail" th:object="${member}">
+        <div>
+          <label for="loginId">회원 ID (email)</label>
+          <input type="text" id="loginId" th:field="*{email}" readonly="true" class="form-control">
+        </div>
+
+        <div>
+          <label for="password">비밀번호</label>
+          <input type="text" id="password" th:field="*{password}" readonly="true" class="form-control">
+        </div>
+
+        <div>
+          <label for="name">회원 이름 </label>
+          <input type="text" id="name"  th:field="*{member_name}" readonly="true" class="form-control ">
+        </div>
+
+        <div>
+          <label for="allias">회원 별명(닉네임) </label>
+          <input type="text" id="allias"  th:field="*{allias}" class="form-control">
+        </div>
+
+        <div>
+          <label for="address">주소</label>
+          <input type="text" id="address" th:field="*{address}"  class="form-control">
+        </div>
+
+        <div>
+          <label for="party">소속</label>
+          <input type="text" id="party" th:field="*{party}" class="form-control">
+        </div>
+
+        <div>
+          <label name="group" >그룹</label>
+          <input type="text" id="group" th:field="*{group_type}" class="form-control">
+
+        </div>
+
+        <div>
+          <label name="restrict" >제한 여부</label>
+          <br>
+          <div>
+            <input type="checkbox" id="restrict" th:if="*{restrict_id} ne 1"  value="1">
+          </div>
+
+
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-primary" id="putBtn" type="button">수정</button>
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+        </div>
+
+      </form>
+        작성 게시글
+      <table>
+
+
+      </table>
+
+
+
+
+</div>
+

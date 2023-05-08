@@ -28,4 +28,7 @@ public interface AdminDAO {
     AdminMemberDTO findUserMemberByEmail(String email);
 
     List<Group> findAllGroup();
+
+    int updateMemberByEmail(AdminMemberDTO member);
+
 }
