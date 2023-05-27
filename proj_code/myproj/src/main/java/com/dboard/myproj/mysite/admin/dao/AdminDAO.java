@@ -6,6 +6,7 @@ import com.dboard.myproj.data.dto.AdminMemberDTO;
 import com.dboard.myproj.data.entity.Group;
 import com.dboard.myproj.data.entity.Member;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -29,6 +30,7 @@ public interface AdminDAO {
 
     List<Group> findAllGroup();
 
+    @Update("UPDDATE `member` set ")
     int updateMemberByEmail(AdminMemberDTO member);
 
 }

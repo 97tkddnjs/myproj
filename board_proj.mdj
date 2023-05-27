@@ -572,7 +572,7 @@
 									"font": "Arial;13;1",
 									"left": 328,
 									"top": 125,
-									"width": 216,
+									"width": 241.3896484375,
 									"height": 13,
 									"text": "RESTRICT"
 								},
@@ -598,7 +598,7 @@
 											"font": "Arial;13;0",
 											"left": 333,
 											"top": 148,
-											"width": 206,
+											"width": 231.3896484375,
 											"height": 13
 										},
 										{
@@ -613,7 +613,7 @@
 											"font": "Arial;13;0",
 											"left": 333,
 											"top": 163,
-											"width": 206,
+											"width": 231.3896484375,
 											"height": 13
 										},
 										{
@@ -628,7 +628,7 @@
 											"font": "Arial;13;0",
 											"left": 333,
 											"top": 178,
-											"width": 206,
+											"width": 231.3896484375,
 											"height": 13
 										},
 										{
@@ -643,22 +643,37 @@
 											"font": "Arial;13;0",
 											"left": 333,
 											"top": 193,
-											"width": 206,
+											"width": 231.3896484375,
+											"height": 13
+										},
+										{
+											"_type": "ERDColumnView",
+											"_id": "AAAAAAGIWNsv5u6bt6w=",
+											"_parent": {
+												"$ref": "AAAAAAGHTKL7GWGfgFA="
+											},
+											"model": {
+												"$ref": "AAAAAAGIWNsv2e6YkcI="
+											},
+											"font": "Arial;13;0",
+											"left": 333,
+											"top": 208,
+											"width": 231.3896484375,
 											"height": 13
 										}
 									],
 									"font": "Arial;13;0",
 									"left": 328,
 									"top": 143,
-									"width": 216,
-									"height": 68
+									"width": 241.3896484375,
+									"height": 83
 								}
 							],
 							"font": "Arial;13;0",
 							"left": 328,
 							"top": 120,
-							"width": 216,
-							"height": 91,
+							"width": 241.3896484375,
+							"height": 106,
 							"nameLabel": {
 								"$ref": "AAAAAAGHTKL7GWGe1ik="
 							},
@@ -702,7 +717,7 @@
 									},
 									"font": "Arial;13;0",
 									"left": 458,
-									"top": 229,
+									"top": 244,
 									"height": 13,
 									"alpha": 0.5235987755982988,
 									"distance": 30,
@@ -735,7 +750,7 @@
 							"tail": {
 								"$ref": "AAAAAAGHTKL7GWGdmjw="
 							},
-							"points": "443:210;443:308;368:308;368:432",
+							"points": "443:225;443:308;368:308;368:432",
 							"nameLabel": {
 								"$ref": "AAAAAAGHTKYs5GHKSrI="
 							},
@@ -2537,7 +2552,8 @@
 								"$ref": "AAAAAAGHTKL7GWGb6wM="
 							},
 							"name": "email",
-							"type": "INTEGER",
+							"type": "VARCHAR",
+							"length": "100",
 							"foreignKey": true,
 							"referenceTo": {
 								"$ref": "AAAAAAGHTJpyf2D/wWg="
@@ -2550,6 +2566,17 @@
 								"$ref": "AAAAAAGHTKL7GWGb6wM="
 							},
 							"name": "RESTRICT_CNT",
+							"type": "INTEGER",
+							"length": 0
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "AAAAAAGIWNsv2e6YkcI=",
+							"_parent": {
+								"$ref": "AAAAAAGHTKL7GWGb6wM="
+							},
+							"name": "restrict_show",
+							"type": "Boolean",
 							"length": 0
 						}
 					]
@@ -2878,7 +2905,7 @@
 							},
 							"name": "email",
 							"type": "VARCHAR",
-							"length": "300",
+							"length": "100",
 							"foreignKey": true,
 							"referenceTo": {
 								"$ref": "AAAAAAGHTJpyf2D/wWg="
@@ -3093,7 +3120,8 @@
 								"$ref": "AAAAAAGHUdhwRuaCETM="
 							},
 							"name": "email",
-							"type": "INTEGER",
+							"type": "VARCHAR",
+							"length": "100",
 							"foreignKey": true,
 							"referenceTo": {
 								"$ref": "AAAAAAGHTJpyf2D/wWg="

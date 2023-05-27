@@ -60,6 +60,13 @@ public class AdminService {
 
     @Transactional
     public int updateMemberByEmail(AdminMemberDTO member) {
-            return dao.updateMemberByEmail(member);
+
+        // restrict를 확인해야 함~
+        if(member.getRestrict_id() !=null){
+
+
+        }
+
+        return dao.updateMemberByEmail(member);
     }
 }

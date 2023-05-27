@@ -19,7 +19,17 @@
 
         FROM
             (
-                SELECT *
+                SELECT
+                    M.`member_id`		,
+                    M.`email`       	,
+                    M.`password`      ,
+                    M.`member_name`   ,
+                    M.`address`       ,
+                    M.`party`         ,
+                    M.`allias`        ,
+                    M.`grade_id`      ,
+                    M.`group_id`	,
+                    G.`group_type`
                 FROM MEMBER M inner join `GROUPS` G on  M.`group_id` = G.`group_id`
             ) TMP
                 left outer join `RESTRICT` R on TMP.member_id = R.member_id
@@ -31,9 +41,9 @@
 
     <select id="countMember" parameterType="com.dboard.myproj.config.page.SearchDto"
             resultType="int">
-    SELECT
-        COUNT(*)
-    FROM MEMBER;
+        SELECT
+            COUNT(*)
+        FROM MEMBER;
     </select>
 
     <select id="findUserMemberByEmail" parameterType="String"
@@ -54,7 +64,17 @@
 
         FROM
             (
-                SELECT *
+                SELECT
+                    M.`member_id`		,
+                    M.`email`       	,
+                    M.`password`      ,
+                    M.`member_name`   ,
+                    M.`address`       ,
+                    M.`party`         ,
+                    M.`allias`        ,
+                    M.`grade_id`      ,
+                    M.`group_id`	,
+                    G.`group_type`
                 FROM MEMBER M inner join `GROUPS` G on  M.`group_id` = G.`group_id`
             ) TMP
                 left outer join `RESTRICT` R on TMP.member_id = R.member_id
