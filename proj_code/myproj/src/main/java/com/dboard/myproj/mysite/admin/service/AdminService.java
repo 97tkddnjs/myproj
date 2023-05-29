@@ -5,20 +5,25 @@ import com.dboard.myproj.config.page.PagingResponse;
 import com.dboard.myproj.config.page.SearchDto;
 import com.dboard.myproj.data.dto.AdminMemberDTO;
 import com.dboard.myproj.data.entity.Group;
+import com.dboard.myproj.data.entity.Restrict;
 import com.dboard.myproj.mysite.admin.dao.AdminDAO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  *
  *
  * */
 
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AdminService {
@@ -30,7 +35,6 @@ public class AdminService {
 
         int count  = dao.countMember(params);
 
-        Map<String, Object> mapping = new HashMap<>();
         if (count < 1) {
 
         }
@@ -58,12 +62,31 @@ public class AdminService {
         return dao.findAllGroup();
     }
 
+    
+    // logic 바꾸기
     @Transactional
     public int updateMemberByEmail(AdminMemberDTO member) {
 
-        // restrict를 확인해야 함~
-        if(member.getRestrict_id() !=null){
 
+        // 만약 null column 이 존재하지 않는 것임 restrict 부터
+        Restrict restrict = dao.findRestrictByEmail(member);
+
+        if(member.getRestrict_show()==true){
+            // show 냐 아니냐~
+            if(restrict==null){
+                //ins
+                log.info("ins restrict");
+            }else{
+                if(restrict.getRestrict_show()==false){
+                    dao.updateRestrict(member);
+                    log.info("res true => false");
+                }
+            }
+        }else{
+            if(restrict !=null){
+                dao.updateNotRestrict(member);
+                log.info("res false -> true +=1");
+            }
 
         }
 

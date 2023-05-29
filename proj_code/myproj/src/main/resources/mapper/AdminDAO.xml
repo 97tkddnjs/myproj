@@ -15,7 +15,8 @@
             TMP.`grade_id`      ,
             GR.`grade_type`     ,
             TMP.`group_type`	,
-            R.`restrict_id`
+            R.`restrict_id`     ,
+            R.`restrict_show`
 
         FROM
             (
@@ -60,7 +61,8 @@
             TMP.`grade_id`      ,
             GR.`grade_type`     ,
             TMP.`group_type`	,
-            R.`restrict_id`
+            R.`restrict_id`     ,
+            R.`restrict_show`
 
         FROM
             (
@@ -82,4 +84,55 @@
         WHERE TMP.grade_id = GR.grade_id
         AND TMP.email = #{email};
     </select>
+    <select id="isRestrict" resultType="Boolean" parameterType="String">
+        SELECT R.restrict_show
+        FROM `RESTRICT` R
+        WHERE R.email = #{email}
+    </select>
+
+    <select id="findRestrictByEmail"
+            parameterType="com.dboard.myproj.data.dto.AdminMemberDTO"
+            resultType="com.dboard.myproj.data.entity.Restrict">
+        SELECT *
+        FROM `RESTRICT`
+        WHERE email = #{email}
+    </select>
+
+    <update id="updateRestrict"
+            parameterType="com.dboard.myproj.data.dto.AdminMemberDTO">
+        UPDATE `RESTRICT`
+        SET RESTRICT_SHOW= #{RESTRICT_SHOW},
+            RESTRICT_CNT =
+                (SELECT RESTRICT_CNT
+                 FROM `RESTRICT`
+                 WHERE email = #{email}) +1
+        WHERE email = #{email}
+    </update>
+
+    <update id="updateNotRestrict"
+            parameterType="com.dboard.myproj.data.dto.AdminMemberDTO">
+        UPDATE `RESTRICT`
+        SET RESTRICT_SHOW= #{RESTRICT_SHOW}
+        WHERE email = #{email}
+    </update>
+
+
+    <select id="findAllGroup"
+    resultType="com.dboard.myproj.data.entity.Group">
+        SELECT *
+        FROM `GROUP`
+    </select>
+
+    <update id="updateMemberByEmail"
+            parameterType="com.dboard.myproj.data.dto.AdminMemberDTO">
+        UPDATE `MEMBER`
+        SET group_id = (
+            SELECT group_id
+            from `group`
+            where group_type = #{group_type})
+        where email = #{email}
+
+    </update>
+
+
 </mapper>

@@ -2567,7 +2567,8 @@
 							},
 							"name": "RESTRICT_CNT",
 							"type": "INTEGER",
-							"length": 0
+							"length": 0,
+							"nullable": true
 						},
 						{
 							"_type": "ERDColumn",
@@ -2990,8 +2991,7 @@
 								"$ref": "AAAAAAGHTLG3DmJqox4="
 							},
 							"name": "BD_SHOW",
-							"type": "BOOLEAN",
-							"nullable": true
+							"type": "BOOLEAN"
 						}
 					]
 				},

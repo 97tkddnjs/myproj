@@ -10,25 +10,16 @@
 
 				// Javascript 객체로 전달해야해서
                 var form = $("#memberDetail").serialize();
-                alert(form);
+                form = decodeURIComponent(form);
+
                 var searchObj = JSON.parse('{"' + decodeURI(form).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
+                //searchObj= searchObj.replace(/@/g, '%40');
                 form = (JSON.stringify(searchObj));
-                alert(form);
-                // test={
-                //   //member_id : 1,
-                //   email : $("#loginId").val(),
-                //   password : $("#password").val(),
-                //   member_name : $("#name").val(),
-                //   address : $("#address").val()
-                //
-                // }
-                //alert(JSON.stringify(test))
-                // form = JSON.stringify(form);
-                //alert(form)
+
+
 				$.ajax({
 
 					type:"POST"
-					//, encType:"multipart/form-data"
 					, url:"/mysite/admin/rest/meber/update"
 					, data : form
 					, processData : false
@@ -36,10 +27,8 @@
                   //, contentType :  false
                     , cache : false
 					, success : function(result) {
-						if(result=="")
+						if(result['result']=="ok"){
 							alert("yes");
-						if(result > 0) {
-							alert(result)
 							alert("게시글 작성 성공");
 						} else {
 							alert(result)
@@ -58,7 +47,7 @@
 <!-- Moa Modal-->
 
     <div class="modal-header">
-      <h5 class="modal-title" id="historyModalLabel">ID - Modal</h5>
+      <h5 class="modal-title" id="historyModalLabel" th:text="${member.email}"></h5>
       <button class="close" type="button" data-dismiss="modal" aria-label="Close">
         <span aria-hidden="true">×</span>
       </button>
@@ -84,32 +73,35 @@
 
         <div>
           <label for="allias">회원 별명(닉네임) </label>
-          <input type="text" id="allias"  th:field="*{allias}" class="form-control">
+          <input type="text" id="allias"  th:field="*{allias}" class="form-control" readonly="true" >
         </div>
 
         <div>
           <label for="address">주소</label>
-          <input type="text" id="address" th:field="*{address}"  class="form-control">
+          <input type="text" id="address" th:field="*{address}"  class="form-control" readonly="true" >
         </div>
 
         <div>
           <label for="party">소속</label>
-          <input type="text" id="party" th:field="*{party}" class="form-control">
+          <input type="text" id="party" th:field="*{party}" class="form-control" readonly="true" >
         </div>
 
         <div>
           <label name="group" >그룹</label>
-          <input type="text" id="group" th:field="*{group_type}" class="form-control">
-
+          <br>
+          <select th:field="*{group_type}" class="form-select">
+            <option th:each="group : ${groups}" th:value="${group.group_type}"
+                    th:text="${group.group_type}"
+                    th:selected = "${group.group_type == member.group_type}" ></option>
+          </select>
         </div>
-
+        <br>
         <div>
           <label name="restrict" >제한 여부</label>
           <br>
           <div>
-            <input type="checkbox" id="restrict" th:if="*{restrict_id} ne 1"  value="1">
+            <input type="checkbox" id="restrict" th:field="*{restrict_show}" th:checked="${member.restrict_show}"  value="true">
           </div>
-
 
         </div>
 

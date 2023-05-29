@@ -47,8 +47,8 @@
 <script>
     /*모달*/
     function fnModuleInfo(str){
-
-        $('#MoaModal .modal-content').load("modal?email="+str);
+        alert(str);
+        $('#MoaModal .modal-content').load("member/detail?email="+str);
         $('#MoaModal').modal();
 
     }
@@ -110,7 +110,7 @@
                     ${idx+1}
                 </td>
                 <td>
-                    <a onclick="fnModuleInfo('${row.email}')">
+                    <a href="javascript: fnModuleInfo('${row.email}')">
                         <i class="fa fa-arrow-circle-right fa-lg"  >${row.email}</i>
                     </a>
                 </td>

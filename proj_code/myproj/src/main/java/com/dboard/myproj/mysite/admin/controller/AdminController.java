@@ -4,6 +4,7 @@ package com.dboard.myproj.mysite.admin.controller;
 import com.dboard.myproj.config.page.PagingResponse;
 import com.dboard.myproj.config.page.SearchDto;
 import com.dboard.myproj.data.dto.AdminMemberDTO;
+import com.dboard.myproj.data.entity.Group;
 import com.dboard.myproj.data.entity.Member;
 import com.dboard.myproj.mysite.admin.service.AdminService;
 import lombok.RequiredArgsConstructor;
@@ -64,16 +65,18 @@ public class AdminController {
      *  그룹이랑 제한 여부 정도만 건들일 수 있음....
      *
      * */
-    @GetMapping("/modal")
+    @GetMapping("/member/detail")
     public String modal(@RequestParam("email") String email,  Model model ) {
         //System.out.println("inthe =  /" );
         log.info("modal page into " + email);
 
         AdminMemberDTO memberDetail = service.findUserMemberByEmail(email);
+        List<Group> allGroup = service.findAllGroup();
 
         log.info("send modal info : " + memberDetail);
         model.addAttribute("member", memberDetail);
-        return "mysite/admin/modal";
+        model.addAttribute("groups",allGroup);
+        return "mysite/admin/memberdetail";
     }
 
 

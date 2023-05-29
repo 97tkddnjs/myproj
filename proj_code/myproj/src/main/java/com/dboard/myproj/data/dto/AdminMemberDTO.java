@@ -32,4 +32,6 @@ public class AdminMemberDTO {
 
     Long restrict_id;
 
+    Boolean restrict_show;
+
 }

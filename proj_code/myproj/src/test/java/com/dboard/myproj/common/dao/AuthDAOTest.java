@@ -77,6 +77,13 @@ class AuthDAOTest {
         String email = "test@a.com";
         AdminMemberDTO userMemberByEmail = adminDAO.findUserMemberByEmail(email);
         System.out.println("userMemberByEmail = " + userMemberByEmail);
-
+        Boolean d = null;
+        if(d==null || d==false){
+            System.out.println("d = " + d);
+        }
+        //Boolean aBoolean = adminDAO.isRestrict(email);
+        //System.out.println("aBoolean = " + aBoolean);
     }
+
+
 }

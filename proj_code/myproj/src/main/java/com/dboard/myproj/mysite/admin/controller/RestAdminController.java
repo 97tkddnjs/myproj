@@ -24,7 +24,8 @@ public class RestAdminController {
     Map<String, String> updateMember(@RequestBody AdminMemberDTO member) {
 
         log.info("rest check "+member);
-        service.updateMemberByEmail(member);
+        int flag = service.updateMemberByEmail(member);
+
         Map<String, String> response = new HashMap<>();
         response.put("result","ok" );
 

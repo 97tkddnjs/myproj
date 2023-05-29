@@ -5,6 +5,7 @@ import com.dboard.myproj.config.page.SearchDto;
 import com.dboard.myproj.data.dto.AdminMemberDTO;
 import com.dboard.myproj.data.entity.Group;
 import com.dboard.myproj.data.entity.Member;
+import com.dboard.myproj.data.entity.Restrict;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Update;
 
@@ -30,7 +31,14 @@ public interface AdminDAO {
 
     List<Group> findAllGroup();
 
-    @Update("UPDDATE `member` set ")
     int updateMemberByEmail(AdminMemberDTO member);
+
+    Boolean isRestrict(String email);
+
+    int updateRestrict(AdminMemberDTO member);
+
+    int updateNotRestrict(AdminMemberDTO member);
+
+    Restrict findRestrictByEmail(AdminMemberDTO member);
 
 }
