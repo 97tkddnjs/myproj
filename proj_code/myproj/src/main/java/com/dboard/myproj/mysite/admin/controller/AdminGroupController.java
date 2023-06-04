@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/mysite/admin")
 public class AdminGroupController {
 
-    @GetMapping("/group")
-    public String groupAdmin() {
-
-        return null;
-    }
+//    @GetMapping("/group")
+//    public String groupAdmin() {
+//
+//        return null;
+//    }
 
 
 }

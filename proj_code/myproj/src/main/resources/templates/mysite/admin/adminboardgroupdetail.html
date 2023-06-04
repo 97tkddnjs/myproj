@@ -4,50 +4,29 @@
 <body>
 <nav th:replace="~{mysite/admin/common/navbar :: navbarFragment}"></nav>
 
-
-<script>
-
-
-    function search (dd) {
-            console.log(dd);
-            // Javascript 객체로 전달해야해서
-
-            let temp = document.getElementById("searchdata");
-            console.log(temp);
-            let form = new FormData( document.getElementById("searchdata"));
-
-            console.log(form);
-            for (let key of form.keys()) {
-                console.log(key);
-            }
-
-        }
-
-</script>
-
 <div  class="container my-5">
 
     <div class="search my-3">
-        <form id="searchdata" class="d-inline-flex">
+        <form class="d-inline-flex">
             <select class="m-1">
-                <option value="1">회원</option>
-                <option value="2">그룹</option>
-                <option value="3">제한 회원</option>
+                <option value="1">그룹 id</option>
+                <option value="2">그룹 이름</option>
             </select>
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button id="searchbtn" class="btn btn-outline-success" onclick="search('ddd')">Search</button>
+            <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
+        <button id="group_b" class="btn btn-primary"  >button</button>
         <!-- Button trigger modal -->
+
 
     </div>
 
         <table class="table">
             <thead>
-                <th> 번호 </th>
-                <th> email </th>
-                <th> 이름 </th>
-                <th> 별명 </th>
-                <th> 그룹 </th>
+                <th> 그룹 ID</th>
+                <th> 그룹 이름 </th>
+                <th> 속한 카테고리 게시판</th>
+                <th> 접근 가능 멤버 </th>
             </thead>
 
             <!-- /* list 내용 채우는 공간임 */-->
@@ -126,7 +105,7 @@
             html += `
               <tr>
                 <td>
-                    ${idx+1 }
+                    ${idx+1}
                 </td>
                 <td>
                     <a href="javascript: fnModuleInfo('${row.email}')">
@@ -158,7 +137,7 @@
 
         // 2. 렌더링 할 HTML을 저장할 변수
         let html = '';
-        html += '<p>';
+
         // 첫 페이지랑 마지막 페이지는 주고자 함
         html+=`<a href="javascript:void(0);" onClick="movePage(1)" className="page_bt first ">첫 페이지</a>`;
 
@@ -171,22 +150,21 @@
          * 4. 시작 페이지(startPage)와 끝 페이지(endPage) 사이의 페이지 번호(i)를 넘버링 하는 로직
          *    페이지 번호(i)와 현재 페이지 번호(params.page)가 동일한 경우, 페이지 번호(i)를 활성화(on) 처리
          */
-
+        html += '<p>';
         for (let i = pagination.startPage; i <= pagination.endPage; i++) {
             html += (i !== params.page)
                 ? `<a href="javascript:void(0);" onclick="movePage(${i});">${i}</a>`
                 : `<span class="on">${i}</span>`
         }
-
+        html += '</p>';
 
         // 5. 현재 위치한 페이지 뒤에 데이터가 더 있는 경우, 다음 페이지 버튼과 끝 페이지 버튼을 HTML에 추가
         if (pagination.existNextPage) {
             html += `
                         <a href="javascript:void(0);" onclick="movePage(${pagination.endPage + 1});" class="page_bt next">다음 페이지</a>`;
         }
-
         html += `<a href="javascript:void(0);" onClick="movePage(${pagination.totalPageCount});" className="page_bt last">마지막 페이지</a>`;
-        html += '</p>';
+
         // 6. class가 "paging"인 요소를 찾아 HTML을 렌더링
         document.querySelector('.paging').innerHTML = html;
     }

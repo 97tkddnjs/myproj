@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<nav th:replace="~{mysite/admin/common/header :: adminHead}"></nav>
+<body>
+<nav th:replace="~{mysite/admin/common/navbar :: navbarFragment}"></nav>
+
+<div  class="container my-5">
+
+    <div class="search my-3">
+        <form class="d-inline-flex">
+            <select class="m-1">
+                <option value="1">그룹 id</option>
+                <option value="2">그룹 이름</option>
+            </select>
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+        <button id="group_b" class="btn btn-primary"  >그룹 추가</button>
+        <!-- Button trigger modal -->
+
+
+    </div>
+
+        <table class="table">
+            <thead>
+                <th> 그룹 ID</th>
+                <th> 그룹 이름 </th>
+                <th> 속한 카테고리 게시판</th>
+                <th> 접근 가능 멤버 수</th>
+            </thead>
+
+            <!-- /* list 내용 채우는 공간임 */-->
+            <tbody id="list">
+
+
+            </tbody>
+        </table>
+
+
+</div>
+<script>
+    /*모달*/
+    function fnModuleInfo(str){
+        alert(str);
+        $('#MoaModal .modal-content').load("member/detail?email="+str);
+        $('#MoaModal').modal();
+
+    }
+
+    window.onload = () => {
+        // 페이지가 로드되었을 때, 딱 한 번만 함수를 실행
+        findAllPost();
+    }
+
+
+    // 게시글 리스트 조회
+    function findAllPost() {
+
+        // 1. PagingResponse의 멤버인 List<T> 타입의 list를 의미
+        const list = [[ ${allmember.list} ]];
+        // alert(list);
+        // 2. 리스트가 비어있는 경우, 행에 "검색 결과가 없다"는 메시지를 출력하고, 페이지 번호(페이지네이션) HTML을 제거(초기화)한 후 로직을 종료
+        if ( !list.length ) {
+            document.getElementById('list').innerHTML = '<td colspan="6"><div className="no_data_msg">검색된 결과가 없습니다.</div></td>';
+            drawPage();
+        }
+
+        // 3. PagingResponse의 멤버인 pagination을 의미
+        const pagination = [[ ${allmember.pagination} ]];
+
+        // 4. @ModelAttribute를 이용해서 뷰(HTML)로 전달한 SearchDto 타입의 객체인 params를 의미
+        const params = [[ ${params} ]];
+
+        // 5. 리스트에 출력되는 게시글 번호를 처리하기 위해 사용되는 변수 (리스트에서 번호는 페이지 정보를 이용해서 계산해야 함)
+        let num = pagination.totalRecordCount - ((params.page - 1) * params.recordSize);
+
+        // 6. 리스트 데이터 렌더링
+        drawList(list, num);
+
+        // 7. 페이지 번호 렌더링
+        drawPage(pagination, params);
+    }
+
+
+    // 리스트 HTML draw
+    function drawList(list, num) {
+
+        // 1. 렌더링 할 HTML을 저장할 변수
+        let html = '';
+
+        /*
+         * 2. 기존에 타임리프(Thymeleaf)를 이용해서 리스트 데이터를 그리던 것과 유사한 로직
+         *    기존에는 게시글 번호를 (전체 데이터 수 - loop의 인덱스 번호)로 처리했으나, 현재는 (전체 데이터 수 - ((현재 페이지 번호 - 1) * 페이지당 출력할 데이터 개수))로 정밀히 계산
+         */
+        list.forEach((row, idx) => {
+            html += `
+              <tr>
+                <td>
+                    ${idx+1 }
+                </td>
+                <td>
+                    <a href="javascript: fnModuleInfo('${row.email}')">
+                        <i class="fa fa-arrow-circle-right fa-lg"  >${row.email}</i>
+                    </a>
+                </td>
+                <td>${row.member_name}</td>
+                <td>${row.allias}</td>
+                <td>${row.group_type}</td>
+            </tr>
+                `;
+        })
+
+        // 3. id가 "list"인 요소를 찾아 HTML을 렌더링
+        document.getElementById('list').innerHTML = html;
+    }
+
+
+</script>
+
+
+
+
+<!-- Moa Modal Button -->
+<!-- Moa Modal Button -->
+<div class="modal fade" id="MoaModal" tabindex="-1" role="dialog" aria-labelledby="historyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+
+        </div>
+
+    </div>
+</div>
+
+
+
+</body>
+
+
+</html>

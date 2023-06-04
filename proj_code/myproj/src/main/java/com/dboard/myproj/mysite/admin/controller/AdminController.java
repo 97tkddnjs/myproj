@@ -38,9 +38,11 @@ public class AdminController {
     private final AdminService service;
 
     @GetMapping("/home")
-    public String index() {
+    public String index(Model model ) {
         //System.out.println("inthe =  /" );
         log.info("admin index page into ");
+        List<Group> allGroup = service.findAllGroup();
+        model.addAttribute("group", allGroup);
 
         return "mysite/admin/index";
     }
@@ -85,5 +87,17 @@ public class AdminController {
 
         service.findAllGroup();
         return "";
+    }
+
+    /**
+     *
+     *
+     * */
+
+    @GetMapping("/board")
+    public String boardAdmin() {
+
+
+        return null;
     }
 }

@@ -20,7 +20,6 @@ import java.util.List;
  *
  * */
 @SpringBootTest
-@Transactional
 //@TestPropertySource(locations = "classpath:application.properties")
 class AuthDAOTest {
 
@@ -85,5 +84,24 @@ class AuthDAOTest {
         //System.out.println("aBoolean = " + aBoolean);
     }
 
+    @Test
+    void testUser() {
+
+        for(int i = 1; i <=15;i++){
+            MemberFormDto dto = new MemberFormDto();
+            String name = "testuser"+i;
+            String email = name +"@test.com";
+            dto.setEmail(email);
+            dto.setPassword("1234");
+            dto.setMember_name(name);
+            dto.setAllias(name);
+            dto.setGroup_id(1);
+//            System.out.println("email = " + email);
+            dao.memberSave(dto);
+        }
+
+
+
+    }
 
 }
