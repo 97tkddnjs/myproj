@@ -68,7 +68,7 @@ public class AdminController {
      *
      * */
     @GetMapping("/member/detail")
-    public String modal(@RequestParam("email") String email,  Model model ) {
+    public String memberdetail(@RequestParam("email") String email,  Model model ) {
         //System.out.println("inthe =  /" );
         log.info("modal page into " + email);
 
@@ -80,6 +80,26 @@ public class AdminController {
         model.addAttribute("groups",allGroup);
         return "mysite/admin/memberdetail";
     }
+
+
+    @GetMapping("/member/search/")
+    public String memberDetailSearch(@RequestParam("condition") int condition,
+                                     @RequestParam("name") String name,
+                                     @ModelAttribute("params") final SearchDto params,
+                                     Model model) {
+
+        if(condition==1){
+            // 회원 검색
+
+        } else if (condition == 2) {
+            // 그룹 검색
+        }else if (condition ==3){
+            // 제한회원 검색
+        }
+
+        return  "mysite/admin/adminmember";
+    }
+
 
 
     @GetMapping("/group")

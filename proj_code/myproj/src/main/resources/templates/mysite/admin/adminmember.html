@@ -5,37 +5,17 @@
 <nav th:replace="~{mysite/admin/common/navbar :: navbarFragment}"></nav>
 
 
-<script>
-
-
-    function search (dd) {
-            console.log(dd);
-            // Javascript 객체로 전달해야해서
-
-            let temp = document.getElementById("searchdata");
-            console.log(temp);
-            let form = new FormData( document.getElementById("searchdata"));
-
-            console.log(form);
-            for (let key of form.keys()) {
-                console.log(key);
-            }
-
-        }
-
-</script>
-
 <div  class="container my-5">
 
     <div class="search my-3">
         <form id="searchdata" class="d-inline-flex">
-            <select class="m-1">
+            <select name="condition"  class="m-1">
                 <option value="1">회원</option>
                 <option value="2">그룹</option>
                 <option value="3">제한 회원</option>
             </select>
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button id="searchbtn" class="btn btn-outline-success" onclick="search('ddd')">Search</button>
+            <input name="searchval" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" onclick="search()">Search</button>
         </form>
         <!-- Button trigger modal -->
 
@@ -66,9 +46,31 @@
 <script>
     /*모달*/
     function fnModuleInfo(str){
-        alert(str);
+        //alert(str);
         $('#MoaModal .modal-content').load("member/detail?email="+str);
         $('#MoaModal').modal();
+
+    }
+
+    function search () {
+        //alert(dd);
+        // Javascript 객체로 전달해야해서
+
+        let form = new FormData( document.getElementById("searchdata"));
+
+        // alert(form);
+        // for (let item of form.entries()) {
+        //     alert(item[0] + " : " + item[1]);
+        // }
+        var cond = form.get('condition');
+        var name = form.get('searchval');
+
+        var url = "/mysite/admin/member/search/";
+
+
+        url += "condition="+cond+"&name="+name;
+
+        alert(url);
 
     }
 

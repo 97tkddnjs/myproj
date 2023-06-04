@@ -10,6 +10,8 @@ import lombok.Getter;
 public class Pagination {
 
     private int totalRecordCount;     // 전체 데이터 수
+
+    private int currentPage;           // 현재 페이자
     private int totalPageCount;       // 전체 페이지 수
     private int startPage;            // 첫 페이지 번호
     private int endPage;              // 끝 페이지 번호
@@ -21,6 +23,7 @@ public class Pagination {
     public Pagination(int totalRecordCount, SearchDto params) {
         if (totalRecordCount > 0) {
             this.totalRecordCount = totalRecordCount;
+            this.currentPage = params.getPage();
             calculation(params);
         }
     }
