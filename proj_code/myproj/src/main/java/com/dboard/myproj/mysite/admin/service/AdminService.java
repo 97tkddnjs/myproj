@@ -68,28 +68,79 @@ public class AdminService {
     public int updateMemberByEmail(AdminMemberDTO member) {
 
 
+        log.info("res  "+ member.getRestrict_show());
         // 만약 null column 이 존재하지 않는 것임 restrict 부터
         Restrict restrict = dao.findRestrictByEmail(member);
 
-        if(member.getRestrict_show()==true){
-            // show 냐 아니냐~
-            if(restrict==null){
-                //ins
-                log.info("ins restrict");
-            }else{
-                if(restrict.getRestrict_show()==false){
-                    dao.updateRestrict(member);
-                    log.info("res true => false");
-                }
-            }
-        }else{
-            if(restrict !=null){
-                dao.updateNotRestrict(member);
+        log.info("restrict "+restrict);
+
+        if(member.getRestrict_show()==null){
+            // 제한 안걸기
+            // 데이터가 있었어
+            log.info("res  nonono");
+            System.out.println("res bbb");
+            if(restrict !=null && restrict.getRestrict_show()==true){
                 log.info("res false -> true +=1");
+                dao.updateNotRestrict(member);
             }
 
         }
+        else if(member.getRestrict_show()==true){
+            // 제한 걸거야
+            log.info("sssss");
+            // 데이터 없어 -> 생성
+            if(restrict==null){
+                log.info("ins restrict");
+                dao.restrictMemberSave(member);
 
+            }else{ // 데이터 있어 근데 false -> 제한걸어
+
+                if(restrict.getRestrict_show()==null){
+
+                    log.info("already res false => true");
+                    dao.updateRestrict(member);
+
+                }
+            }
+
+        }else{
+            System.out.println("res ccc");
+            log.info("dddd");
+        }
+
+        log.info("ssasdfasdfa");
         return dao.updateMemberByEmail(member);
+    }
+
+    @Transactional
+    public PagingResponse<AdminMemberDTO>  searchMemberName(String name,final SearchDto params) {
+
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("name", name);
+        map.put("params", params);
+
+        int count = dao.cntSearchMemberName(map);
+        Pagination pagination = new Pagination(count, params);
+        params.setPagination(pagination);
+
+        List<AdminMemberDTO> adminMemberDTOS = dao.searchMemberName(map);
+
+        return new PagingResponse<>(adminMemberDTOS, pagination);
+    }
+
+    @Transactional
+    public PagingResponse<AdminMemberDTO>  searchRestrictMemberName(String name, final SearchDto params) {
+
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("name", name);
+        map.put("params", params);
+
+        return null;
+    }
+
+    @Transactional
+    public PagingResponse<AdminMemberDTO>  searchGroupMemberName(String name,final SearchDto params) {
+
+        return null;
     }
 }

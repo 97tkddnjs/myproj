@@ -73,6 +73,7 @@ public class AdminController {
         log.info("modal page into " + email);
 
         AdminMemberDTO memberDetail = service.findUserMemberByEmail(email);
+        log.info("member detail",memberDetail);
         List<Group> allGroup = service.findAllGroup();
 
         log.info("send modal info : " + memberDetail);
@@ -82,20 +83,32 @@ public class AdminController {
     }
 
 
-    @GetMapping("/member/search/")
+    @GetMapping("/member/search")
     public String memberDetailSearch(@RequestParam("condition") int condition,
                                      @RequestParam("name") String name,
                                      @ModelAttribute("params") final SearchDto params,
                                      Model model) {
+        PagingResponse<AdminMemberDTO> userMembers =null;
+
 
         if(condition==1){
-            // 회원 검색
+
+            userMembers = service.searchMemberName(name, params);
+
+            List<AdminMemberDTO> list = userMembers.getList();
+            list.stream().forEach(
+                    member_admin -> System.out.println("member_admin = " + member_admin)
+            );
+            System.out.println("list.size() = " + list.size());
+            log.info("condition1 size ");
 
         } else if (condition == 2) {
             // 그룹 검색
         }else if (condition ==3){
             // 제한회원 검색
         }
+
+        model.addAttribute("allmember",userMembers);
 
         return  "mysite/admin/adminmember";
     }

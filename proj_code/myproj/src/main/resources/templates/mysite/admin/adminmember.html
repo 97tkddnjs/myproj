@@ -14,7 +14,7 @@
                 <option value="2">그룹</option>
                 <option value="3">제한 회원</option>
             </select>
-            <input name="searchval" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <input name="searchval" class="form-control me-2"   placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success" onclick="search()">Search</button>
         </form>
         <!-- Button trigger modal -->
@@ -28,6 +28,7 @@
                 <th> 이름 </th>
                 <th> 별명 </th>
                 <th> 그룹 </th>
+                <th> 제한 여부</th>
             </thead>
 
             <!-- /* list 내용 채우는 공간임 */-->
@@ -65,13 +66,22 @@
         var cond = form.get('condition');
         var name = form.get('searchval');
 
-        var url = "/mysite/admin/member/search/";
+        var url = "/mysite/admin/member/search?";
 
 
         url += "condition="+cond+"&name="+name;
-
         alert(url);
+        //window.location.href=url;
+        $.ajax({
 
+            type:"GET"
+            , url: url
+            , processData : false
+            , contentType :  "application/json; charset=utf-8"
+            //, contentType :  false
+            , cache : false
+
+        }); // ajax
     }
 
 </script>
@@ -120,10 +130,6 @@
         // 1. 렌더링 할 HTML을 저장할 변수
         let html = '';
 
-        /*
-         * 2. 기존에 타임리프(Thymeleaf)를 이용해서 리스트 데이터를 그리던 것과 유사한 로직
-         *    기존에는 게시글 번호를 (전체 데이터 수 - loop의 인덱스 번호)로 처리했으나, 현재는 (전체 데이터 수 - ((현재 페이지 번호 - 1) * 페이지당 출력할 데이터 개수))로 정밀히 계산
-         */
         list.forEach((row, idx) => {
             html += `
               <tr>
@@ -138,9 +144,23 @@
                 <td>${row.member_name}</td>
                 <td>${row.allias}</td>
                 <td>${row.group_type}</td>
-            </tr>
                 `;
+            if(row.restrict_show == true){
+                html += `
+                <td> YES</td>
+               </tr>`;
+            }else{
+                html += `
+                <td></td>
+               </tr>`;
+            }
+
+
         })
+        /*
+         * 2. 기존에 타임리프(Thymeleaf)를 이용해서 리스트 데이터를 그리던 것과 유사한 로직
+         *    기존에는 게시글 번호를 (전체 데이터 수 - loop의 인덱스 번호)로 처리했으나, 현재는 (전체 데이터 수 - ((현재 페이지 번호 - 1) * 페이지당 출력할 데이터 개수))로 정밀히 계산
+         */
 
         // 3. id가 "list"인 요소를 찾아 HTML을 렌더링
         document.getElementById('list').innerHTML = html;

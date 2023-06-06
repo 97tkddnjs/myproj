@@ -84,6 +84,23 @@
         WHERE TMP.grade_id = GR.grade_id
         AND TMP.email = #{email};
     </select>
+
+    <insert id="restrictMemberSave" parameterType="com.dboard.myproj.data.dto.AdminMemberDTO" >
+        insert into `RESTRICT`(
+            `email`         ,
+            `member_id`     ,
+            `restrict_cnt`  ,
+            `restrict_show`
+        )
+        values (
+                   #{email}         ,
+                   #{member_id}     ,
+                    0               ,
+                    true
+               )
+
+    </insert>
+
     <select id="isRestrict" resultType="Boolean" parameterType="String">
         SELECT R.restrict_show
         FROM `RESTRICT` R
@@ -100,19 +117,21 @@
 
     <update id="updateRestrict"
             parameterType="com.dboard.myproj.data.dto.AdminMemberDTO">
-        UPDATE `RESTRICT`
-        SET RESTRICT_SHOW= #{RESTRICT_SHOW},
-            RESTRICT_CNT =
-                (SELECT RESTRICT_CNT
-                 FROM `RESTRICT`
-                 WHERE email = #{email}) +1
-        WHERE email = #{email}
+
+        UPDATE `RESTRICT` AS t1
+            JOIN (
+            SELECT email, RESTRICT_CNT
+            FROM `RESTRICT`
+            WHERE email = #{email}
+            ) AS t2 ON t1.email = t2.email
+        SET t1.RESTRICT_SHOW = #{restrict_show}, t1.RESTRICT_CNT = t2.RESTRICT_CNT + 1
+
     </update>
 
     <update id="updateNotRestrict"
             parameterType="com.dboard.myproj.data.dto.AdminMemberDTO">
         UPDATE `RESTRICT`
-        SET RESTRICT_SHOW= #{RESTRICT_SHOW}
+        SET RESTRICT_SHOW= #{restrict_show}
         WHERE email = #{email}
     </update>
 
@@ -134,5 +153,69 @@
 
     </update>
 
+
+    <select id="cntSearchMemberName" parameterType="hashmap"
+            resultType="int">
+        SELECT
+           COUNT(*)
+        FROM
+            (
+                SELECT
+                    M.`member_id`		,
+                    M.`email`       	,
+                    M.`password`      ,
+                    M.`member_name`   ,
+                    M.`address`       ,
+                    M.`party`         ,
+                    M.`allias`        ,
+                    M.`grade_id`      ,
+                    M.`group_id`	,
+                    G.`group_type`
+                FROM MEMBER M inner join `GROUPS` G on  M.`group_id` = G.`group_id`
+            ) TMP
+                left outer join `RESTRICT` R on TMP.member_id = R.member_id
+           , GRADE GR
+        WHERE TMP.grade_id = GR.grade_id
+        AND TMP.`member_name` LIKE CONCAT('%',#{name},'%')
+    </select>
+
+    <select id="searchMemberName" parameterType="hashmap"
+            resultType="com.dboard.myproj.data.dto.AdminMemberDTO">
+        SELECT
+            TMP.`member_id`		,
+            TMP.`email`       	,
+            TMP.`password`      ,
+            TMP.`member_name`   ,
+            TMP.`address`       ,
+            TMP.`party`         ,
+            TMP.`allias`        ,
+            TMP.`grade_id`      ,
+            GR.`grade_type`     ,
+            TMP.`group_type`	,
+            R.`restrict_id`     ,
+            R.`restrict_show`
+
+        FROM
+            (
+                SELECT
+                    M.`member_id`		,
+                    M.`email`       	,
+                    M.`password`      ,
+                    M.`member_name`   ,
+                    M.`address`       ,
+                    M.`party`         ,
+                    M.`allias`        ,
+                    M.`grade_id`      ,
+                    M.`group_id`	,
+                    G.`group_type`
+                FROM MEMBER M inner join `GROUPS` G on  M.`group_id` = G.`group_id`
+            ) TMP
+                left outer join `RESTRICT` R on TMP.member_id = R.member_id
+           , GRADE GR
+        WHERE TMP.grade_id = GR.grade_id
+        AND TMP.`member_name` LIKE CONCAT('%',#{name},'%')
+        ORDER BY TMP.`member_id`
+        LIMIT #{params.pagination.limitStart}, #{params.recordSize} ;
+    </select>
 
 </mapper>

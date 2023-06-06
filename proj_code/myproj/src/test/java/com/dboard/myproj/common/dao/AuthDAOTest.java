@@ -1,17 +1,20 @@
 package com.dboard.myproj.common.dao;
 
 import com.dboard.myproj.config.page.Pagination;
+import com.dboard.myproj.config.page.PagingResponse;
 import com.dboard.myproj.config.page.SearchDto;
 import com.dboard.myproj.data.dto.AdminMemberDTO;
 import com.dboard.myproj.data.dto.MemberFormDto;
 import com.dboard.myproj.data.entity.Member;
 import com.dboard.myproj.mysite.admin.dao.AdminDAO;
+import com.dboard.myproj.mysite.admin.service.AdminService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -20,6 +23,7 @@ import java.util.List;
  *
  * */
 @SpringBootTest
+@Transactional
 //@TestPropertySource(locations = "classpath:application.properties")
 class AuthDAOTest {
 
@@ -29,6 +33,9 @@ class AuthDAOTest {
     @Autowired
     AdminDAO adminDAO;
 
+
+    @Autowired
+    AdminService service;
     @Test
     @DisplayName("bb")
     void memberSave() {
@@ -103,5 +110,22 @@ class AuthDAOTest {
 
 
     }
+
+    @Test
+    void test5() {
+
+
+        String name = "testuser1";
+        SearchDto params =new SearchDto();
+
+        PagingResponse<AdminMemberDTO> adminMemberDTOPagingResponse = service.searchMemberName(name, params);
+        List<AdminMemberDTO> list = adminMemberDTOPagingResponse.getList();
+        list.stream().forEach(
+                member_admin -> System.out.println("member_admin = " + member_admin)
+        );
+        System.out.println("list.size() = " + list.size());
+
+    }
+
 
 }

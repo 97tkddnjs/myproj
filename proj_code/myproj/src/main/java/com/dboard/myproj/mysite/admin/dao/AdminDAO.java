@@ -9,6 +9,7 @@ import com.dboard.myproj.data.entity.Restrict;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Update;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -40,5 +41,17 @@ public interface AdminDAO {
     int updateNotRestrict(AdminMemberDTO member);
 
     Restrict findRestrictByEmail(AdminMemberDTO member);
+
+    void restrictMemberSave(AdminMemberDTO member);
+
+    int cntSearchMemberName(HashMap<String, Object> map);
+    List<AdminMemberDTO>  searchMemberName(HashMap<String, Object> map);
+
+    List<AdminMemberDTO>  searchRestrictMemberName(String name, final SearchDto params);
+
+
+
+    //List<AdminMemberDTO>  searchGroupMemberName(String name,final SearchDto params);
+
 
 }
