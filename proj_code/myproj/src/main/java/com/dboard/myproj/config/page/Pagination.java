@@ -1,12 +1,14 @@
 package com.dboard.myproj.config.page;
 
 import lombok.Getter;
+import lombok.ToString;
 
 /**
  * 웹에서 화면 하단에 페이지 번호를 출력하는 기능을 "페이지네이션"
  *
  * */
 @Getter
+@ToString
 public class Pagination {
 
     private int totalRecordCount;     // 전체 데이터 수
@@ -51,12 +53,12 @@ public class Pagination {
 
         // LIMIT 시작 위치 계산
         limitStart = (params.getPage() - 1) * params.getRecordSize();
-
+        System.out.println("###########"+startPage+"############"+endPage+"##########");
         // 이전 페이지 존재 여부 확인
-        existPrevPage = startPage != 1;
+        existPrevPage = startPage != 1 ? true:false;
 
         // 다음 페이지 존재 여부 확인
-        existNextPage = (endPage * params.getRecordSize()) < totalRecordCount;
+        existNextPage = (endPage * params.getRecordSize()) < totalRecordCount ? true : false;
     }
 
 }

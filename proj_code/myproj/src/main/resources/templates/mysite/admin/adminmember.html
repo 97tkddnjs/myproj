@@ -10,12 +10,13 @@
     <div class="search my-3">
         <form id="searchdata" class="d-inline-flex">
             <select name="condition"  class="m-1">
+                <option value="">전체 검색</option>
                 <option value="1">회원</option>
                 <option value="2">그룹</option>
                 <option value="3">제한 회원</option>
             </select>
             <input name="searchval" class="form-control me-2"   placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success" onclick="search()">Search</button>
+            <button class="btn btn-outline-success" onclick="movePage(1);">Search</button>
         </form>
         <!-- Button trigger modal -->
 
@@ -51,37 +52,6 @@
         $('#MoaModal .modal-content').load("member/detail?email="+str);
         $('#MoaModal').modal();
 
-    }
-
-    function search () {
-        //alert(dd);
-        // Javascript 객체로 전달해야해서
-
-        let form = new FormData( document.getElementById("searchdata"));
-
-        // alert(form);
-        // for (let item of form.entries()) {
-        //     alert(item[0] + " : " + item[1]);
-        // }
-        var cond = form.get('condition');
-        var name = form.get('searchval');
-
-        var url = "/mysite/admin/member/search?";
-
-
-        url += "condition="+cond+"&name="+name;
-        alert(url);
-        //window.location.href=url;
-        $.ajax({
-
-            type:"GET"
-            , url: url
-            , processData : false
-            , contentType :  "application/json; charset=utf-8"
-            //, contentType :  false
-            , cache : false
-
-        }); // ajax
     }
 
 </script>
@@ -218,20 +188,32 @@
     // 페이지 이동
     function movePage(page) {
 
+        let form = new FormData( document.getElementById("searchdata"));
+
+        // alert(form);
+        // for (let item of form.entries()) {
+        //     alert(item[0] + " : " + item[1]);
+        // }
+        var cond = form.get('condition');
+        var value = form.get('searchval');
+
+
+
         // 1. drawPage( )의 각 버튼에 선언된 onclick 이벤트를 통해 전달받는 page(페이지 번호)를 기준으로 객체 생성
         const queryParams = {
             page: (page) ? page : 1,
             recordSize: 10,
-            pageSize: 10
+            pageSize: 10,
+            searchType: cond,
+            keyword: value
         }
-
         /*
          * 2. location.pathname : 리스트 페이지의 URI("/post/list.do")를 의미
          *    new URLSearchParams(queryParams).toString() : queryParams의 모든 프로퍼티(key-value)를 쿼리 스트링으로 변환
          *    URI + 쿼리 스트링에 해당하는 주소로 이동
          *    (해당 함수가 리턴해주는 값을 브라우저 콘솔(console)에 찍어보시면 쉽게 이해하실 수 있습니다.)
          */
-        location.href = location.pathname + '?' + new URLSearchParams(queryParams).toString();
+        location.href = location.pathname + '?' +  new URLSearchParams(queryParams).toString();
     }
 
     /*]]>*/

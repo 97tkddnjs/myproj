@@ -23,7 +23,7 @@ import java.util.List;
  *
  * */
 @SpringBootTest
-@Transactional
+//@Transactional
 //@TestPropertySource(locations = "classpath:application.properties")
 class AuthDAOTest {
 
@@ -94,7 +94,7 @@ class AuthDAOTest {
     @Test
     void testUser() {
 
-        for(int i = 1; i <=15;i++){
+        for(int i = 16; i <=100;i++){
             MemberFormDto dto = new MemberFormDto();
             String name = "testuser"+i;
             String email = name +"@test.com";
