@@ -11,19 +11,16 @@ import javax.validation.constraints.NotNull;
 public class MemberFormDto {
 
     //@NotNull
-    String email;
+    String member_id;
 
+    String email ;
     //@NotEmpty
-    String password;
+    String pass;
 
     //@NotNull
-    String member_name;
+    String member_nm;
 
-    String address;
+    String phone_num;
 
     String party;
-
-    String allias;
-
-    Integer group_id;
 }

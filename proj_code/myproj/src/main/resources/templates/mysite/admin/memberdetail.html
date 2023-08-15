@@ -1,6 +1,10 @@
 
-<!-- Modal -->
-<!-- histoty Modal-->
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<nav th:replace="~{mysite/admin/common/header :: adminHead}"></nav>
+<body>
+<nav th:replace="~{mysite/admin/common/navbar :: navbarFragment}"></nav>
+
 
 <script>
 
@@ -46,19 +50,14 @@
 </script>
 <!-- Moa Modal-->
 
-    <div class="modal-header">
-      <h5 class="modal-title" id="historyModalLabel" th:text="${member.email}"></h5>
-      <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">×</span>
-      </button>
-    </div>
-    <div class="modal-body">
+
+<div  class="container my-5">
 
     show please
       <form id="memberDetail" th:object="${member}">
         <input th:field="*{member_id}" type="hidden">
         <div>
-          <label for="loginId">회원 ID (email)</label>
+          <label for="loginId">학생 ID </label>
           <input type="text" id="loginId" th:field="*{email}" readonly="true" class="form-control">
         </div>
 
@@ -68,13 +67,8 @@
         </div>
 
         <div>
-          <label for="name">회원 이름 </label>
+          <label for="name">학생 이름 </label>
           <input type="text" id="name"  th:field="*{member_name}" readonly="true" class="form-control ">
-        </div>
-
-        <div>
-          <label for="allias">회원 별명(닉네임) </label>
-          <input type="text" id="allias"  th:field="*{allias}" class="form-control" readonly="true" >
         </div>
 
         <div>
@@ -88,13 +82,7 @@
         </div>
 
         <div>
-          <label name="group" >그룹</label>
-          <br>
-          <select th:field="*{group_type}" class="form-select">
-            <option th:each="group : ${groups}" th:value="${group.group_type}"
-                    th:text="${group.group_type}"
-                    th:selected = "${group.group_type == member.group_type}" ></option>
-          </select>
+
         </div>
         <br>
         <div>

@@ -1,6 +1,7 @@
 package com.dboard.myproj.common.service;
 
 import com.dboard.myproj.common.dao.AuthDAO;
+import com.dboard.myproj.data.dto.LoginForm;
 import com.dboard.myproj.data.dto.MemberFormDto;
 import com.dboard.myproj.data.entity.Member;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,7 @@ public class AuthenticationService {
 
         Member member = authDAO.memberRetrievalByEmail(dto);
 
-        if(member.getPassword().equals(dto.getPassword()) ){
+        if(member.getPassword().equals(dto.getPass()) ){
             return member;
         }else{
             return null;

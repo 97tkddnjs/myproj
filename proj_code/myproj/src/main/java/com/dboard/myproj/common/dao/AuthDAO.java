@@ -1,5 +1,6 @@
 package com.dboard.myproj.common.dao;
 
+import com.dboard.myproj.data.dto.LoginForm;
 import com.dboard.myproj.data.dto.MemberFormDto;
 import com.dboard.myproj.data.entity.Member;
 import org.apache.ibatis.annotations.Mapper;

@@ -5,12 +5,14 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.sql.Date;
+
 @Getter
 @Setter
 @ToString
 public class Member {
 
-    Long member_id;
+    String member_id;
 
     String email;
 
@@ -18,16 +20,14 @@ public class Member {
     String password;
 
     //@NotNull
-    String member_name;
+    String member_nm;
 
-    String address;
+    String phone_num;
 
     String party;
 
-    String allias;
-
-    String groupt_id;
-
     int grade_id;
+
+    Date date;
 
 }

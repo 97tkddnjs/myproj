@@ -22,8 +22,8 @@
 
   <form action="/signup" th:action th:object="${member}" method="post">
     <div>
-      <label for="loginId">회원 ID (email)</label>
-      <input type="text" id="loginId" th:field="*{email}" class="form-control">
+      <label for="loginId">회원 ID (학번)</label>
+      <input type="text" id="loginId" th:field="*{member_id}" class="form-control">
     </div>
 
     <div>
@@ -37,26 +37,17 @@
     </div>
 
     <div>
-      <label for="allias">회원 별명(닉네임) </label>
-      <input type="text" id="allias" th:field="*{allias}"  class="form-control">
+      <label for="email">회원 이메일 </label>
+      <input type="text" id="email" th:field="*{email}"  class="form-control">
     </div>
 
     <div>
-      <label for="address">주소</label>
-      <input type="text" id="address" th:field="*{address}"  class="form-control">
+      <label for="phone">전화번호</label>
+      <input type="text" id="phone" th:field="*{phone_num}"  class="form-control">
     </div>
 
     <div>
-      <label for="party">소속</label>
-      <input type="text" id="party" th:field="*{party}"  class="form-control">
-    </div>
 
-    <div>
-      <label name="group" >그룹</label>
-      <select th:field="*{group_id}">
-        <option th:value="1" >ALL</option>
-        <option th:value="2">BASIC</option>
-      </select>
 
     </div>
 

@@ -1,5 +1,7 @@
 package com.dboard.myproj.common.controller;
 
+import com.dboard.myproj.data.dto.ClassCode;
+import com.dboard.myproj.data.dto.LoginForm;
 import com.dboard.myproj.data.dto.MemberFormDto;
 import com.dboard.myproj.common.service.AuthenticationService;
 import com.dboard.myproj.config.AuthConst;
@@ -24,32 +26,41 @@ public class AuthenticationController {
 
     @GetMapping("/")
     public String index(
-            @ModelAttribute("memberForm") MemberFormDto memberForm,
+            @ModelAttribute("memberForm") MemberFormDto memberFormDto,
             Model model
 
     ) {
-//        model.addAttribute("msg", msg);
+
         return "login/loginform";
     }
     // reload 즉 f5키는 post를 부르게 된다.
-    @PostMapping("/")
-    public String index2(
-            @ModelAttribute("memberForm") MemberFormDto memberForm,
-            Model model
-
-    ) {
-//        model.addAttribute("msg", msg);
-        return "login/loginform";
-    }
+//    @PostMapping("/")
+//    public String index2(
+//            @ModelAttribute("loginForm") LoginForm loginForm,
+//            Model model
+//    ) {
+////        model.addAttribute("msg", msg);
+//        return "login/loginform";
+//    }
 
     @PostMapping("/login")
     public String loginPost(
-            @ModelAttribute("memberForm") MemberFormDto memberForm,
+            @ModelAttribute("memberForm")  MemberFormDto memberFormDto,
             HttpServletRequest request
             ) {
-        log.info("login "+memberForm);
-        Member login_member = authservice.login(memberForm);
+
+
+        log.info("login "+memberFormDto);
+
+
+        Member login_member = authservice.login(memberFormDto);
+
+
+
         log.info("info member "+login_member);
+
+
+
         if(login_member !=null){
             HttpSession session = request.getSession(true);
             session.setAttribute(AuthConst.LOGIN_MEMBER, login_member);
@@ -77,14 +88,17 @@ public class AuthenticationController {
 
     @GetMapping("/signup")
     public String signup(
-            @ModelAttribute("member") MemberFormDto memberFormDto
-    ) {
+            @ModelAttribute("member") MemberFormDto memberFormDto,
+            @ModelAttribute("class_code") ClassCode classCode
+            ) {
+
         return "login/signupform";
     }
 
     @PostMapping("/signup")
     public String signupPost(
             @ModelAttribute("member") MemberFormDto memberFormDto,
+            @ModelAttribute("class_code") ClassCode classCode,
             RedirectAttributes re
     ) {
 
