@@ -4,17 +4,15 @@ import com.dboard.myproj.config.page.Pagination;
 import com.dboard.myproj.config.page.PagingResponse;
 import com.dboard.myproj.config.page.SearchDto;
 import com.dboard.myproj.data.dto.AdminMemberDTO;
-import com.dboard.myproj.data.dto.MemberFormDto;
-import com.dboard.myproj.data.entity.Member;
+import com.dboard.myproj.data.dto.MemberFormDTO;
+import com.dboard.myproj.data.entity.MemberVO;
 import com.dboard.myproj.mysite.admin.dao.AdminDAO;
 import com.dboard.myproj.mysite.admin.service.AdminService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -39,10 +37,10 @@ class AuthDAOTest {
     @Test
     @DisplayName("bb")
     void memberSave() {
-        MemberFormDto dto = new MemberFormDto();
+        MemberFormDTO dto = new MemberFormDTO();
         dto.setEmail("test@a.com");
 
-        Member member = dao.memberRetrieval();
+        MemberVO member = dao.memberRetrieval();
 //        Member member = dao.memberRetrieval2();
         System.out.println("member = " + member);
     }
@@ -51,11 +49,11 @@ class AuthDAOTest {
     @DisplayName("aa")
     void memberRetrieval() {
 
-        MemberFormDto dto = new MemberFormDto();
+        MemberFormDTO dto = new MemberFormDTO();
         dto.setEmail("test@a.com");
 
 //        Member member = dao.memberRetrieval();
-        Member member = dao.memberRetrieval2();
+        MemberVO member = dao.memberRetrieval2();
         System.out.println("member = " + member);
 
     }
@@ -95,7 +93,7 @@ class AuthDAOTest {
     void testUser() {
 
         for(int i = 16; i <=100;i++){
-            MemberFormDto dto = new MemberFormDto();
+            MemberFormDTO dto = new MemberFormDTO();
             String name = "testuser"+i;
             String email = name +"@test.com";
             dto.setEmail(email);

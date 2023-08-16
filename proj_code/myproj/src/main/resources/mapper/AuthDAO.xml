@@ -2,7 +2,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.dboard.myproj.common.dao.AuthDAO">
-    <select id="memberRetrieval" resultType="com.dboard.myproj.data.entity.Member">
+    <select id="memberRetrieval" resultType="com.dboard.myproj.data.entity.MemberVO">
         SELECT
             `email`         ,
             `password`      ,
@@ -15,7 +15,7 @@
         FROM MEMBER
     </select>
 
-    <insert id="memberSave" parameterType="com.dboard.myproj.data.dto.MemberFormDto" >
+    <insert id="memberSave" parameterType="com.dboard.myproj.data.dto.MemberFormDTO" >
         insert into MEMBER(
             `email`         ,
             `password`      ,
@@ -40,8 +40,8 @@
     </insert>
 
     <select id="memberRetrievalByEmail"
-            parameterType="com.dboard.myproj.data.dto.MemberFormDto"
-            resultType="com.dboard.myproj.data.entity.Member"
+            parameterType="com.dboard.myproj.data.dto.MemberFormDTO"
+            resultType="com.dboard.myproj.data.entity.MemberVO"
     >
         SELECT
             `email`         ,

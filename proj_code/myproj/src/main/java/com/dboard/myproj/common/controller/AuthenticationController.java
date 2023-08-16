@@ -1,11 +1,11 @@
 package com.dboard.myproj.common.controller;
 
-import com.dboard.myproj.data.dto.ClassCode;
-import com.dboard.myproj.data.dto.LoginForm;
-import com.dboard.myproj.data.dto.MemberFormDto;
+import com.dboard.myproj.data.dto.ClassCodeDTO;
+import com.dboard.myproj.data.dto.MemberFormDTO;
 import com.dboard.myproj.common.service.AuthenticationService;
 import com.dboard.myproj.config.AuthConst;
-import com.dboard.myproj.data.entity.Member;
+import com.dboard.myproj.data.dto.SignupDTO;
+import com.dboard.myproj.data.entity.MemberVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,7 +27,7 @@ public class AuthenticationController {
 
     @GetMapping("/")
     public String index(
-            @ModelAttribute("memberForm") MemberFormDto memberFormDto,
+            @ModelAttribute("memberForm") MemberFormDTO memberFormDto,
             Model model
 
     ) {
@@ -45,7 +46,7 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public String loginPost(
-            @ModelAttribute("memberForm")  MemberFormDto memberFormDto,
+            @ModelAttribute("memberForm") MemberFormDTO memberFormDto,
             HttpServletRequest request
             ) {
 
@@ -53,7 +54,7 @@ public class AuthenticationController {
         log.info("login "+memberFormDto);
 
 
-        Member login_member = authservice.login(memberFormDto);
+        MemberVO login_member = authservice.login(memberFormDto);
 
 
 
@@ -87,25 +88,32 @@ public class AuthenticationController {
 
 
     @GetMapping("/signup")
-    public String signup(
-            @ModelAttribute("member") MemberFormDto memberFormDto,
-            @ModelAttribute("class_code") ClassCode classCode
-            ) {
+    public String signup(Model model) {
+
+        SignupDTO signupDTO = new SignupDTO();
+//        List<ClassCodeDTO> classCodeDTOS =  authservice.findClassCodes();
+//
+//        signupDTO.setClassCodes(classCodeDTOS);
+
+        model.addAttribute("signupData", signupDTO);
+
 
         return "login/signupform";
     }
 
     @PostMapping("/signup")
     public String signupPost(
-            @ModelAttribute("member") MemberFormDto memberFormDto,
-            @ModelAttribute("class_code") ClassCode classCode,
+            @ModelAttribute("signupData") SignupDTO signupDTO,
             RedirectAttributes re
     ) {
-
+        MemberFormDTO memberFormDTO = signupDTO.getMember();
+        List<ClassCodeDTO> classCodes = signupDTO.getClassCodes();
 //        System.out.println("member = " + memberFormDto);
-        log.info("member show "+memberFormDto);
+        log.info("member show "+memberFormDTO);
 
-        boolean sign = authservice.signUp(memberFormDto);
+
+        boolean sign = authservice.signUp(memberFormDTO);
+//        authservice.registerClassByMember(classCode);
 
 
         if (sign) {

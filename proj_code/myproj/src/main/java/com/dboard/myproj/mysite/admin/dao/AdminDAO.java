@@ -3,11 +3,9 @@ package com.dboard.myproj.mysite.admin.dao;
 
 import com.dboard.myproj.config.page.SearchDto;
 import com.dboard.myproj.data.dto.AdminMemberDTO;
-import com.dboard.myproj.data.entity.Group;
-import com.dboard.myproj.data.entity.Member;
+
 import com.dboard.myproj.data.entity.Restrict;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Update;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +28,7 @@ public interface AdminDAO {
 
     AdminMemberDTO findUserMemberByEmail(String email);
 
-    List<Group> findAllGroup();
+//    List<Group> findAllGroup();
 
     int updateMemberByEmail(AdminMemberDTO member);
 

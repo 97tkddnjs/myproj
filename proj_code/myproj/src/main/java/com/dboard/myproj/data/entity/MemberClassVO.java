@@ -4,7 +4,7 @@ package com.dboard.myproj.data.entity;
 import lombok.Data;
 
 @Data
-public class MemberClass {
+public class MemberClassVO {
 
     int mem_cls_id;
 

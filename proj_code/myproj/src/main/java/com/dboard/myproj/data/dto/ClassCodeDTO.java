@@ -1,10 +1,10 @@
-package com.dboard.myproj.data.entity;
+package com.dboard.myproj.data.dto;
 
 
 import lombok.Data;
 
 @Data
-public class ClassCode {
+public class ClassCodeDTO {
 
     int class_id;
 
@@ -12,5 +12,6 @@ public class ClassCode {
 
     String class_ymd;
 
+    boolean registerClassYN;
 
 }

@@ -10,7 +10,7 @@ import java.sql.Date;
 @Getter
 @Setter
 @ToString
-public class Member {
+public class MemberVO {
 
     String member_id;
 

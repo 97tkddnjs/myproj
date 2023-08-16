@@ -1,7 +1,7 @@
 package com.dboard.myproj.config.interceptor;
 
 import com.dboard.myproj.config.AuthConst;
-import com.dboard.myproj.data.entity.Member;
+import com.dboard.myproj.data.entity.MemberVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -28,7 +28,7 @@ public class AuthCheckInterceptor implements HandlerInterceptor {
             response.sendRedirect("/?redirectURL=" + requestURI);
             return false;
         }
-        Member attribute1 = (Member) attribute;
+        MemberVO attribute1 = (MemberVO) attribute;
         log.info("login session 정보 입니다 1~ {}", session);
         log.info("login session 정보 입니다 2~ {}", attribute1.getMember_id());
 

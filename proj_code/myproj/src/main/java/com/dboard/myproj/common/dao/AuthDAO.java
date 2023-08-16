@@ -1,10 +1,12 @@
 package com.dboard.myproj.common.dao;
 
-import com.dboard.myproj.data.dto.LoginForm;
-import com.dboard.myproj.data.dto.MemberFormDto;
-import com.dboard.myproj.data.entity.Member;
+import com.dboard.myproj.data.dto.MemberFormDTO;
+import com.dboard.myproj.data.entity.ClassCodeVO;
+import com.dboard.myproj.data.entity.MemberVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
  * @author  : lsw
@@ -19,17 +21,18 @@ import org.apache.ibatis.annotations.Select;
 public interface AuthDAO {
 
 
-    Member memberRetrievalByEmail(MemberFormDto memberDto);
+    MemberVO memberRetrievalByEmail(MemberFormDTO memberDto);
 
-    void memberSave(MemberFormDto memberDto);
+    void memberSave(MemberFormDTO memberDto);
     //MemberFormDto dto
     //parameterType="com.dboard.myproj.common.dto.MemberFormDto"
 //    @Select("")
-    Member memberRetrieval();
-
+    MemberVO memberRetrieval();
 
 
     @Select("SELECT * FROM member")
-    Member memberRetrieval2();
+    MemberVO memberRetrieval2();
+
+    List<ClassCodeVO> findClassCodes();
 
 }
