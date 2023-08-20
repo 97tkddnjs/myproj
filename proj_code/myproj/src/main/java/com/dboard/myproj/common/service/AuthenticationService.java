@@ -3,12 +3,14 @@ package com.dboard.myproj.common.service;
 import com.dboard.myproj.common.dao.AuthDAO;
 import com.dboard.myproj.data.dto.ClassCodeDTO;
 import com.dboard.myproj.data.dto.MemberFormDTO;
+import com.dboard.myproj.data.dto.SignupDTO;
 import com.dboard.myproj.data.entity.ClassCodeVO;
 import com.dboard.myproj.data.entity.MemberVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,11 +22,40 @@ public class AuthenticationService {
 
 
     @Transactional
-    public boolean signUp(MemberFormDTO dto){
+    public boolean signUp(SignupDTO signupDTO){
 
-        MemberVO member = authDAO.memberRetrievalByEmail(dto);
+        LocalDateTime now = LocalDateTime.now();
+
+        MemberFormDTO memberFormDTO = signupDTO.getMember();
+        List<ClassCodeDTO> classCodes = signupDTO.getClassCodes();
+
+
+        MemberVO memberVO = MemberVO.builder()
+                        .member_id(memberFormDTO.getMember_id())
+                        .email(memberFormDTO.getEmail())
+                        .member_nm(memberFormDTO.getMember_nm())
+                .password(memberFormDTO.getPassword())
+                .member_nm(memberFormDTO.getMember_nm())
+                .phone_num(memberFormDTO.getPhone_num())
+                .reg_dt(now)
+                .build();
+
+
+
+        MemberVO member
+                = authDAO.memberRetrievalById(memberVO);
+
         if (member == null) {
-            authDAO.memberSave(dto);
+            authDAO.memberSave(memberVO);
+
+            for(ClassCodeDTO classCode :classCodes){
+                if(classCode.isRegisterClassYN()==true){
+                    classCode.setMember_id(memberVO.getMember_id());
+                    authDAO.saveCourseReg(classCode);
+                }
+
+            }
+
             return  true;
         }else{
             return false;
@@ -32,11 +63,20 @@ public class AuthenticationService {
     }
 
     @Transactional
-    public MemberVO login(MemberFormDTO dto) {
+    public MemberVO login(MemberFormDTO memberFormDTO) {
 
-        MemberVO member = authDAO.memberRetrievalByEmail(dto);
+        MemberVO memberVO = MemberVO.builder()
+                .member_id(memberFormDTO.getMember_id())
+                .email(memberFormDTO.getEmail())
+                .member_nm(memberFormDTO.getMember_nm())
+                .password(memberFormDTO.getPassword())
+                .member_nm(memberFormDTO.getMember_nm())
+                .phone_num(memberFormDTO.getPhone_num())
+                .build();
 
-        if(member.getPassword().equals(dto.getPassword()) ){
+        MemberVO member = authDAO.memberRetrievalById(memberVO);
+
+        if(member.getPassword().equals(memberVO.getPassword()) ){
             return member;
         }else{
             return null;

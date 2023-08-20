@@ -15,44 +15,61 @@
         FROM MEMBER
     </select>
 
-    <insert id="memberSave" parameterType="com.dboard.myproj.data.dto.MemberFormDTO" >
-        insert into MEMBER(
-            `email`         ,
-            `password`      ,
-            `member_name`   ,
-            `address`       ,
-            `party`         ,
-            `allias`        ,
-            `grade_id`      ,
-            `group_id`
+    <insert id="memberSave" parameterType="com.dboard.myproj.data.entity.MemberVO" >
+        insert into CLASS_MEMBER(
+            `MEMBER_ID`          ,
+            `EMAIL`              ,
+            `PASSWORD`           ,
+            `MEMBER_NM`          ,
+            `PHONE_NUM`          ,
+            `PARTY`              ,
+            `REG_DT`
         )
         values (
-                   #{email}         ,
-                   #{password}      ,
-                   #{member_name}   ,
-                   #{address}       ,
-                   #{party}         ,
-                   #{allias}        ,
-                   2                ,
-                   #{group_id}
+                   #{member_id}         ,
+                   #{email}      ,
+                   #{password}   ,
+                   #{member_nm}       ,
+                   #{phone_num}         ,
+                   #{party}        ,
+                   #{reg_dt}
                )
 
     </insert>
 
-    <select id="memberRetrievalByEmail"
+    <select id="memberRetrievalById"
             parameterType="com.dboard.myproj.data.dto.MemberFormDTO"
             resultType="com.dboard.myproj.data.entity.MemberVO"
     >
         SELECT
-            `email`         ,
-            `password`      ,
-            `member_name`   ,
-            `address`       ,
-            `party`         ,
-            `allias`        ,
-            `grade_id`      ,
-            `group_id`
-        FROM MEMBER
-        WHERE email=#{email}
+            `MEMBER_ID`         ,
+            `EMAIL`      ,
+            `PASSWORD`   ,
+            `MEMBER_NM`       ,
+            `PHONE_NUM`         ,
+        FROM CLASS_MEMBER
+        WHERE MEMBER_ID=#{member_id}
     </select>
+
+    <select id="findClassCodes"
+            resultType="com.dboard.myproj.data.entity.ClassCodeVO">
+
+        SELECT
+            `CLASS_ID`,
+            `CLASS_NM`,
+            `CLASS_YMD`
+        FROM CLASS_CODE
+    </select>
+
+    <insert id="saveCourseReg" parameterType="com.dboard.myproj.data.dto.ClassCodeDTO">
+        insert into COURSE_REGISTRATION(
+            `MEMBER_ID`          ,
+            `CLASS_ID`
+        )
+        values (
+                   #{member_id}         ,
+                   #{class_id}
+               )
+
+    </insert>
 </mapper>

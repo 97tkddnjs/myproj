@@ -91,9 +91,9 @@ public class AuthenticationController {
     public String signup(Model model) {
 
         SignupDTO signupDTO = new SignupDTO();
-//        List<ClassCodeDTO> classCodeDTOS =  authservice.findClassCodes();
+        List<ClassCodeDTO> classCodeDTOS =  authservice.findClassCodes();
 //
-//        signupDTO.setClassCodes(classCodeDTOS);
+        signupDTO.setClassCodes(classCodeDTOS);
 
         model.addAttribute("signupData", signupDTO);
 
@@ -108,13 +108,11 @@ public class AuthenticationController {
     ) {
         MemberFormDTO memberFormDTO = signupDTO.getMember();
         List<ClassCodeDTO> classCodes = signupDTO.getClassCodes();
-//        System.out.println("member = " + memberFormDto);
+
         log.info("member show "+memberFormDTO);
 
 
-        boolean sign = authservice.signUp(memberFormDTO);
-//        authservice.registerClassByMember(classCode);
-
+        boolean sign = authservice.signUp(signupDTO);
 
         if (sign) {
             log.info("dddd");

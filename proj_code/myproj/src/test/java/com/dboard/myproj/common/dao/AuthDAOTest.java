@@ -92,18 +92,18 @@ class AuthDAOTest {
     @Test
     void testUser() {
 
-        for(int i = 16; i <=100;i++){
-            MemberFormDTO dto = new MemberFormDTO();
-            String name = "testuser"+i;
-            String email = name +"@test.com";
-            dto.setEmail(email);
-            dto.setPassword("1234");
-            dto.setMember_name(name);
-            dto.setAllias(name);
-            dto.setGroup_id(1);
-//            System.out.println("email = " + email);
-            dao.memberSave(dto);
-        }
+//        for(int i = 16; i <=100;i++){
+//            MemberFormDTO dto = new MemberFormDTO();
+//            String name = "testuser"+i;
+//            String email = name +"@test.com";
+//            dto.setEmail(email);
+//            dto.setPassword("1234");
+//            dto.setMember_name(name);
+//            dto.setAllias(name);
+//            dto.setGroup_id(1);
+////            System.out.println("email = " + email);
+//            dao.memberSave(dto);
+//        }
 
 
 
@@ -113,15 +113,15 @@ class AuthDAOTest {
     void test5() {
 
 
-        String name = "testuser1";
-        SearchDto params =new SearchDto();
-
-        PagingResponse<AdminMemberDTO> adminMemberDTOPagingResponse = service.searchMemberName(name, params);
-        List<AdminMemberDTO> list = adminMemberDTOPagingResponse.getList();
-        list.stream().forEach(
-                member_admin -> System.out.println("member_admin = " + member_admin)
-        );
-        System.out.println("list.size() = " + list.size());
+//        String name = "testuser1";
+//        SearchDto params =new SearchDto();
+//
+//        PagingResponse<AdminMemberDTO> adminMemberDTOPagingResponse = service.searchMemberName(name, params);
+//        List<AdminMemberDTO> list = adminMemberDTOPagingResponse.getList();
+//        list.stream().forEach(
+//                member_admin -> System.out.println("member_admin = " + member_admin)
+//        );
+//        System.out.println("list.size() = " + list.size());
 
     }
 

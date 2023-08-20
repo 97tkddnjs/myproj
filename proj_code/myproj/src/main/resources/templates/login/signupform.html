@@ -2,8 +2,28 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="utf-8">
-  <link th:href="@{/css/bootstrap.min.css}"
-        href="../css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+
+  <!--    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">-->
+
+  <!-- ... -->
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <!-- jQuery and Bootstrap JavaScript -->
+  <!--    <link rel="stylesheet" type="text/" th:href="@{/js/bootstrap.min.js}">-->
+
+
+  <!-- JS, Popper.js, and jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+
   <style>
         .container {
             max-width: 560px;
@@ -12,7 +32,84 @@
             border-color: #dc3545;
             color: #dc3545;
         }
+
+        .table-container {
+          height: 300px; /* Set the desired height */
+          overflow-y: scroll;
+          border: 1px solid #ccc;
+          margin-top: 20px;
+        }
+
+
+        .table-container thead {
+          position: sticky;
+          top: 0;
+          background-color: white;
+          z-index: 1;
+        }
+
+
     </style>
+  <script>
+    $(document).ready( function() {
+      $("#signUpBtn").click(function() {
+
+
+        var loginId = $("#loginId").val();
+        var password = $("#password").val();
+        var name = $("#name").val();
+        var email = $("#email").val();
+
+        // 각 필드가 비어있는지 확인하여 검증합니다.
+        if (loginId === "") {
+          alert("회원 ID (학번)을 입력해주세요.");
+          return;
+        }
+        if (password === "") {
+          alert("비밀번호를 입력해주세요.");
+          return;
+        }
+        if (name === "") {
+          alert("회원 이름을 입력해주세요.");
+          return;
+        }
+        if (email === "") {
+          alert("회원 이메일을 입력해주세요.");
+          return;
+        }
+
+        // 체크박스 검증
+        var hasChecked = false; // 하나라도 체크되었는지를 나타내는 변수
+
+        // 테이블의 각 행을 반복하여 체크박스의 상태를 확인
+        $(".table-container tbody tr").each(function () {
+          var isChecked = $(this).find(".form-check-input").prop("checked");
+          if (isChecked) {
+            hasChecked = true;
+            return false; // 체크가 되었으면 반복을 멈춥니다.
+          }
+        });
+
+        // 하나라도 체크되지 않았으면 알림을 표시하고 폼 제출을 막습니다.
+        if (!hasChecked) {
+          alert("수강 여부를 선택해주세요.");
+          return;
+        }
+        // 필수 입력 필드가 모두 입력되었을 경우, 폼을 서버로 제출합니다.
+        // 폼 전송
+
+        alert("im");
+        $("#signUpInfo").submit();
+
+      })
+
+
+
+
+    });
+
+
+  </script>
 </head>
 <body>
 <div class="container">
@@ -20,11 +117,13 @@
     <h2>회원가입</h2>
   </div>
 
-  <form action="/signup" th:action th:object="${signupData}" method="post">
+  <form id="signUpInfo" action="/signup" th:action th:object="${signupData}" method="post">
     <div>
       <label for="loginId">회원 ID (학번)</label>
       <input type="text" id="loginId" th:field="*{member.member_id}" class="form-control">
+
     </div>
+
 
     <div>
       <label for="password">비밀번호</label>
@@ -42,38 +141,50 @@
     </div>
 
     <div>
+      <label for="name">회원 소속 </label>
+      <input type="text" id="party" th:field="*{member.party}"  class="form-control">
+    </div>
+
+    <div style="margin-bottom: 20px;">
       <label for="phone">전화번호</label>
       <input type="text" id="phone" th:field="*{member.phone_num}"  class="form-control">
     </div>
 
-    <div>
-      <table>
+    <div class="table-container">
+      <table class="table">
         <thead>
-          <tr>
-            <th>수업명</th>
-            <th>개설학기</th>
-            <th>수강여부</th>
-          </tr>
+        <tr>
+          <th>#</th>
+          <th>수업명</th>
+          <th>개설학기</th>
+          <th>수강여부</th>
+        </tr>
         </thead>
         <tbody>
-          <tr>
-            <td><input type="text" name="classCodeList[0].code"></td>
-            <td><input type="checkbox" name="classCodeList[0].yesNo"></td>
-          </tr>
-          <tr>
-            <!-- Add more rows -->
-          </tr>
-
+        <tr th:each="classCode, rowNumber : ${signupData.classCodes}">
+          <td th:text="${rowNumber.count}"></td>
+          <td th:text="${classCode.class_nm}"></td>
+          <td th:text="${classCode.class_ymd}">[개설학기 데이터]</td>
+          <td>
+            <div class="form-check">
+              <input class="form-check-input"
+                     type="checkbox"
+                     th:checked="${classCode.registerClassYN}"
+                     th:if="${classCode.registerClassYN}">
+              <input class="form-check-input"
+                     type="checkbox"
+                     th:if="${!classCode.registerClassYN}">
+            </div>
+          </td>
+        </tr>
         </tbody>
-
       </table>
-
     </div>
 
     <hr class="my-4">
     <div class="row">
       <div class="col">
-        <button class="w-100 btn btn-primary btn-lg" type="submit">
+        <button id="signUpBtn" class="w-100 btn btn-primary btn-lg" type="button">
           회원가입</button>
       </div>
 

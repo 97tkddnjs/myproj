@@ -6,6 +6,8 @@ import lombok.Data;
 @Data
 public class ClassCodeDTO {
 
+    String member_id;
+
     int class_id;
 
     String class_nm;

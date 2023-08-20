@@ -1,5 +1,6 @@
 package com.dboard.myproj.common.dao;
 
+import com.dboard.myproj.data.dto.ClassCodeDTO;
 import com.dboard.myproj.data.dto.MemberFormDTO;
 import com.dboard.myproj.data.entity.ClassCodeVO;
 import com.dboard.myproj.data.entity.MemberVO;
@@ -21,9 +22,9 @@ import java.util.List;
 public interface AuthDAO {
 
 
-    MemberVO memberRetrievalByEmail(MemberFormDTO memberDto);
+    MemberVO memberRetrievalById(MemberVO memberVo);
 
-    void memberSave(MemberFormDTO memberDto);
+    void memberSave(MemberVO memberVo);
     //MemberFormDto dto
     //parameterType="com.dboard.myproj.common.dto.MemberFormDto"
 //    @Select("")
@@ -35,4 +36,5 @@ public interface AuthDAO {
 
     List<ClassCodeVO> findClassCodes();
 
+    void saveCourseReg(ClassCodeDTO classCode);
 }
