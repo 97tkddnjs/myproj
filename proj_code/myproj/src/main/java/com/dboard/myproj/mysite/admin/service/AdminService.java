@@ -28,27 +28,27 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AdminService {
 
-//    private final AdminDAO dao;
-//
-//    @Transactional
-//    public PagingResponse<AdminMemberDTO> findAllUserMember(final SearchDto params){
-//
-//        int count  = dao.countMember(params);
-//
-//        if (count < 1) {
-//
-//        }
-//
-//        // Pagination 객체를 생성해서 페이지 정보 계산 후 SearchDto 타입의 객체인 params에 계산된 페이지 정보 저장
-//        Pagination pagination = new Pagination(count, params);
-//        // param 에 pagination 정보 주입
-//        params.setPagination(pagination);
-//
-//        List<AdminMemberDTO> allUserMember = dao.findAllUserMember(params);
-//
-//        return new PagingResponse<>(allUserMember, pagination);
-//    }
-//
+    private final AdminDAO dao;
+
+    @Transactional
+    public PagingResponse<AdminMemberDTO> findAllUserMember(final SearchDto params){
+
+        int count  = dao.countMember(params);
+
+        if (count < 1) {
+
+        }
+
+        // Pagination 객체를 생성해서 페이지 정보 계산 후 SearchDto 타입의 객체인 params에 계산된 페이지 정보 저장
+        Pagination pagination = new Pagination(count, params);
+        // param 에 pagination 정보 주입
+        params.setPagination(pagination);
+
+        List<AdminMemberDTO> allUserMember = dao.findAllUserMember(params);
+
+        return new PagingResponse<>(allUserMember, pagination);
+    }
+
 //
 //    @Transactional
 //    public AdminMemberDTO findUserMemberByEmail(String email) {

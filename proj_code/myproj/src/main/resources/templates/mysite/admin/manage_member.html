@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<nav th:replace="~{mysite/admin/common/header :: adminHead}"></nav>
+<body>
+<nav th:replace="~{mysite/admin/common/navbar :: navbarFragment}"></nav>
+
+
+    <div  class="container my-5">
+
+        <div class="search my-3">
+            <form id="searchdata" class="d-inline-flex">
+                <select name="condition"  class="m-1">
+                    <option value="">전체 검색</option>
+                    <option value="1">회원</option>
+                    <option value="2">제한 회원</option>
+                    <option value="3">제한 회원</option>
+                </select>
+                <input name="searchval" class="form-control me-2"   placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" onclick="movePage(1);">Search</button>
+            </form>
+            <!-- Button trigger modal -->
+
+        </div>
+
+        <table class="table">
+            <thead>
+            <th> 번호 </th>
+            <th> ID </th>
+            <th> 이름 </th>
+            <th> 제한 여부</th>
+            </thead>
+
+            <!-- /* list 내용 채우는 공간임 */-->
+            <tbody id="list">
+
+
+            </tbody>
+        </table>
+
+
+        <!--/* 페이지네이션 렌더링 영역 */-->
+        <div class="paging align-content-center">
+
+        </div>
+    </div>
+
+</body>
+</html>

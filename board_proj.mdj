@@ -2335,6 +2335,24 @@
 								},
 								"cardinality": "0..*"
 							}
+						},
+						{
+							"_type": "FCFlowchart",
+							"_id": "AAAAAAGKHYfQHFgmeLE=",
+							"_parent": {
+								"$ref": "AAAAAAGHTJl/gGDpEp8="
+							},
+							"name": "Flowchart1",
+							"ownedElements": [
+								{
+									"_type": "FCFlowchartDiagram",
+									"_id": "AAAAAAGKHYfQHFgn/xQ=",
+									"_parent": {
+										"$ref": "AAAAAAGKHYfQHFgmeLE="
+									},
+									"name": "FlowchartDiagram1"
+								}
+							]
 						}
 					],
 					"columns": [

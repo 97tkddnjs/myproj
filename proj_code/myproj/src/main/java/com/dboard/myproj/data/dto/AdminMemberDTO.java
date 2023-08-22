@@ -16,22 +16,12 @@ public class AdminMemberDTO {
 
     String password;
 
-    String member_name;
-
-    String address;
+    String member_nm;
 
     String party;
 
-    String allias;
-
     Long grade_id;
 
-    String grade_type;
-
-    String group_type;
-
-    Long restrict_id;
-
-    Boolean restrict_show;
+    Long restrict_YN;
 
 }

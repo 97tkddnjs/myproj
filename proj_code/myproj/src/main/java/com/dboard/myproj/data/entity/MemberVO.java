@@ -1,10 +1,7 @@
 package com.dboard.myproj.data.entity;
 
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
@@ -13,6 +10,8 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class MemberVO {
 
     String member_id;

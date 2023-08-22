@@ -7,6 +7,7 @@ import com.dboard.myproj.data.dto.SignupDTO;
 import com.dboard.myproj.data.entity.ClassCodeVO;
 import com.dboard.myproj.data.entity.MemberVO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class AuthenticationService {
 
@@ -73,7 +75,7 @@ public class AuthenticationService {
                 .member_nm(memberFormDTO.getMember_nm())
                 .phone_num(memberFormDTO.getPhone_num())
                 .build();
-
+        log.info(" member VO  : {}",memberVO);
         MemberVO member = authDAO.memberRetrievalById(memberVO);
 
         if(member.getPassword().equals(memberVO.getPassword()) ){

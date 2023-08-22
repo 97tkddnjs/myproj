@@ -9,9 +9,7 @@
             `member_name`   ,
             `address`       ,
             `party`         ,
-            `allias`        ,
-            `grade_id`      ,
-            `group_id`
+            `grade_id`
         FROM MEMBER
     </select>
 
@@ -23,7 +21,8 @@
             `MEMBER_NM`          ,
             `PHONE_NUM`          ,
             `PARTY`              ,
-            `REG_DT`
+            `REG_DT`             ,
+            `GRADE_ID`
         )
         values (
                    #{member_id}         ,
@@ -32,13 +31,14 @@
                    #{member_nm}       ,
                    #{phone_num}         ,
                    #{party}        ,
-                   #{reg_dt}
+                   #{reg_dt}        ,
+                    2
                )
 
     </insert>
 
     <select id="memberRetrievalById"
-            parameterType="com.dboard.myproj.data.dto.MemberFormDTO"
+            parameterType="com.dboard.myproj.data.entity.MemberVO"
             resultType="com.dboard.myproj.data.entity.MemberVO"
     >
         SELECT
@@ -46,7 +46,10 @@
             `EMAIL`      ,
             `PASSWORD`   ,
             `MEMBER_NM`       ,
-            `PHONE_NUM`         ,
+            `PHONE_NUM`      ,
+            `PARTY`         ,
+            `GRADE_ID`      ,
+            `REG_DT`
         FROM CLASS_MEMBER
         WHERE MEMBER_ID=#{member_id}
     </select>

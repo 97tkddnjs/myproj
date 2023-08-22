@@ -35,31 +35,32 @@ public class AdminController {
 
     private final AdminService service;
 
-//    @GetMapping("/home")
-//    public String index(Model model ) {
-////        //System.out.println("inthe =  /" );
-////        log.info("admin index page into ");
-////        List<Group> allGroup = service.findAllGroup();
-////        model.addAttribute("group", allGroup);
-////
-////        return "mysite/admin/index";
-//    }
+
+
+    @GetMapping("/home")
+    public String index(Model model ) {
+        //System.out.println("inthe =  /" );
+        log.info("admin index page into ");
+
+
+        return "mysite/admin/index";
+    }
 
     /**
      *  회원 관리를 보여주는 URL
      *  처음 접속시 전체 데이터 보여주어야 함
      *  admin은 따로 터치 x~
      */
-//    @GetMapping("/member")
-//    public String memberAdmin(@ModelAttribute("params") final SearchDto params,
-//                              Model model) {
-//
-//
-//        PagingResponse<AdminMemberDTO> allUserMember = service.findAllUserMember(params);
-//        model.addAttribute("allmember",allUserMember);
-//
-//        return "mysite/admin/adminmember";
-//    }
+    @GetMapping("/member")
+    public String memberAdmin(@ModelAttribute("params") final SearchDto params,
+                              Model model) {
+
+
+        PagingResponse<AdminMemberDTO> allUserMember = service.findAllUserMember(params);
+        model.addAttribute("allmember",allUserMember);
+
+        return "mysite/admin/adminmember";
+    }
 //
 //    /**
 //     *  그룹이랑 제한 여부 정도만 건들일 수 있음....
