@@ -338,20 +338,35 @@
 											"top": 550,
 											"width": 231,
 											"height": 13
+										},
+										{
+											"_type": "ERDColumnView",
+											"_id": "AAAAAAGKHYoOKVguZWM=",
+											"_parent": {
+												"$ref": "AAAAAAGHTJl/gWDtdo8="
+											},
+											"model": {
+												"$ref": "AAAAAAGKHYoOJFgrEKs="
+											},
+											"font": "Arial;13;0",
+											"left": 293,
+											"top": 565,
+											"width": 231,
+											"height": 13
 										}
 									],
 									"font": "Arial;13;0",
 									"left": 288,
 									"top": 455,
 									"width": 241,
-									"height": 113
+									"height": 128
 								}
 							],
 							"font": "Arial;13;0",
 							"left": 288,
 							"top": 432,
 							"width": 241,
-							"height": 145,
+							"height": 151,
 							"nameLabel": {
 								"$ref": "AAAAAAGHTJl/gWDsQoU="
 							},
@@ -2011,7 +2026,7 @@
 									},
 									"font": "Arial;13;0",
 									"left": 303,
-									"top": 595,
+									"top": 601,
 									"height": 13,
 									"alpha": 0.5235987755982988,
 									"distance": 30,
@@ -2045,7 +2060,7 @@
 								"$ref": "AAAAAAGHTJl/gWDrGFM="
 							},
 							"lineStyle": 2,
-							"points": "288:576;288:632;80:632;80:648",
+							"points": "288:582;288:632;80:632;80:648",
 							"nameLabel": {
 								"$ref": "AAAAAAGJyZF00V48i94="
 							},
@@ -2431,6 +2446,16 @@
 							"name": "REG_DT",
 							"type": "DATE",
 							"length": 0
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "AAAAAAGKHYoOJFgrEKs=",
+							"_parent": {
+								"$ref": "AAAAAAGHTJl/gGDpEp8="
+							},
+							"name": "party",
+							"type": "VARCHAR",
+							"length": "100"
 						}
 					]
 				},

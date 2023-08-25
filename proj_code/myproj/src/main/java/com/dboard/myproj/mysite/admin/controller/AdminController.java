@@ -59,7 +59,7 @@ public class AdminController {
         PagingResponse<AdminMemberDTO> allUserMember = service.findAllUserMember(params);
         model.addAttribute("allmember",allUserMember);
 
-        return "mysite/admin/adminmember";
+        return "mysite/admin/manage_member";
     }
 //
 //    /**

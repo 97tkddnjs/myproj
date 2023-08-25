@@ -8,6 +8,8 @@ import com.dboard.myproj.data.dto.SignupDTO;
 import com.dboard.myproj.data.entity.MemberVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -102,26 +104,28 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    public String signupPost(
-            @ModelAttribute("signupData") SignupDTO signupDTO,
+    public ResponseEntity<String> signupPost(
+            @RequestBody SignupDTO signupDTO,
             RedirectAttributes re
     ) {
         MemberFormDTO memberFormDTO = signupDTO.getMember();
         List<ClassCodeDTO> classCodes = signupDTO.getClassCodes();
 
         log.info("member show "+memberFormDTO);
-
+        log.info("data class  ");
+        classCodes.forEach(
+                x -> System.out.println("x = " + x)
+        );
 
         boolean sign = authservice.signUp(signupDTO);
 
         if (sign) {
             log.info("dddd");
-            re.addFlashAttribute("msg", "ok pass");
+            return new ResponseEntity<>("ok pass", HttpStatus.OK);
         }else{
-            re.addFlashAttribute("msg", "sorry fail");
+            log.info("fail");
+            return new ResponseEntity<>("sorry fail ", HttpStatus.SERVICE_UNAVAILABLE);
         }
-
-        return "redirect:/";
 
     }
 

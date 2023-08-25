@@ -5,12 +5,14 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @ToString
 public class AdminMemberDTO {
 
-    Long member_id;
+    String member_id;
 
     String email;
 
@@ -22,6 +24,8 @@ public class AdminMemberDTO {
 
     Long grade_id;
 
-    Long restrict_YN;
+    LocalDateTime reg_dt;
+
+    Long restrict;
 
 }
