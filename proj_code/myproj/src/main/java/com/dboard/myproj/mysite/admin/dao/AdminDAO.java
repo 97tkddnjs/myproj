@@ -2,8 +2,11 @@ package com.dboard.myproj.mysite.admin.dao;
 
 
 import com.dboard.myproj.config.page.SearchDto;
+import com.dboard.myproj.data.dto.AdminBoardDTO;
 import com.dboard.myproj.data.dto.AdminMemberDTO;
 
+import com.dboard.myproj.data.dto.ClassCodeDTO;
+import com.dboard.myproj.data.entity.ClassCodeVO;
 import com.dboard.myproj.data.entity.Restrict;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -26,27 +29,23 @@ public interface AdminDAO {
 
     int countMember(SearchDto params);
 
-    AdminMemberDTO findUserMemberByEmail(String email);
+    AdminMemberDTO findUserMemberByID(String memberID);
 
-//    List<Group> findAllGroup();
+    int countClassCode(SearchDto params);
 
-    int updateMemberByEmail(AdminMemberDTO member);
+    List<ClassCodeVO> findAllClassCode(SearchDto params);
 
-    Boolean isRestrict(String email);
+    int saveClassCode(ClassCodeDTO classCodeDTO);
 
-    int updateRestrict(AdminMemberDTO member);
+    int saveClassBoardType(ClassCodeDTO classCodeDTO);
 
-    int updateNotRestrict(AdminMemberDTO member);
+    ClassCodeVO findClassCodeById(String classId);
 
-    Restrict findRestrictByEmail(AdminMemberDTO member);
+    List<ClassCodeDTO> findCourseRegistrationByMemberID(String memberID);
 
-    void restrictMemberSave(AdminMemberDTO member);
+    int updateClassCodeById(ClassCodeDTO classCodeDTO);
 
-    int cntSearchMemberName(HashMap<String, Object> map);
-    List<AdminMemberDTO>  searchMemberName(HashMap<String, Object> map);
-
-    List<AdminMemberDTO>  searchRestrictMemberName(String name, final SearchDto params);
-
+    List<AdminBoardDTO> findAllBoard(SearchDto params);
 
 
     //List<AdminMemberDTO>  searchGroupMemberName(String name,final SearchDto params);

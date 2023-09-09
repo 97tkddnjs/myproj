@@ -12,5 +12,6 @@ public class ClassCodeVO {
 
     String class_ymd;
 
+    String del_yn;
 
 }

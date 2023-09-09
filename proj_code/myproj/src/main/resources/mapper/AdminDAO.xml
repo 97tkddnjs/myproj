@@ -2,6 +2,46 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.dboard.myproj.mysite.admin.dao.AdminDAO">
+
+    <!-- 게시글 검색 -->
+    <sql id="search">
+        <!-- 검색 키워드가 있을 때 -->
+        <if test="keyword != null and keyword != ''">
+            <choose>
+
+                <!-- 검색 유형이 있을 때 -->
+                <when test="searchType != null and searchType != ''">
+
+                    <choose>
+                        <when test="1== searchType">
+                            AND MEMBER_ID LIKE CONCAT('%', #{keyword}, '%')
+                        </when>
+                        <when test="2== searchType">
+                            AND EXISTS  (
+                            select restrict_id
+                            FROM   restrict_member
+                            WHERE  MEMBER_ID = cm.MEMBER_ID
+                            AND    RESTRICT_SHOW=TRUE)
+                        </when>
+                        <when test="3== searchType">
+                            AND (SELECT MEMBER_ID
+                            FROM course_registration cr
+                            WHERE ( select SUBSTR(CLASS_YMD,1,4)
+                                    from class_code WHERE CLASS_ID= cr.CLASS_ID AND DEL_YN='N') =  #{keyword}) = cm.`MEMBER_ID`
+                        </when>
+                    </choose>
+                </when>
+
+                <!-- 전체 검색일 때 -->
+                <otherwise>
+                    AND 1=1
+                </otherwise>
+            </choose>
+        </if>
+    </sql>
+
+
+
     <select id="findAllUserMember" parameterType="com.dboard.myproj.config.page.SearchDto"
             resultType="com.dboard.myproj.data.dto.AdminMemberDTO">
         SELECT
@@ -20,6 +60,7 @@
                 AND    RESTRICT_SHOW=TRUE) as SUCCESS
         FROM CLASS_MEMBER cm
         WHERE GRADE_ID= 2
+        <include refid="search" />
         LIMIT #{offset}, #{recordSize}
     </select>
 
@@ -27,7 +68,9 @@
             resultType="int">
         SELECT
             COUNT(*)
-        FROM CLASS_MEMBER;
+        FROM CLASS_MEMBER cm
+        WHERE GRADE_ID= 2
+        <include refid="search" />
     </select>
 
     <select id="findUserMemberByID" parameterType="String"
@@ -48,9 +91,110 @@
                     WHERE  MEMBER_ID = cm.MEMBER_ID
                       AND    RESTRICT_SHOW=TRUE) as RESTRRICT
         FROM CLASS_MEMBER cm
-            LIMIT #{offset}, #{recordSize}
         WHERE `MEMBER_ID` = #{member_id}
     </select>
 
+    <select id="findAllClassCode" parameterType="com.dboard.myproj.config.page.SearchDto"
+             resultType="com.dboard.myproj.data.entity.ClassCodeVO">
+        SELECT
+            `CLASS_ID`  ,
+            `CLASS_NM`  ,
+            `CLASS_YMD` ,
+            `DEL_YN`
+        FROM CLASS_CODE
+        LIMIT #{offset}, #{recordSize}
+    </select>
+
+    <select id="countClassCode" parameterType="com.dboard.myproj.config.page.SearchDto"
+            resultType="int">
+        SELECT
+        COUNT(*)
+        FROM CLASS_CODE
+        <include refid="search" />
+    </select>
+    
+    
+    <insert id="saveClassCode" parameterType="com.dboard.myproj.data.dto.ClassCodeDTO">
+
+        INSERT INTO CLASS_CODE (
+            `CLASS_NM`  ,
+            `CLASS_YMD` ,
+            `DEL_YN`)
+        VALUES
+            (
+             #{class_nm},
+             #{class_ymd},
+             'N'
+            )
+
+
+    </insert>
+
+
+    <insert id="saveClassBoardType" parameterType="com.dboard.myproj.data.dto.ClassCodeDTO">
+
+        INSERT INTO CLASS_BOARD_TYPE (
+            `CLASS_ID`  ,
+            `BOARD_ID` ,
+            `CB_SHOW`)
+        VALUES
+            (
+                (SELECT `CLASS_ID`
+                FROM CLASS_CODE
+                WHERE `CLASS_NM` = #{class_nm} AND `CLASS_YMD` = #{class_ymd})
+                , 1
+                , 'N'
+
+            )
+
+
+    </insert>
+
+
+    <select id="findClassCodeById"
+            parameterType="String"
+            resultType="com.dboard.myproj.data.entity.ClassCodeVO">
+
+        SELECT
+                    `CLASS_ID`  ,
+                    `CLASS_NM`  ,
+                    `CLASS_YMD` ,
+                    `DEL_YN`
+        FROM CLASS_CODE
+        WHERE `CLASS_ID`=#{classId}
+
+    </select>
+
+    <update id="updateClassCodeById"
+            parameterType="com.dboard.myproj.data.dto.ClassCodeDTO">
+        UPDATE CLASS_CODE
+        SET `DEL_YN` = #{del_yn}
+        WHERE `CLASS_ID`=#{class_id}
+    </update>
+
+
+    <select id="findAllBoard" parameterType="com.dboard.myproj.config.page.SearchDto"
+            resultType="com.dboard.myproj.data.dto.AdminBoardDTO">
+
+        SELECT
+            cbt.CLASS_ID ,
+            cc.CLASS_YMD,
+            cc.CLASS_NM,
+            (SELECT BOARD_NM from board_type bt where bt.BOARD_ID = cbt.BOARD_ID) as board_nm
+        FROM class_board_type as cbt inner join class_code as cc on cbt.CLASS_ID= cc.CLASS_ID
+        WHERE  cc.DEL_YN ='N';
+
+    </select>
+
+    <select id="findCourseRegistrationByMemberID" parameterType="String"
+            resultType="com.dboard.myproj.data.dto.ClassCodeDTO">
+        SELECT
+            CLASS_ID		,
+            (SELECT CLASS_NM FROM CLASS_CODE CC WHERE  CC.CLASS_ID = CR.CLASS_ID) AS CLASS_NM		,
+            (SELECT  CLASS_YMD FROM CLASS_CODE CC WHERE  CC.CLASS_ID = CR.CLASS_ID) AS CLASS_YMD
+        FROM COURSE_REGISTRATION CR
+        WHERE `MEMBER_ID` = #{memberID}
+
+    </select>
 
 </mapper>

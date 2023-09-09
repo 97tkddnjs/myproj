@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<nav th:replace="~{mysite/admin/common/header :: adminHead}"></nav>
+<nav th:replace="~{mysite/admin/common/navbar :: navbarFragment}"></nav>
+
+
+
+
+<script>
+    function goBack() {
+        window.history.back();
+    }
+    $(document).ready( function() {
+        $("#signUpBtn").click(function() {
+
+
+            var loginId = $("#loginId").val();
+            var password = $("#password").val();
+            var name = $("#name").val();
+            var email = $("#email").val();
+            var classCodeDatas = []; // 테이블 데이터를 저장할 배열
+
+
+            // 각 필드가 비어있는지 확인하여 검증합니다.
+            if (loginId === "") {
+                alert("회원 ID (학번)을 입력해주세요.");
+                return;
+            }
+            if (password === "") {
+                alert("비밀번호를 입력해주세요.");
+                return;
+            }
+            if (name === "") {
+                alert("회원 이름을 입력해주세요.");
+                return;
+            }
+            if (email === "") {
+                alert("회원 이메일을 입력해주세요.");
+                return;
+            }
+
+            // 체크박스 검증
+            var hasChecked = false; // 하나라도 체크되었는지를 나타내는 변수
+
+            // 테이블의 각 행을 반복하여 체크박스의 상태를 확인
+            $(".table-container tbody tr").each(function () {
+                var row = $(this);
+                var isChecked = row.find(".form-check-input").prop("checked");
+
+
+                var classCodeData = {
+                    member_id : loginId ,
+                    class_nm: row.find("td:eq(1)").text(),
+                    class_ymd: row.find("td:eq(2)").text(),
+                    registerClassYN: isChecked,
+                    class_id : row.find("td:eq(4)").text()
+                };
+
+                classCodeDatas.push(classCodeData);
+
+                if (isChecked) {
+                    hasChecked = true;
+                }
+            });
+
+            // 하나라도 체크되지 않았으면 알림을 표시하고 폼 제출을 막습니다.
+            if (!hasChecked) {
+                alert("수강 여부를 선택해주세요.");
+                return;
+            }
+            // 필수 입력 필드가 모두 입력되었을 경우, 폼을 서버로 제출합니다.
+            // 폼 전송
+
+            alert("im");
+
+            var memberDTO = {
+                member_id: $("#loginId").val(),
+                email: $("#email").val(),
+                password: $("#password").val(),
+                member_nm: $("#name").val(),
+                phone_num: $("#phone").val(),
+                party: $("#party").val()
+
+            }
+
+            var formData = {
+                member: memberDTO
+                ,
+                classCodes: classCodeDatas
+            };
+            // $("#signUpInfo").submit();
+            alert("ok");
+
+            $.ajax({
+                type: "POST",
+                url: "/signup",
+                data: JSON.stringify(formData),
+                contentType: "application/json",
+                success: function(response, textStatus, xhr) {
+                    if (xhr.status === 200) {
+                        console.log("성공:", response);
+                        // 상태 코드가 200 (OK)인 경우에 처리
+                    } else {
+                        console.log("다른 상태 코드:", xhr.status);
+                        // 다른 상태 코드에 대한 처리
+                    }
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    console.log("에러:", xhr.status, errorThrown);
+                    location.href = "/"
+                    // 서버로 데이터 전송 중 오류 발생
+                }
+            });
+        })
+
+
+
+
+    });
+
+
+</script>
+
+
+<body>
+
+
+<div class="container">
+    <div class="py-5 text-center">
+        <h2> member details</h2>
+    </div>
+
+    <form id="signUpInfo" action="/signup" th:action th:object="${memberdetail}" method="post" >
+        <div>
+            <label for="loginId">회원 ID (학번)</label>
+            <input type="text" id="loginId" th:field="*{member.member_id}" class="form-control" readonly="true">
+
+        </div>
+
+
+        <div>
+            <label for="password">비밀번호</label>
+            <input type="text" id="password"  th:field="*{member.password}" class="form-control" readonly="true">
+        </div>
+
+        <div>
+            <label for="name">회원 이름 </label>
+            <input type="text" id="name" th:field="*{member.member_nm}"  class="form-control" readonly="true">
+        </div>
+
+        <div>
+            <label for="email">회원 이메일 </label>
+            <input type="text" id="email" th:field="*{member.email}"  class="form-control" readonly="true">
+        </div>
+
+        <div>
+            <label for="name">회원 소속 </label>
+            <input type="text" id="party" th:field="*{member.party}"  class="form-control" readonly="true">
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <label for="phone">전화번호</label>
+            <input type="text" id="phone" th:field="*{member.phone_num}"  class="form-control" readonly="true">
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <label for="restrict">재한 여부</label>
+            <input type="checkbox" id="restrict" th:checked="*{member.restrict==0}" >
+        </div>
+
+        <div class="table-container ">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>수업명</th>
+                    <th>개설학기</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="classCode, rowNumber : ${memberdetail.classCodes}">
+
+                    <td th:text="${rowNumber.count}"></td>
+
+                    <td th:text="${classCode.class_nm}"></td>
+                    <td th:text="${classCode.class_ymd}">[개설학기 데이터]</td>
+<!--                    <td>-->
+<!--                        <div class="form-check">-->
+<!--                            <input class="form-check-input"-->
+<!--                                   type="checkbox"-->
+<!--                                   th:checked="${classCode.registerClassYN}"-->
+<!--                                   th:if="${classCode.registerClassYN}">-->
+<!--                            <input class="form-check-input"-->
+<!--                                   type="checkbox"-->
+<!--                                   th:if="${!classCode.registerClassYN}">-->
+<!--                        </div>-->
+<!--                    </td>-->
+                    <td style="display: none;" th:text="${classCode.class_id}"/>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <hr class="my-4">
+        <div class="row">
+            <div class="col">
+                <button id="signUpBtn" class="w-100 btn btn-primary btn-lg" type="button">
+                    수정</button>
+            </div>
+
+            <div class="col">
+                <button class="w-100 btn btn-secondary btn-lg"
+                        th:onclick="goBack()"
+                        type="button">취소</button>
+            </div>
+
+        </div>
+
+    </form>
+</div> <!-- /container -->
+
+
+</body>
+</html>

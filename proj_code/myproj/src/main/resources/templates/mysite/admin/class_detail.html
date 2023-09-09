@@ -1,0 +1,132 @@
+
+
+
+<script th:inline="javascript">
+
+
+    // $(document).ready(function() {
+        function cancel(){
+            $("#cancelBtn").click();
+        }
+        function updateClass() {
+
+            var class_id = [[${classCode.class_id}]];
+
+            var class_nm = $("#class_nm").val();
+            var class_ymd = $("#class_ymd").val();
+
+            var init_delYN = [[${classCode.del_yn}]];
+
+            init_delYN  = (init_delYN =='Y' ? true : false);
+            var update_delYN =document.getElementById("restrict_YN").checked;
+
+            // var update_delYN =  $("#restrict_YN").val().checked();
+            console.log(init_delYN,update_delYN );
+            // 각 필드가 비어있는지 확인하여 검증합니다.
+            if (init_delYN == update_delYN) {
+                alert("변경사항이 없습니다.")
+                cancel();
+                return;
+            }else{
+                if (window.confirm("정말 변경 하시겠습니까?")) {
+                    // 사용자가 "OK"를 눌렀을 때 실행할 로직
+                    alert("수행합니다!");
+                    // Javascript 객체로 전달해야해서
+                    var form = $("#classDetail").serialize();
+
+                    console.log(form);
+                    //alert(form);
+                    var searchObj = JSON.parse('{"' + decodeURI(form).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
+                    searchObj.del_yn = update_delYN === true ? 'Y' : 'N';
+                    form = (JSON.stringify(searchObj));
+
+
+                    console.log(form);
+                    $.ajax({
+
+                        type:"POST"
+                        //, encType:"multipart/form-data"
+                        , url:"/mysite/admin/rest/class/"+class_id
+                        , data : form
+                        , processData : false
+                        , contentType :  "application/json; charset=utf-8"
+                        //, contentType :  false
+                        , cache : false
+                        , success : function(data) {
+                            // alert(data);
+                            if(data.result=="")
+                                alert("yes");
+                            if(data.result =="ok") {
+                                alert(data.result)
+                                alert("수업 등록 성공");
+                            } else {
+                                alert(data.result)
+                                alert("수업 등록 실패 \n 관리자에게 문의 바랍니다");
+                            }
+                            location.href="/mysite/admin/class";
+                        } //call back function
+                        , error : function(xhr) {
+                            alert(xhr)
+                            alert("통신 실패");
+                        } //call back function
+                    }); // ajax
+
+
+
+                } else {
+                    // 사용자가 "취소"를 눌렀을 때 실행할 로직 또는 아무것도 하지 않음
+                    alert("취소하였습니다.")
+                    cancel();
+                }
+
+
+
+            }// else if 문
+        }
+    // }); // ready
+</script>
+
+
+<div class="modal-header">
+    <h5 class="modal-title" id="historyModalLabel" th:text="|*{classCode.class_ymd} 학기 *{classCode.class_nm} 수업|"> ID - Modal</h5>
+    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+</div>
+<div class="modal-body">
+
+
+
+    <form id="classDetail"  th:object="${classCode}">
+        <div>
+            <input type="text" id="class_id" th:field="*{class_id}"  class="form-control" hidden="true">
+
+        </div>
+
+        <div>
+            <label for="class_nm"> 수업 이름 </label>
+            <input type="text" id="class_nm" th:field="*{class_nm}"  class="form-control" readonly="true">
+        </div>
+
+        <div>
+            <label for="class_ymd"> 수업 학기 </label>
+            <input type="text" id="class_ymd" th:field="*{class_ymd}" placeholder="yyyymm"  class="form-control" readonly="true">
+        </div>
+        <br>
+        <div>
+            <label name="restrict_YN" >제한 여부</label>
+            <br>
+                <input type="checkbox" id="restrict_YN"  th:checked="*{del_yn =='Y'}"
+                       value ="" >
+
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn btn-primary" id="putBtn" type="button" onclick="updateClass()">등록</button>
+            <button class="btn btn-secondary" id="cancelBtn" type="button" data-dismiss="modal">Cancel</button>
+        </div>
+    </form>
+
+
+</div>
+

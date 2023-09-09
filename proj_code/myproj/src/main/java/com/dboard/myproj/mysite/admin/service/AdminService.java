@@ -3,8 +3,12 @@ package com.dboard.myproj.mysite.admin.service;
 import com.dboard.myproj.config.page.Pagination;
 import com.dboard.myproj.config.page.PagingResponse;
 import com.dboard.myproj.config.page.SearchDto;
+import com.dboard.myproj.data.dto.AdminBoardDTO;
 import com.dboard.myproj.data.dto.AdminMemberDTO;
 
+import com.dboard.myproj.data.dto.ClassCodeDTO;
+import com.dboard.myproj.data.dto.MemberDetailFormDTO;
+import com.dboard.myproj.data.entity.ClassCodeVO;
 import com.dboard.myproj.data.entity.Restrict;
 import com.dboard.myproj.mysite.admin.dao.AdminDAO;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.annotation.Target;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,9 +40,7 @@ public class AdminService {
 
         int count  = dao.countMember(params);
 
-        if (count < 1) {
 
-        }
 
         // Pagination 객체를 생성해서 페이지 정보 계산 후 SearchDto 타입의 객체인 params에 계산된 페이지 정보 저장
         Pagination pagination = new Pagination(count, params);
@@ -47,6 +50,67 @@ public class AdminService {
         List<AdminMemberDTO> allUserMember = dao.findAllUserMember(params);
 
         return new PagingResponse<>(allUserMember, pagination);
+    }
+
+    @Transactional
+    public PagingResponse<ClassCodeVO> findAllClass(SearchDto params) {
+
+        int count = dao.countClassCode(params);
+
+        Pagination pagination = new Pagination(count, params);
+
+        List<ClassCodeVO> allClassCodes =  dao.findAllClassCode(params);
+
+        return new PagingResponse<>(allClassCodes, pagination);
+
+    }
+
+    @Transactional
+    public int saveClassCode(ClassCodeDTO classCodeDTO) {
+
+        dao.saveClassCode(classCodeDTO);
+
+        return dao.saveClassBoardType(classCodeDTO);
+
+
+    }
+
+    public ClassCodeDTO findClassCodeById(String classId) {
+
+        ClassCodeVO classCodeVO = dao.findClassCodeById(classId);
+        ClassCodeDTO classCodeDTO = new ClassCodeDTO();
+
+        classCodeDTO.setClass_id(classCodeVO.getClass_id());
+        classCodeDTO.setClass_nm(classCodeVO.getClass_nm());
+        classCodeDTO.setClass_ymd(classCodeVO.getClass_ymd());
+        classCodeDTO.setDel_yn(classCodeVO.getDel_yn());
+
+        return classCodeDTO;
+    }
+
+    public int updateClassCodeById(ClassCodeDTO classCodeDTO) {
+
+        return dao.updateClassCodeById(classCodeDTO);
+    }
+
+    public List<AdminBoardDTO> findAllBoard(SearchDto params) {
+
+        return  dao.findAllBoard(params);
+
+    }
+
+    public MemberDetailFormDTO findMemberDetailById(String memberId) {
+
+        AdminMemberDTO userMemberByID = dao.findUserMemberByID(memberId);
+        List<ClassCodeDTO> courseRegistrationByMemberID = dao.findCourseRegistrationByMemberID(memberId);
+
+        MemberDetailFormDTO memberDetailFormDTO = new MemberDetailFormDTO();
+
+        memberDetailFormDTO.setMember(userMemberByID);
+        memberDetailFormDTO.setClassCodes(courseRegistrationByMemberID);
+
+        return  memberDetailFormDTO;
+
     }
 
 //

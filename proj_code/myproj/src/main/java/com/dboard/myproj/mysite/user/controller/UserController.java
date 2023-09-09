@@ -14,7 +14,7 @@ public class UserController {
 
     @GetMapping("/home")
     public String index() {
-        return "";
+        return "mysite/user/index";
     }
 
 }

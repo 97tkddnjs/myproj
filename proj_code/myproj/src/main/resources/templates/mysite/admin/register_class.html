@@ -1,11 +1,107 @@
-<!doctype html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<nav th:replace="~{mysite/admin/common/header :: adminHead}"></nav>
-<body>
-<nav th:replace="~{mysite/admin/common/navbar :: navbarFragment}"></nav>
-
-    
 
 
-</body>
-</html>
+
+<script>
+
+
+    $(document).ready(function() {
+        $("#putBtn").click(function() {
+
+
+            var class_nm = $("#class_nm").val();
+            var class_ymd = $("#class_ymd").val();
+
+
+
+            // 각 필드가 비어있는지 확인하여 검증합니다.
+            if (class_nm === "") {
+                alert("수업명을 입력해주세요.");
+                return;
+            }
+            if (class_ymd === "") {
+                alert("수업학기를 입력해주세요.");
+                return;
+            }
+            // Javascript 객체로 전달해야해서
+            var form = $("#classDetail").serialize();
+            //alert(form);
+            var searchObj = JSON.parse('{"' + decodeURI(form).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
+            form = (JSON.stringify(searchObj));
+
+            $.ajax({
+
+                type:"POST"
+                //, encType:"multipart/form-data"
+                , url:"/mysite/admin/rest/register/class"
+                , data : form
+                , processData : false
+                , contentType :  "application/json; charset=utf-8"
+                //, contentType :  false
+                , cache : false
+                , success : function(data) {
+                    // alert(data);
+                    if(data.result=="")
+                        alert("yes");
+                    if(data.result =="ok") {
+                        alert(data.result)
+                        alert("수업 등록 성공");
+                    } else {
+                        alert(data.result)
+                        alert("수업 등록 실패 \n 관리자에게 문의 바랍니다");
+                    }
+                    location.href="/mysite/admin/class";
+                } //call back function
+                , error : function(xhr) {
+                    alert(xhr)
+                    alert("통신 실패");
+                } //call back function
+            }); // ajax
+        }); // click
+    }); // ready
+</script>
+
+
+<div class="modal-header">
+    <h5 class="modal-title" id="historyModalLabel">새 수업 등록하기</h5>
+    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+</div>
+<div class="modal-body">
+
+         <p style="margin-bottom: 20px;"></p>
+
+        <form id="classDetail"  th:object="${classCode}">
+            <div>
+
+
+            </div>
+
+            <div>
+                <label for="class_nm"> 수업 이름 </label>
+                <input type="text" id="class_nm" th:field="*{class_nm}"  class="form-control">
+            </div>
+
+            <div>
+                <label for="class_ymd"> 수업 학기 </label>
+                <input type="text" id="class_ymd" th:field="*{class_ymd}" placeholder="yyyymm"  class="form-control">
+            </div>
+            <br>
+            <div>
+                <label name="restrict" >제한 여부</label>
+                <br>
+                <div>
+                    <input type="checkbox" id="restrict" >
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="putBtn" type="button">등록</button>
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            </div>
+        </form>
+
+
+</div>
+

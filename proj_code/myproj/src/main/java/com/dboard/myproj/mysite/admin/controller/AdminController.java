@@ -3,25 +3,23 @@ package com.dboard.myproj.mysite.admin.controller;
 
 import com.dboard.myproj.config.page.PagingResponse;
 import com.dboard.myproj.config.page.SearchDto;
-import com.dboard.myproj.data.dto.AdminMemberDTO;
+import com.dboard.myproj.data.dto.*;
 
+import com.dboard.myproj.data.entity.ClassCodeVO;
 import com.dboard.myproj.mysite.admin.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 /**
+ *  @author : lsw
+ *
  *  1. 만들것이 전체 화면
- *  2. search <- post
- *  3. member detail <- group, 등등~ 뭐 이리 복잡하니...
- *  4. admin group <- pop up 방식으로다가
+ *
  *
  *
  * */
@@ -50,36 +48,83 @@ public class AdminController {
      *  회원 관리를 보여주는 URL
      *  처음 접속시 전체 데이터 보여주어야 함
      *  admin은 따로 터치 x~
+     * @param : SearchDto
+     * @description :
      */
     @GetMapping("/member")
     public String memberAdmin(@ModelAttribute("params") final SearchDto params,
                               Model model) {
 
-
+        log.info("====== search ====== {}", params);
         PagingResponse<AdminMemberDTO> allUserMember = service.findAllUserMember(params);
         model.addAttribute("allmember",allUserMember);
 
         return "mysite/admin/manage_member";
     }
-//
-//    /**
-//     *  그룹이랑 제한 여부 정도만 건들일 수 있음....
-//     *
+    @GetMapping("/member/{memberId}")
+    public String memberdetail(@PathVariable("memberId") String memberId,  Model model ) {
+
+        MemberDetailFormDTO memberDetailFormDTO = service.findMemberDetailById(memberId);
+
+        model.addAttribute("memberdetail", memberDetailFormDTO);
+
+        return "mysite/admin/member_detail";
+    }
+
+
+    @GetMapping("/class")
+    public String classAdmin(@ModelAttribute("params") final SearchDto params,
+                             Model model) {
+
+
+        log.info("====== search ====== {}", params);
+        params.setRecordSize(5);
+        PagingResponse<ClassCodeVO> classCode =  service.findAllClass(params);
+        model.addAttribute("classCode",classCode);
+        return "mysite/admin/manage_class";
+    }
+
+    @GetMapping("/class/register")
+    public String classRegister(@ModelAttribute("classCode") ClassCodeDTO classCode) {
+
+
+        return "mysite/admin/register_class";
+    }
+    @GetMapping("/class/{classId}")
+    public String classdetail(@PathVariable("classId") String classId, Model model ) {
+
+
+        log.info("=========== classdetail ==========  "+classId);
+        ClassCodeDTO classCodeDTO= service.findClassCodeById(classId);
+        log.info("=========== classCode ==========  "+classCodeDTO);
+        model.addAttribute("classCode", classCodeDTO);
+
+        return "mysite/admin/class_detail";
+    }
+
+
+    @GetMapping("/board")
+    public String boardAdmin(@ModelAttribute("params") final SearchDto params,
+                             Model model) {
+
+        List< AdminBoardDTO> adminBoardDTOS =service.findAllBoard(params);
+        adminBoardDTOS.forEach(
+                adminBoardDTO->   System.out.println("adminBoardDTOS = " + adminBoardDTO)
+        );
+        model.addAttribute("curymdboard",adminBoardDTOS);
+        return "mysite/admin/manage_board";
+    }
+
+
+    @GetMapping("/board/register")
+    public String boardRegister(@ModelAttribute("classCode") ClassCodeDTO classCode) {
+
+
+        return "mysite/admin/register_board";
+    }
 //     * */
-//    @GetMapping("/member/detail")
-//    public String memberdetail(@RequestParam("email") String email,  Model model ) {
-//        //System.out.println("inthe =  /" );
-////        log.info("modal page into " + email);
-////
-////        AdminMemberDTO memberDetail = service.findUserMemberByEmail(email);
-////        log.info("member detail",memberDetail);
-//////        List<Group> allGroup = service.findAllGroup();
-////
-////        log.info("send modal info : " + memberDetail);
-////        model.addAttribute("member", memberDetail);
-////        model.addAttribute("groups",allGroup);
-//        return "mysite/admin/memberdetail";
-//    }
+
+
 //
 //
 //    @GetMapping("/member/search")

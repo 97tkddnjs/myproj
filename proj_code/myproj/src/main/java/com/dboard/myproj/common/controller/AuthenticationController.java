@@ -71,7 +71,7 @@ public class AuthenticationController {
             if(login_member.getGrade_id()==1){
                 return "redirect:/mysite/admin/home";
             }else{
-                return "redirect:/mysite/user/";
+                return "redirect:/mysite/user/home";
             }
 
         }else{

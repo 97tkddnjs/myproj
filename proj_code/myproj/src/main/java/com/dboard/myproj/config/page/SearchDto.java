@@ -2,9 +2,11 @@ package com.dboard.myproj.config.page;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 public class SearchDto {
 
     private int page;                 // 현재 페이지 번호

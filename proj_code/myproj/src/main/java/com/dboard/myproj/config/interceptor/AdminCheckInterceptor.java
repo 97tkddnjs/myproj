@@ -35,7 +35,7 @@ public class AdminCheckInterceptor implements HandlerInterceptor {
 
         if(attribute1.getGrade_id() != AuthConst.ADMIN_MEMBER){
             log.info("권한이 없는 일반 USER 입니다.");
-            response.sendRedirect("/?redirectURL=" + requestURI);
+            response.sendRedirect("/" );
             return false;
         }
 

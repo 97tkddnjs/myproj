@@ -22,6 +22,8 @@ public class AdminMemberDTO {
 
     String party;
 
+    String phone_num;
+
     Long grade_id;
 
     LocalDateTime reg_dt;

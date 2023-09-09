@@ -14,6 +14,8 @@ public class ClassCodeDTO {
 
     String class_ymd;
 
+    String del_yn;
+
     boolean registerClassYN;
 
 }

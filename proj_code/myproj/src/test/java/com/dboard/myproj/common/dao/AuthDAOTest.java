@@ -78,13 +78,7 @@ class AuthDAOTest {
     @Test
     void test2() {
 
-        String email = "test@a.com";
-        AdminMemberDTO userMemberByEmail = adminDAO.findUserMemberByEmail(email);
-        System.out.println("userMemberByEmail = " + userMemberByEmail);
-        Boolean d = null;
-        if(d==null || d==false){
-            System.out.println("d = " + d);
-        }
+
         //Boolean aBoolean = adminDAO.isRestrict(email);
         //System.out.println("aBoolean = " + aBoolean);
     }
@@ -92,18 +86,18 @@ class AuthDAOTest {
     @Test
     void testUser() {
 
-//        for(int i = 16; i <=100;i++){
-//            MemberFormDTO dto = new MemberFormDTO();
-//            String name = "testuser"+i;
-//            String email = name +"@test.com";
-//            dto.setEmail(email);
-//            dto.setPassword("1234");
-//            dto.setMember_name(name);
-//            dto.setAllias(name);
-//            dto.setGroup_id(1);
-////            System.out.println("email = " + email);
-//            dao.memberSave(dto);
-//        }
+        for(int i = 100; i <=200;i++){
+            MemberVO memberVO = new MemberVO();
+            String name = "testuser"+i;
+            String email = name +"@test.com";
+            memberVO.setMember_id("test"+i);
+            memberVO.setEmail(email);
+            memberVO.setPassword("1234");
+            memberVO.setMember_nm(name);
+            memberVO.setGrade_id(2);
+//            System.out.println("email = " + email);
+            dao.memberSave(memberVO);
+        }
 
 
 

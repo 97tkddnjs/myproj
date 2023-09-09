@@ -2,16 +2,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.dboard.myproj.common.dao.AuthDAO">
-    <select id="memberRetrieval" resultType="com.dboard.myproj.data.entity.MemberVO">
-        SELECT
-            `email`         ,
-            `password`      ,
-            `member_name`   ,
-            `address`       ,
-            `party`         ,
-            `grade_id`
-        FROM MEMBER
-    </select>
 
     <insert id="memberSave" parameterType="com.dboard.myproj.data.entity.MemberVO" >
         insert into CLASS_MEMBER(
@@ -62,6 +52,7 @@
             `CLASS_NM`,
             `CLASS_YMD`
         FROM CLASS_CODE
+        WHERE DLE_YN = 'N';
     </select>
 
     <insert id="saveCourseReg" parameterType="com.dboard.myproj.data.dto.ClassCodeDTO">

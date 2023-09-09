@@ -7,40 +7,34 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+
         <li class="nav-item">
-          <div th:if="${session.get('loginMember')}">
-            <a class="nav-link active" th:href="@{/logout}">logout</a>
-          </div>
-          <div th:unless="${session.get('loginMember')}">
-            <a class="nav-link" th:href="@{/login}">login</a>
-          </div>
+          <a class="nav-link" th:href="@{/mysite/admin/class}">수업 관리</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" th:href="@{member}">수업 관리</a>
+          <a class="nav-link" th:href="@{/mysite/admin/member}">학생 관리</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" th:href="@{member}">학생 관리</a>
+          <a class="nav-link" th:href="@{/mysite/admin/board}">게시판 관리</a>
         </li>
+      </ul>
 
-        <li class="nav-item">
-          <a class="nav-link" th:href="@{group}">게시판 관리</a>
-        </li>
-<!--        <li class="nav-item dropdown">-->
-<!--          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
-<!--            그룹 및 게시판 관리-->
-<!--          </a>-->
-<!--          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">-->
-<!--            <li><a class="dropdown-item"th:href="@{group}">그룹 관리</a></li>-->
+      <ul class="navbar-nav ml-auto">
+          <li class="nav-item" style="margin-left: 50px">
+            <a class="nav-link" th:href="@{#/list}" th:text="${session.loginMember.email}">dd</a>
+          </li>
+          <li class="nav-item">
+            <div th:if="${session.get('loginMember')}">
+              <a class="nav-link active" th:href="@{/logout}">logout</a>
+            </div>
+            <div th:unless="${session.get('loginMember')}">
+              <a class="nav-link" th:href="@{/login}">login</a>
+            </div>
+          </li>
 
-<!--            <li><a class="dropdown-item" href="#">Another action</a></li>-->
-<!--            <li><a class="dropdown-item" href="#">Something else here</a></li>-->
-<!--          </ul>-->
-<!--        </li>-->
-        <li >
-          <a class="nav-link" th:href="@{#/list}" th:text="${session.loginMember.email}">dd</a>
-        </li>
       </ul>
     </div>
   </div>
