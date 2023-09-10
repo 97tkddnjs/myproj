@@ -1,14 +1,58 @@
 <nav th:fragment="navbarFragment" class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-  <script>
 
+  <script th:inline="javascript">
+      window.onload = () => {
+          // 페이지가 로드되었을 때, 딱 한 번만 함수를 실행
+
+      }
     function userpage(){
+
       var userId = [[${session.loginMember.member_id}]]
       var url = "/mysite/user/userpage/" + userId;
-      alert(url);
-      // location.href =url;
+      // alert(url);
+      location.href =url;
+      // window.location.href("/");
     }
-  </script>
 
+    function userboarddetail(class_id){
+          document.getElementById('board_detail').innerHTML ='';
+          board_detail(class_id);
+
+    }
+
+    function board_detail(class_id){
+
+
+          $.ajax({
+            type: "POST",
+            url: "/mysite/user/rest/board",
+            data: {class_id},
+            contentType: "application/json",
+            success: function(data) {
+
+              let html = '';
+
+
+              $.each(data, function (index, row) {
+                html += `
+                 <a class="dropdown-item" href="#">${row.board_nm}</a>
+            `
+                console.log(row.board_nm);
+              });
+              document.getElementById('board_detail').innerHTML = html;
+
+            },
+            error: function(xhr, textStatus, errorThrown) {
+              console.log("에러:", xhr.status, errorThrown);
+
+              // 서버로 데이터 전송 중 오류 발생
+            }
+          });
+
+    }
+
+
+  </script>
   <div class="container-fluid">
     <a class="navbar-brand" href="/mysite/user/home">USER WebSite</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -16,28 +60,51 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <ul  th:each="userboard : ${userboardlist}"  class="navbar-nav me-auto mb-2 mb-lg-0 ">
 
-        <li class="nav-item">
-          <a class="nav-link" th:href="@{/list}">게시판 목록</a>
+
+
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle"  th:text="${userboard.class_nm}"  href="#" th:onclick="|javascript:userboarddetail(${userboard.class_id})|" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Dropdown link
+          </a>
+          <div id="board_detail" class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+
+          </div>
         </li>
+
+
+
+<!--        <li class="nav-item dropdown">-->
+<!--          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+<!--            Dropdown link-->
+<!--          </a>-->
+<!--          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">-->
+<!--            <a class="dropdown-item" href="#">Action</a>-->
+<!--            <a class="dropdown-item" href="#">Another action</a>-->
+<!--            <a class="dropdown-item" href="#">Something else here</a>-->
+<!--          </div>-->
+<!--        </li>-->
 
       </ul>
 
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item" style="margin-left: 50px">
-          <a class="nav-link" href="" th:onclick="userpage()" th:text="${session.loginMember.member_id}">dd</a>
-        </li>
-        <li class="nav-item">
-          <div th:if="${session.get('loginMember')}">
-            <a class="nav-link active" th:href="@{/logout}">logout</a>
-          </div>
-          <div th:unless="${session.get('loginMember')}">
-            <a class="nav-link" th:href="@{/login}">login</a>
-          </div>
-        </li>
+
+          <li class="nav-item" style="margin-left: 50px">
+            <a class="nav-link" th:href="|javascript:userpage()|" th:with="member=${session.loginMember.member_id}" th:text="${member}">dd</a>
+          </li>
+          <li class="nav-item">
+            <div th:if="${session.get('loginMember')}">
+              <a class="nav-link active" th:href="@{/logout}">logout</a>
+            </div>
+            <div th:unless="${session.get('loginMember')}">
+              <a class="nav-link" th:href="@{/login}">login</a>
+            </div>
+          </li>
 
       </ul>
+
     </div>
   </div>
 </nav>

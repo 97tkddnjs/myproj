@@ -1,0 +1,66 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dboard.myproj.mysite.user.dao.UserDAO">
+    <select id="findUserMemberByID" parameterType="String"
+            resultType="com.dboard.myproj.data.dto.AdminMemberDTO">
+
+        SELECT
+            `MEMBER_ID`         ,
+            `EMAIL`      ,
+            `PASSWORD`   ,
+            `MEMBER_NM`       ,
+            `PHONE_NUM`      ,
+            `PARTY`         ,
+            `GRADE_ID`      ,
+            `REG_DT`        ,
+            EXISTS  (
+                    select restrict_id
+                    FROM   restrict_member
+                    WHERE  MEMBER_ID = cm.MEMBER_ID
+                      AND    RESTRICT_SHOW=TRUE) as RESTRRICT
+        FROM CLASS_MEMBER cm
+        WHERE `MEMBER_ID` = #{member_id}
+    </select>
+    <select id="findAllClassCode" parameterType="String"
+            resultType="com.dboard.myproj.data.dto.ClassCodeDTO">
+        SELECT
+            `CLASS_ID`  ,
+            `CLASS_NM`  ,
+            `CLASS_YMD` ,
+            EXISTS(SELECT *
+             FROM COURSE_REGISTRATION  CR
+             WHERE CR.`CLASS_ID` = CC.`CLASS_ID`
+               AND CR.`MEMBER_ID` = #{member_id}) AS registerClassYN
+        FROM CLASS_CODE CC
+    </select>
+
+    <select id="userBoardListById" parameterType="String"
+            resultType="com.dboard.myproj.data.dto.ClassCodeDTO">
+
+        SELECT
+            CLASS_ID		,
+            (SELECT CLASS_NM FROM CLASS_CODE CC WHERE  CC.CLASS_ID = CR.CLASS_ID) AS CLASS_NM		,
+            (SELECT  CLASS_YMD FROM CLASS_CODE CC WHERE  CC.CLASS_ID = CR.CLASS_ID) AS CLASS_YMD
+        FROM COURSE_REGISTRATION CR
+        WHERE `MEMBER_ID`=#{member_id};
+
+
+    </select>
+    <select id="findClassBoardTypeByID" parameterType="String"
+            resultType="com.dboard.myproj.data.dto.ClassBoardTypeDTO">
+
+        SELECT
+            `CB_TYPE`   ,
+            `BOARD_ID`  ,
+            `CLASS_ID`  ,
+            (SELECT BOARD_NM
+             FROM BOARD_TYPE
+             WHERE BOARD_ID = CBT.BOARD_ID) AS BOARD_NM,
+            CB_SHOW
+        FROM CLASS_BOARD_TYPE CBT
+        WHERE CLASS_ID =#{class_id};
+
+    </select>
+
+</mapper>
