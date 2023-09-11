@@ -5,6 +5,7 @@ import com.dboard.myproj.data.dto.AdminMemberDTO;
 import com.dboard.myproj.data.dto.ClassBoardTypeDTO;
 import com.dboard.myproj.data.dto.ClassCodeDTO;
 import com.dboard.myproj.data.dto.MemberDetailFormDTO;
+import com.dboard.myproj.data.entity.BoardDetailVO;
 import com.dboard.myproj.mysite.user.dao.UserDAO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,5 +49,10 @@ public class UserService {
     public List<ClassBoardTypeDTO> findClassBoardTypeByID(String class_id) {
         log.info(" service " + class_id);
         return dao.findClassBoardTypeByID(class_id);
+    }
+
+    public List<BoardDetailVO> findAllBoardDetail(String cb_type) {
+
+        return dao.findAllBoardDetail(cb_type);
     }
 }

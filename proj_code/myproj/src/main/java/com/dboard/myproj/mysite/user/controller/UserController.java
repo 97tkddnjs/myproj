@@ -3,6 +3,7 @@ package com.dboard.myproj.mysite.user.controller;
 import com.dboard.myproj.config.AuthConst;
 import com.dboard.myproj.data.dto.ClassCodeDTO;
 import com.dboard.myproj.data.dto.MemberDetailFormDTO;
+import com.dboard.myproj.data.entity.BoardDetailVO;
 import com.dboard.myproj.data.entity.MemberVO;
 import com.dboard.myproj.mysite.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -51,6 +52,12 @@ public class UserController {
 
         log.info("============ in te======");
 
+
+        List<ClassCodeDTO> userBoardList =  userService.userBoardListById(member_id);
+
+        model.addAttribute("userboardlist", userBoardList);
+
+
         MemberDetailFormDTO memberDetailFormDTO = userService.findUserDetailByID(member_id);
         model.addAttribute("memberdetail", memberDetailFormDTO);
 
@@ -58,6 +65,30 @@ public class UserController {
 
         return "mysite/user/user_member_detail";
 
+    }
+
+
+    @GetMapping("{cb_type}/{class_id}/{board_id}")
+    public String boardDetail( @PathVariable String cb_type
+            , @PathVariable String class_id, @PathVariable String board_id,
+                               HttpServletRequest request, Model model) {
+
+        HttpSession session = request.getSession();
+        MemberVO attribute = (MemberVO)session.getAttribute(AuthConst.LOGIN_MEMBER);
+        String member_id = attribute.getMember_id();
+
+
+        log.info("====== board ======");
+
+        List<ClassCodeDTO> userBoardList =  userService.userBoardListById(member_id);
+
+        model.addAttribute("userboardlist", userBoardList);
+
+        List<BoardDetailVO> boardDetailVOS =  userService.findAllBoardDetail(cb_type);
+
+        model.addAttribute("boarddetail",boardDetailVOS);
+
+        return "mysite/user/user_board";
     }
 
 }

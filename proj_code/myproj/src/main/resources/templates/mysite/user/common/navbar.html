@@ -15,7 +15,7 @@
     }
 
     function userboarddetail(class_id){
-          document.getElementById('board_detail').innerHTML ='';
+          // document.getElementById('board_detail').innerHTML ='';
           board_detail(class_id);
 
     }
@@ -34,12 +34,13 @@
 
 
               $.each(data, function (index, row) {
+                var tmp = '/mysite/user/'+row.cb_type +'/'+row.class_id+'/'+row.board_id;
                 html += `
-                 <a class="dropdown-item" href="#">${row.board_nm}</a>
+                 <a class="dropdown-item" href="${tmp}">${row.board_nm}</a>
             `
                 console.log(row.board_nm);
               });
-              document.getElementById('board_detail').innerHTML = html;
+              document.getElementById('board_detail_'+class_id).innerHTML = html;
 
             },
             error: function(xhr, textStatus, errorThrown) {
@@ -69,7 +70,7 @@
           <a class="nav-link dropdown-toggle"  th:text="${userboard.class_nm}"  href="#" th:onclick="|javascript:userboarddetail(${userboard.class_id})|" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Dropdown link
           </a>
-          <div id="board_detail" class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <div th:id="|board_detail_${userboard.class_id}|" class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
 
           </div>
         </li>

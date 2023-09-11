@@ -63,4 +63,21 @@
 
     </select>
 
+    <select id="findAllBoardDetail" parameterType="String"
+            resultType="com.dboard.myproj.data.entity.BoardDetailVO">
+
+        SELECT
+            `BD_ID`         ,
+            `TITLE`         ,
+            `MEMBEER_ID`    ,
+            `CONTENTS`      ,
+            `BD_DT`         ,
+            `FILE_PATH`     ,
+            `CB_TYPE`       ,
+            `BD_SHOW`
+        FROM BOARD_DETAIL
+        WHERE `CB_TYPE` = #{cb_type}
+
+    </select>
+
 </mapper>
