@@ -1,6 +1,7 @@
 package com.dboard.myproj.mysite.user.controller;
 
 
+import com.dboard.myproj.data.dto.BoardRegDTO;
 import com.dboard.myproj.data.dto.ClassBoardTypeDTO;
 import com.dboard.myproj.data.dto.ClassCodeDTO;
 
@@ -10,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +55,13 @@ public class RestUserController {
 //        map.put("list", classBoardTypeDTOS);
         return ResponseEntity.ok(classBoardTypeDTOS);
 
+    }
+
+    @PostMapping("/board/register")
+    public ResponseEntity boaardRegister(@ModelAttribute BoardRegDTO boardRegDTO) throws IOException {
+        log.info("========== into the here   " + boardRegDTO);
+        service.savedBoard(boardRegDTO);
+        return ResponseEntity.ok("ok");
     }
 
 //    @PostMapping("/class/{classID}")

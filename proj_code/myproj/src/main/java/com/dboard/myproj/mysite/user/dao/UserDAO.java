@@ -1,10 +1,12 @@
 package com.dboard.myproj.mysite.user.dao;
 
+import com.dboard.myproj.config.page.SearchDto;
 import com.dboard.myproj.data.dto.AdminMemberDTO;
 import com.dboard.myproj.data.dto.ClassBoardTypeDTO;
 import com.dboard.myproj.data.dto.ClassCodeDTO;
 import com.dboard.myproj.data.entity.BoardDetailVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -20,5 +22,9 @@ public interface UserDAO {
 
     List<ClassBoardTypeDTO> findClassBoardTypeByID(String class_id);
 
-    List<BoardDetailVO> findAllBoardDetail(String cb_type);
+    List<BoardDetailVO> findAllBoardDetail(@Param("cb_type") String cb_type ,@Param("params") final SearchDto params);
+
+    int countBoardDetail(@Param("cb_type")String cb_type, @Param("params") final  SearchDto params);
+
+    void savedBoard(BoardDetailVO boardDetailVO);
 }

@@ -1,8 +1,8 @@
 <!doctype html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<nav th:replace="~{mysite/admin/common/header :: adminHead}"></nav>
+<nav th:replace="~{mysite/user/common/header :: userHead}"></nav>
 <body>
-<nav th:replace="~{mysite/admin/common/navbar :: navbarFragment}"></nav>
+<nav th:replace="~{mysite/user/common/navbar :: navbarFragment}"></nav>
 
 <script th:inline="javascript">
     /*<![CDATA[*/
@@ -45,7 +45,7 @@
     function findAllPost() {
 
         // 1. PagingResponse의 멤버인 List<T> 타입의 list를 의미
-        const list = [[ ${allmember.list} ]];
+        const list = [[ ${boarddetail.list} ]];
         // alert(list);
         // 2. 리스트가 비어있는 경우, 행에 "검색 결과가 없다"는 메시지를 출력하고, 페이지 번호(페이지네이션) HTML을 제거(초기화)한 후 로직을 종료
         if ( !list.length ) {
@@ -54,7 +54,7 @@
         }
 
         // 3. PagingResponse의 멤버인 pagination을 의미
-        const pagination = [[ ${allmember.pagination} ]];
+        const pagination = [[ ${boarddetail.pagination} ]];
 
         // 4. @ModelAttribute를 이용해서 뷰(HTML)로 전달한 SearchDto 타입의 객체인 params를 의미
         const params = [[ ${params} ]];
@@ -194,20 +194,27 @@
         // alert("hereesr    "+  new URLSearchParams(queryParams).toString());
         location.href = location.pathname + '?' +  new URLSearchParams(queryParams).toString();
     }
-
+    function registerBoard(){
+        var url =   location.pathname + "/register";
+        //alert(url);
+        location.href =url;
+    }
     /*]]>*/
 </script>
 
 
     <div  class="container my-5">
 
+        <div class="my-5">
+            <h3 th:text="|${boardname} 게시판| ">hello 게시판</h3>
+        </div>
         <div class="search my-3">
             <form id="searchdata" class="d-inline-flex" onsubmit="return false;" autocomplete="off">
                 <select id="searchType"  name="searchType"  class="m-1">
                     <option value="">전체 검색</option>
                     <option value="1">회원 ID</option>
-                    <option value="2">제한 회원</option>
-                    <option value="3">수업 등록 연도</option>
+                    <option value="2">제목 검색</option>
+
                 </select>
                 <input id="keyword" name="keyword" class="form-control me-2"   placeholder="Search" aria-label="Search">
                 <button class="btn btn-outline-success" onclick="movePage(1);">Search</button>
@@ -233,9 +240,19 @@
 
 
         <!--/* 페이지네이션 렌더링 영역 */-->
-        <div class="paging align-content-center">
 
+        <div class="row">
+            <div class="col-md-12">
+                <button class="btn btn-primary float-right" onclick="registerBoard()" >게시물 등록</button>
+            </div>
+            <div class="col-md-12 mt-2">
+                <!--/* 페이지네이션 렌더링 영역 */-->
+                <div class="paging align-content-center">
+
+                </div>
+            </div>
         </div>
+
     </div>
 
 </body>

@@ -18,6 +18,8 @@ public class ClassBoardTypeDTO {
 
     String class_id;
 
+    String class_nm;
+
     String cb_show;
 
 }

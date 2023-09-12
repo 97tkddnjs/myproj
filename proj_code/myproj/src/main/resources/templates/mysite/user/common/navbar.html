@@ -34,7 +34,7 @@
 
 
               $.each(data, function (index, row) {
-                var tmp = '/mysite/user/'+row.cb_type +'/'+row.class_id+'/'+row.board_id;
+                var tmp = '/mysite/user/'+row.cb_type +'/'+row.class_nm+'/'+row.board_nm;
                 html += `
                  <a class="dropdown-item" href="${tmp}">${row.board_nm}</a>
             `

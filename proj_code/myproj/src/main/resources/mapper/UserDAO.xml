@@ -54,6 +54,9 @@
             `CB_TYPE`   ,
             `BOARD_ID`  ,
             `CLASS_ID`  ,
+            (SELECT  CLASS_NM
+             FROM CLASS_CODE
+             WHERE CLASS_ID = CBT.CLASS_ID) AS CLASS_NM,
             (SELECT BOARD_NM
              FROM BOARD_TYPE
              WHERE BOARD_ID = CBT.BOARD_ID) AS BOARD_NM,
@@ -63,21 +66,48 @@
 
     </select>
 
-    <select id="findAllBoardDetail" parameterType="String"
-            resultType="com.dboard.myproj.data.entity.BoardDetailVO">
 
-        SELECT
-            `BD_ID`         ,
-            `TITLE`         ,
-            `MEMBEER_ID`    ,
-            `CONTENTS`      ,
-            `BD_DT`         ,
-            `FILE_PATH`     ,
-            `CB_TYPE`       ,
-            `BD_SHOW`
+
+    <select id="findAllBoardDetail"  resultType="com.dboard.myproj.data.entity.BoardDetailVO">
+        SELECT `BD_ID`
+             , `TITLE`
+             , `MEMBER_ID`
+             , `CONTENTS`
+             , `BD_DT`
+             , `FILE_PATH`
+             , `CB_TYPE`
+             , `BD_SHOW`
         FROM BOARD_DETAIL
         WHERE `CB_TYPE` = #{cb_type}
-
+        LIMIT #{params.offset}, #{params.recordSize}
     </select>
+    <select id="countBoardDetail" resultType="int">
+        SELECT COUNT(*)
+        FROM BOARD_DETAIL
+        WHERE `CB_TYPE` = #{cb_type}
+        LIMIT #{params.offset}, #{params.recordSize}
+    </select>
+
+    <insert id="savedBoard" parameterType="com.dboard.myproj.data.entity.BoardDetailVO">
+        INSERT INTO BOARD_DETAIL (
+                                `TITLE`
+                                ,`MEMBER_ID`
+                                ,`CONTENTS`
+                                ,`BD_DT`
+                                ,`FILE_PATH`
+                                ,CB_TYPE
+                                ,`BD_SHOW`
+        )values(
+                #{title}
+                ,#{member_id}
+                ,#{contents}
+                ,#{bd_dt}
+                ,#{file_path}
+                ,#{cb_type}
+                ,true
+
+                       )
+
+    </insert>
 
 </mapper>
