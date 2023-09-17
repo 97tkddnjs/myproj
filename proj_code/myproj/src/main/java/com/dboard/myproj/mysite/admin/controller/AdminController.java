@@ -5,6 +5,7 @@ import com.dboard.myproj.config.page.PagingResponse;
 import com.dboard.myproj.config.page.SearchDto;
 import com.dboard.myproj.data.dto.*;
 
+import com.dboard.myproj.data.entity.BoardTypeVO;
 import com.dboard.myproj.data.entity.ClassCodeVO;
 import com.dboard.myproj.mysite.admin.service.AdminService;
 import lombok.RequiredArgsConstructor;
@@ -87,11 +88,12 @@ public class AdminController {
     @GetMapping("/class/register")
     public String classRegister(@ModelAttribute("classCode") ClassCodeDTO classCode) {
 
+        log.info("=== class register ====");
 
         return "mysite/admin/register_class";
     }
     @GetMapping("/class/{classId}")
-    public String classdetail(@PathVariable("classId") String classId, Model model ) {
+    public String classDetail(@PathVariable("classId") String classId, Model model ) {
 
 
         log.info("=========== classdetail ==========  "+classId);
@@ -101,6 +103,8 @@ public class AdminController {
 
         return "mysite/admin/class_detail";
     }
+
+
 
 
     @GetMapping("/board")
@@ -117,11 +121,31 @@ public class AdminController {
 
 
     @GetMapping("/board/register")
-    public String boardRegister(@ModelAttribute("classCode") ClassCodeDTO classCode) {
+    public String boardRegister(Model model) {
 
-
+        List<BoardTypeVO> boardTypeVOs =  service.findAllBoardType();
+        boardTypeVOs.forEach(
+                i -> System.out.println("i = " + i)
+        );
+        log.info("here    " ,boardTypeVOs.size(),boardTypeVOs);
+        model.addAttribute("boardTypes",boardTypeVOs);
         return "mysite/admin/register_board";
     }
+
+    @GetMapping("/board/detail/{classId}/{classNm}")
+    public String boardDetail( @PathVariable("classId") int classId,
+            @PathVariable("classNm") String classNm ,Model model) {
+
+        log.info("/mysite/admin/board/detail/"+classId);
+
+        List<BoardTypeDTO> boardTypeDTOS= service.findRegClassByClassId(classId);
+
+        model.addAttribute("regclass", classNm);
+        model.addAttribute("classId", classId);
+        model.addAttribute("regboards",boardTypeDTOS);
+        return "mysite/admin/board_detail";
+    }
+
 //     * */
 
 

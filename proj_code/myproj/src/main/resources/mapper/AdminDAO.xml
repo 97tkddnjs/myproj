@@ -29,6 +29,9 @@
                             WHERE ( select SUBSTR(CLASS_YMD,1,4)
                                     from class_code WHERE CLASS_ID= cr.CLASS_ID AND DEL_YN='N') =  #{keyword}) = cm.`MEMBER_ID`
                         </when>
+                        <when test="4== searchType">
+                            WHERE CLASS_YMD LIKE CONCAT( #{keyword}, '%')
+                        </when>
                     </choose>
                 </when>
 
@@ -57,7 +60,7 @@
                 select restrict_id
                 FROM   restrict_member
                 WHERE  MEMBER_ID = cm.MEMBER_ID
-                AND    RESTRICT_SHOW=TRUE) as SUCCESS
+                AND    RESTRICT_SHOW=TRUE) as `RESTRICT`
         FROM CLASS_MEMBER cm
         WHERE GRADE_ID= 2
         <include refid="search" />
@@ -89,7 +92,7 @@
                     select restrict_id
                     FROM   restrict_member
                     WHERE  MEMBER_ID = cm.MEMBER_ID
-                      AND    RESTRICT_SHOW=TRUE) as RESTRRICT
+                      AND    RESTRICT_SHOW=TRUE) as `RESTRICT`
         FROM CLASS_MEMBER cm
         WHERE `MEMBER_ID` = #{member_id}
     </select>
@@ -102,6 +105,7 @@
             `CLASS_YMD` ,
             `DEL_YN`
         FROM CLASS_CODE
+        <include refid="search" />
         LIMIT #{offset}, #{recordSize}
     </select>
 
@@ -182,21 +186,80 @@
             cc.CLASS_NM,
             (SELECT BOARD_NM from board_type bt where bt.BOARD_ID = cbt.BOARD_ID) as board_nm
         FROM class_board_type as cbt inner join class_code as cc on cbt.CLASS_ID= cc.CLASS_ID
-        WHERE  cc.DEL_YN ='N';
+        WHERE  cc.DEL_YN ='N' AND CBT.CB_SHOW='N' ;
 
     </select>
 
     <select id="findCourseRegistrationByMemberID" parameterType="String"
             resultType="com.dboard.myproj.data.dto.ClassCodeDTO">
         SELECT
-            CLASS_ID		,
+            CR.CLASS_ID		,
             (SELECT CLASS_NM FROM CLASS_CODE CC WHERE  CC.CLASS_ID = CR.CLASS_ID) AS CLASS_NM		,
             (SELECT  CLASS_YMD FROM CLASS_CODE CC WHERE  CC.CLASS_ID = CR.CLASS_ID) AS CLASS_YMD
         FROM COURSE_REGISTRATION CR
-        WHERE `MEMBER_ID` = #{memberID}
-
+        WHERE 1=1
+        AND `MEMBER_ID` = #{memberID} ;
     </select>
 
+    <select id="findRestrictMemberById"
+            parameterType="String"
+            resultType="int">
 
+        SELECT COUNT(*)
+        FROM RESTRICT_MEMBER
+        WHERE `MEMBER_ID` = #{member_id}
+    </select>
 
+    <update id="updateRestrictMember">
+        UPDATE RESTRICT_MEMBER
+        SET `RESTRICT_SHOW` = #{restrict}
+        WHERE `MEMBER_ID` = #{member_id}
+    </update>
+    <insert id="saveRestrictMemberById" parameterType="String">
+        INSERT INTO RESTRICT_MEMBER(
+            `MEMBER_ID`
+            ,`RESTRICT_SHOW`
+        )VALUES (
+            #{member_id}
+            , true
+                        )
+    </insert>
+
+    <select id="findAllBoardType"
+            resultType="com.dboard.myproj.data.entity.BoardTypeVO">
+        SELECT
+                `BOARD_ID`
+            ,   `BOARD_NM`
+        FROM BOARD_TYPE;
+    </select>
+    <select id="findRegClassByClassId" parameterType="int"
+            resultType="com.dboard.myproj.data.dto.BoardTypeDTO">
+        SELECT
+             `BOARD_ID`
+            ,`BOARD_NM`
+            , EXISTS (
+                SELECT BOARD_ID
+                FROM CLASS_BOARD_TYPE CBT
+                WHERE CLASS_ID=#{classId}
+                  AND CBT.BOARD_ID = BT.BOARD_ID ) AS `REGISTER`
+        FROM BOARD_TYPE BT;
+    </select>
+
+    <insert id = "saveBoardType" parameterType="String">
+        INSERT INTO BOARD_TYPE(
+                               `BOARD_NM`
+        )VALUES (
+                 #{boardnm}
+                        )
+    </insert>
+    <select id="findClassBoardTypeByClassId" parameterType="int"
+    resultType="com.dboard.myproj.data.dto.BoardTypeDTO">
+        SELECT
+            `BOARD_ID`
+        ,   (SELECT BOARD_NM FROM BOARD_TYPE BT WHERE BT.BOARD_ID = CBT.BOARD_ID) AS `BOARD_NM`
+
+        FROM CLASS_BOARD_TYPE CBT
+        WHERE CBT.CLASS_ID = #{classId}
+        AND CBT.CB_SHOW='N'
+    </select>
 </mapper>

@@ -1,0 +1,121 @@
+
+
+
+
+
+<script>
+
+    $(document).ready(function() {
+        $("#regBoard").click(function() {
+            if (window.confirm("등록 하시겠습니까?")) {
+
+                var boardnm = $("#board_nm").val();
+
+                if (boardnm === "") {
+                    alert("게시판 이름을 입력해주세요.");
+                    return;
+                }
+
+                // console.log()
+                $.ajax({
+
+                    type:"POST"
+                    //, encType:"multipart/form-data"
+                    , url:"/mysite/admin/rest/board/register"
+                    , data : JSON.stringify(boardnm)
+                    , processData : false
+                    , contentType :  "application/json; charset=utf-8"
+                    //, contentType :  false
+                    , cache : false
+                    , success : function(result) {
+                        // alert(data);
+                        if(result=="")
+                            alert("yes");
+                        if(result =="ok") {
+                            alert(result)
+                            alert("게시판 종류 업데이트 성공");
+                        } else {
+                            alert(result)
+                            alert("게시판 종류 업데이트 실패 \n 관리자에게 문의 바랍니다");
+                        }
+                        location.href="/mysite/admin/class";
+                    } //call back function
+                    , error : function(xhr) {
+                        alert(xhr)
+                        alert("통신 실패");
+                    } //call back function
+                }); // ajax
+
+            }else{
+
+            }
+
+
+        }); // click
+    }); // ready
+</script>
+
+<div class="modal-header">
+    <h5 class="modal-title" id="historyModalLabel" > 게시판 등록 </h5>
+    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+</div>
+<div class="modal-body">
+
+    <form id="boardDetail" method="post" >
+        <div>
+            <table class="table table-hover">
+                <tr>
+                    <th>게시핀 이름</th>
+                    <td> <input type="text" id="board_nm"    class="form-control" ></td>
+                    <td> <button type="button" id="regBoard" class="btn btn-primary"> 등록 </button></td>
+                </tr>
+
+            </table>
+
+        </div>
+
+
+
+
+
+
+        <div class="table-container m-auto">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>게시판 이름</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="boardType ,rowNumber: ${boardTypes}">
+
+                    <td th:text="${rowNumber.count}"></td>
+
+                    <td th:text="${boardType.board_nm}"></td>
+<!--                    <td th:text="${classCode.class_ymd}">[개설학기 데이터]</td>-->
+                    <!--                    <td>-->
+                    <!--                        <div class="form-check">-->
+                    <!--                            <input class="form-check-input"-->
+                    <!--                                   type="checkbox"-->
+                    <!--                                   th:checked="${classCode.registerClassYN}"-->
+                    <!--                                   th:if="${classCode.registerClassYN}">-->
+                    <!--                            <input class="form-check-input"-->
+                    <!--                                   type="checkbox"-->
+                    <!--                                   th:if="${!classCode.registerClassYN}">-->
+                    <!--                        </div>-->
+                    <!--                    </td>-->
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn btn-secondary" id="cancelBtn" type="button" data-dismiss="modal">Cancel</button>
+        </div>
+    </form>
+</div>

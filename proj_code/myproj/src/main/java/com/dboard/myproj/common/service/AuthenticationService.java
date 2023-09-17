@@ -78,10 +78,15 @@ public class AuthenticationService {
         log.info(" member VO  : {}",memberVO);
         MemberVO member = authDAO.memberRetrievalById(memberVO);
 
-        if(member.getPassword().equals(memberVO.getPassword()) ){
-            return member;
-        }else{
+        if(member==null){
             return null;
+        }
+        else{
+            if(member.getPassword().equals(memberVO.getPassword()) ) {
+                return member;
+            }else{
+                return null;
+            }
         }
     }
 

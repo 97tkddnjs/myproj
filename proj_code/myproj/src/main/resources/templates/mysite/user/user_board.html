@@ -14,9 +14,9 @@
     }
 
 
-    function memberDetail(memberId){
+    function boadrDetail(bdId){
         //
-        location.href = location.pathname+"/"+memberId;
+        location.href = location.pathname+"/detail/"+bdId;
     }
 
 
@@ -86,11 +86,12 @@
                     ${num+idx+1}
                 </td>
                 <td>
-                    <a href="javascript: memberDetail('${row.member_id}')">
-                        <i class="fa fa-arrow-circle-right fa-lg"  >${row.member_id}</i>
+                    <a href="javascript: boadrDetail('${row.bd_id}')">
+                        <i class="fa fa-arrow-circle-right fa-lg"  >${row.title}</i>
                     </a>
                 </td>
-                <td>${row.member_nm}</td>
+                <td>${row.member_id}</td>
+                <td>${row.bd_dt}</td>
                 `;
             if(row.restrict == 1){
                 html += `

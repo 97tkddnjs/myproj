@@ -218,4 +218,9 @@
         LIMIT #{params.pagination.limitStart}, #{params.recordSize} ;
     </select>
 
+    <select id="findClassBoardTypeByClassId" parameterType="int"
+    resultType="">
+
+    </select>
+
 </mapper>

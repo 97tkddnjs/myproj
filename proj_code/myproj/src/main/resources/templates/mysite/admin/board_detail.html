@@ -1,0 +1,108 @@
+
+
+
+<script th:inline="javascript">
+
+
+    $(document).ready(function() {
+        $("#putBtn").click(function() {
+            var boardDatas = [];
+            var classId = [[${classId}]]
+            // 테이블의 각 행을 반복하여 체크박스의 상태를 확인
+            $(".table-container tbody tr").each(function () {
+                var row = $(this);
+                var isChecked = row.find(".form-check-input").prop("checked");
+
+
+
+                var boardData = {
+                    board_id : row.find("td:eq(3)").text(),
+                    board_nm: row.find("td:eq(1)").text(),
+                    register: isChecked
+                };
+
+                boardDatas.push(boardData);
+
+            });
+
+            var formData = {
+                class_id : classId,
+                boardType: boardDatas
+            };
+            // Javascript 객체로 전달해야해서
+            console.log(formData);
+            $.ajax({
+
+                type : "POST"
+                , url:"/mysite/admin/rest/board/detail"
+                , data : JSON.stringify(formData)
+                , contentType :  "application/json"
+                , success : function(result) {
+                    // alert(data);
+                    if(result=="")
+                        alert("yes");
+                    if(result =="ok") {
+                        alert(result)
+                        alert("수업 등록 성공");
+                    } else {
+                        alert(result)
+                        alert("수업 등록 실패 \n 관리자에게 문의 바랍니다");
+                    }
+                    location.href="/mysite/admin/board";
+                } //call back function
+                , error : function(xhr) {
+
+                    alert("통신 실패");
+                } //call back function
+            }); // ajax
+        }); // click
+    }); // ready
+</script>
+
+
+<div class="modal-header">
+    <h5 class="modal-title" id="historyModalLabel" th:text="${regclass}" > 세부 </h5>
+    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+</div>
+<div class="modal-body">
+
+    <form id="boardDetail" method="post" >
+
+        <div class="table-container m-auto">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>게시판 이름</th>
+                    <th> 등록 여부</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="regboard ,rowNumber: ${regboards}">
+
+                    <td th:text="${rowNumber.count}"></td>
+
+                    <td th:text="${regboard.board_nm}"></td>
+                    <td>
+                        <div class="form-check">
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   th:checked="${regboard.register==1}">
+                        </div>
+                    </td>
+                    <td  style="display: none;" th:text="${regboard.board_id}"></td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn btn-primary" id="putBtn" type="button">게시판 업데이트</button>
+            <button class="btn btn-secondary" id="cancelBtn" type="button" data-dismiss="modal">Cancel</button>
+        </div>
+    </form>
+</div>

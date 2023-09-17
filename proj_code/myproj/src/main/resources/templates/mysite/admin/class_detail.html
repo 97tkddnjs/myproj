@@ -52,16 +52,16 @@
                         , contentType :  "application/json; charset=utf-8"
                         //, contentType :  false
                         , cache : false
-                        , success : function(data) {
+                        , success : function(result) {
                             // alert(data);
-                            if(data.result=="")
+                            if(result=="")
                                 alert("yes");
-                            if(data.result =="ok") {
-                                alert(data.result)
-                                alert("수업 등록 성공");
+                            if(result =="ok") {
+                                alert(result)
+                                alert("수업 업데이트 성공");
                             } else {
-                                alert(data.result)
-                                alert("수업 등록 실패 \n 관리자에게 문의 바랍니다");
+                                alert(result)
+                                alert("수업 업데이트 실패 \n 관리자에게 문의 바랍니다");
                             }
                             location.href="/mysite/admin/class";
                         } //call back function

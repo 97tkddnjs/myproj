@@ -3,11 +3,9 @@ package com.dboard.myproj.mysite.admin.service;
 import com.dboard.myproj.config.page.Pagination;
 import com.dboard.myproj.config.page.PagingResponse;
 import com.dboard.myproj.config.page.SearchDto;
-import com.dboard.myproj.data.dto.AdminBoardDTO;
-import com.dboard.myproj.data.dto.AdminMemberDTO;
+import com.dboard.myproj.data.dto.*;
 
-import com.dboard.myproj.data.dto.ClassCodeDTO;
-import com.dboard.myproj.data.dto.MemberDetailFormDTO;
+import com.dboard.myproj.data.entity.BoardTypeVO;
 import com.dboard.myproj.data.entity.ClassCodeVO;
 import com.dboard.myproj.data.entity.Restrict;
 import com.dboard.myproj.mysite.admin.dao.AdminDAO;
@@ -17,10 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.annotation.Target;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  *
@@ -102,6 +97,7 @@ public class AdminService {
     public MemberDetailFormDTO findMemberDetailById(String memberId) {
 
         AdminMemberDTO userMemberByID = dao.findUserMemberByID(memberId);
+        System.out.println("userMemberByID = " + userMemberByID);
         List<ClassCodeDTO> courseRegistrationByMemberID = dao.findCourseRegistrationByMemberID(memberId);
 
         MemberDetailFormDTO memberDetailFormDTO = new MemberDetailFormDTO();
@@ -110,6 +106,79 @@ public class AdminService {
         memberDetailFormDTO.setClassCodes(courseRegistrationByMemberID);
 
         return  memberDetailFormDTO;
+
+    }
+
+    @Transactional
+    public int updateMemberRestrict(AdminMemberDTO memberDTO) {
+
+        String member_id = memberDTO.getMember_id();
+        Long restrict = memberDTO.getRestrict();
+        log.info("membeer   "+ memberDTO);
+        int count = dao.findRestrictMemberById(member_id);
+        System.out.println("count = " + count);
+
+        int flag = 0;
+        if(count >0){
+            flag =dao.updateRestrictMember(memberDTO);
+        }else{
+            if(restrict !=0){
+              flag =  dao.saveRestrictMemberById(member_id);
+            }
+        }
+        log.info("------    ", flag);
+
+        return flag;
+
+    }
+
+    public List<BoardTypeVO> findAllBoardType() {
+        return dao.findAllBoardType();
+    }
+
+    public List<BoardTypeDTO> findRegClassByClassId(int classId) {
+
+
+        return dao.findRegClassByClassId(classId);
+    }
+
+    public int saveBoardType(String boardnm) {
+        return dao.saveBoardType(boardnm);
+    }
+
+    @Transactional
+    public int updateClassBoardType(UpdateBoardDTO boardTypeDTOS,String classId) {
+
+        List<BoardTypeDTO> boardType = boardTypeDTOS.getBoardType();
+        List<BoardTypeDTO> regBoardType =  dao.findClassBoardTypeByClassId(classId);
+
+
+//        Collections.sort(boardType, BoardTypeDTO::compareTo);
+//        Collections.sort(regBoardType, BoardTypeDTO::compareTo);
+
+        List<Integer> flag = new ArrayList<>();
+
+        for(int i=0 ; i < boardType.size();i++){
+
+            BoardTypeDTO boardTypeDTO = boardType.get(i);
+            for(int j=0; j < regBoardType.size(); j++){
+                BoardTypeDTO regboardTypeDTO = regBoardType.get(j);
+                if(boardTypeDTO.getBoard_id() == regboardTypeDTO.getBoard_id()){
+                    if(boardTypeDTO.getRegister() != regboardTypeDTO.getRegister()){
+                        // update cb_show n
+
+                        boardType.remove(i);
+                    }
+                }
+            }
+            
+            // 처리 안된 부분 처리하기
+            for (BoardTypeDTO data: boardType) {
+                
+            }
+
+        }
+        return 1;
 
     }
 

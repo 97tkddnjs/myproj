@@ -5,6 +5,7 @@ import com.dboard.myproj.data.dto.AdminMemberDTO;
 import com.dboard.myproj.data.dto.ClassBoardTypeDTO;
 import com.dboard.myproj.data.dto.ClassCodeDTO;
 import com.dboard.myproj.data.entity.BoardDetailVO;
+import com.dboard.myproj.data.entity.CommentsVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -26,5 +27,11 @@ public interface UserDAO {
 
     int countBoardDetail(@Param("cb_type")String cb_type, @Param("params") final  SearchDto params);
 
-    void savedBoard(BoardDetailVO boardDetailVO);
+    int savedBoard(BoardDetailVO boardDetailVO);
+
+    BoardDetailVO findBoardDetailById(int bd_id);
+
+    int saveComment(CommentsVO comment);
+
+    List<CommentsVO> findAllCommentsByBd(int bd_id);
 }

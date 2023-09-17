@@ -7,12 +7,12 @@
 
 
 
-<script>
+<script th:inline="javascript">
     function goBack() {
         window.history.back();
     }
     $(document).ready( function() {
-        $("#signUpBtn").click(function() {
+        $("#updateBtn").click(function() {
 
 
             var loginId = $("#loginId").val();
@@ -72,7 +72,7 @@
             // 필수 입력 필드가 모두 입력되었을 경우, 폼을 서버로 제출합니다.
             // 폼 전송
 
-            alert("im");
+
 
             var memberDTO = {
                 member_id: $("#loginId").val(),
@@ -90,28 +90,34 @@
                 classCodes: classCodeDatas
             };
             // $("#signUpInfo").submit();
-            alert("ok");
-
-            $.ajax({
-                type: "POST",
-                url: "/signup",
-                data: JSON.stringify(formData),
-                contentType: "application/json",
-                success: function(response, textStatus, xhr) {
-                    if (xhr.status === 200) {
-                        console.log("성공:", response);
-                        // 상태 코드가 200 (OK)인 경우에 처리
-                    } else {
-                        console.log("다른 상태 코드:", xhr.status);
-                        // 다른 상태 코드에 대한 처리
+            if (window.confirm("정말 변경 하시겠습니까?")) {
+                $.ajax({
+                    type: "POST",
+                    url: "/signup",
+                    data: JSON.stringify(formData),
+                    contentType: "application/json",
+                    success: function(response, textStatus, xhr) {
+                        if (xhr.status === 200) {
+                            console.log("성공:", response);
+                            // 상태 코드가 200 (OK)인 경우에 처리
+                        } else {
+                            console.log("다른 상태 코드:", xhr.status);
+                            // 다른 상태 코드에 대한 처리
+                        }
+                    },
+                    error: function(xhr, textStatus, errorThrown) {
+                        console.log("에러:", xhr.status, errorThrown);
+                        location.href = "/"
+                        // 서버로 데이터 전송 중 오류 발생
                     }
-                },
-                error: function(xhr, textStatus, errorThrown) {
-                    console.log("에러:", xhr.status, errorThrown);
-                    location.href = "/"
-                    // 서버로 데이터 전송 중 오류 발생
-                }
-            });
+                });
+
+            }else{
+
+            }
+
+
+
         })
 
 
@@ -164,10 +170,6 @@
             <input type="text" id="phone" th:field="*{member.phone_num}"  class="form-control" >
         </div>
 
-        <div style="margin-bottom: 20px;">
-            <label for="restrict">재한 여부</label>
-            <input type="checkbox" id="restrict" th:checked="*{member.restrict==0}" readonly="true">
-        </div>
 
         <div class="table-container ">
             <table class="table">
@@ -206,7 +208,7 @@
         <hr class="my-4">
         <div class="row">
             <div class="col">
-                <button id="signUpBtn" class="w-100 btn btn-primary btn-lg" type="button">
+                <button id="updateBtn" class="w-100 btn btn-primary btn-lg" type="button">
                     수정</button>
             </div>
 

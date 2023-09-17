@@ -631,28 +631,13 @@
 											"top": 83,
 											"width": 262,
 											"height": 13
-										},
-										{
-											"_type": "ERDColumnView",
-											"_id": "AAAAAAGKareVOjWz4OM=",
-											"_parent": {
-												"$ref": "AAAAAAGHTK8NymIURB4="
-											},
-											"model": {
-												"$ref": "AAAAAAGKareVLDWwxx4="
-											},
-											"font": "Arial;13;0",
-											"left": 1101,
-											"top": 98,
-											"width": 262,
-											"height": 13
 										}
 									],
 									"font": "Arial;13;0",
 									"left": 1096,
 									"top": 63,
 									"width": 272,
-									"height": 53
+									"height": 38
 								}
 							],
 							"font": "Arial;13;0",
@@ -2451,16 +2436,6 @@
 							"name": "BOARD_NM",
 							"type": "VARCHAR",
 							"length": "100"
-						},
-						{
-							"_type": "ERDColumn",
-							"_id": "AAAAAAGKareVLDWwxx4=",
-							"_parent": {
-								"$ref": "AAAAAAGHTK8NymIQ+hg="
-							},
-							"name": "DEL_YN",
-							"type": "VARCHAR",
-							"length": "1"
 						}
 					]
 				},

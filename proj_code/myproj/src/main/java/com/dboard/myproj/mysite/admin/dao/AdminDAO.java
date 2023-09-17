@@ -5,7 +5,9 @@ import com.dboard.myproj.config.page.SearchDto;
 import com.dboard.myproj.data.dto.AdminBoardDTO;
 import com.dboard.myproj.data.dto.AdminMemberDTO;
 
+import com.dboard.myproj.data.dto.BoardTypeDTO;
 import com.dboard.myproj.data.dto.ClassCodeDTO;
+import com.dboard.myproj.data.entity.BoardTypeVO;
 import com.dboard.myproj.data.entity.ClassCodeVO;
 import com.dboard.myproj.data.entity.Restrict;
 import org.apache.ibatis.annotations.Mapper;
@@ -46,6 +48,20 @@ public interface AdminDAO {
     int updateClassCodeById(ClassCodeDTO classCodeDTO);
 
     List<AdminBoardDTO> findAllBoard(SearchDto params);
+
+    int findRestrictMemberById(String member_id);
+
+    int updateRestrictMember(AdminMemberDTO memberDTO);
+
+    int saveRestrictMemberById(String member_id);
+
+    List<BoardTypeVO> findAllBoardType();
+
+    List<BoardTypeDTO> findRegClassByClassId(int classId);
+
+    int saveBoardType(String boardnm);
+
+    List<BoardTypeDTO> findClassBoardTypeByClassId(String classId);
 
 
     //List<AdminMemberDTO>  searchGroupMemberName(String name,final SearchDto params);

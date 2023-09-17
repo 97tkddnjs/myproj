@@ -6,6 +6,7 @@ import com.dboard.myproj.config.page.PagingResponse;
 import com.dboard.myproj.config.page.SearchDto;
 import com.dboard.myproj.data.dto.*;
 import com.dboard.myproj.data.entity.BoardDetailVO;
+import com.dboard.myproj.data.entity.CommentsVO;
 import com.dboard.myproj.mysite.user.dao.UserDAO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,11 +14,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -76,9 +83,9 @@ public class UserService {
         return  new PagingResponse<>(allBoardDetail,pagination);
     }
 
-    public void savedBoard(BoardRegDTO boardRegDTO) throws  IOException{
+    public Boolean savedBoard(BoardRegDTO boardRegDTO) throws  IOException{
 
-        String path = savedFile(boardRegDTO.getAddFile());
+        String path = savedFilePath(boardRegDTO.getAddFile());
 
         BoardDetailVO boardDetailVO = new BoardDetailVO();
         LocalDateTime curtime = LocalDateTime.now();
@@ -91,11 +98,18 @@ public class UserService {
         boardDetailVO.setFile_path(path);
 
         log.info("===file ok ==== "+path);
-        dao.savedBoard(boardDetailVO);
+        int flag = dao.savedBoard(boardDetailVO);
+        if(flag >0){
+            if(path != null) {
+                savedFile(boardRegDTO.getAddFile(), path);
+            }
+            return true;
+        }
+
+        return false;
 
     }
-
-    public String savedFile(MultipartFile files) throws IOException{
+    public String savedFilePath(MultipartFile files) throws IOException{
 
         if (files.isEmpty()) {
             return null;
@@ -115,14 +129,50 @@ public class UserService {
             String savedName = uuid + extension;
 
             // 파일을 불러올 때 사용할 파일 경로
-            String savedPath = fileDir + savedName;
+            String savedPath =  savedName;
 
-            files.transferTo(new File(savedPath));
+            return savedPath;
+
+        }catch (Exception e){
+            return null;
+        }
+    }
+    public String savedFile(MultipartFile files, String savedPath) throws IOException{
+
+        if (files.isEmpty()) {
+            return null;
+        }
+        try {
+
+            files.transferTo(new File(fileDir+savedPath));
 
             return savedPath;
         }catch (Exception e){
             return null;
         }
 
+    }
+    public UrlResource readFileAsResource(String addFilePath) throws IOException {
+
+//        Path filePath = Paths.get("<file_path_string>");
+        UrlResource resource = new UrlResource("file:"+fileDir+addFilePath.toString());
+//        String fileName = "<file_name_string>";
+//        log.info("Success download input excel file : " + filePath);
+        return resource;
+    }
+
+
+    public BoardDetailVO findBoardDetailById(int bd_id) {
+
+        return dao.findBoardDetailById(bd_id);
+    }
+
+    public int saveComment(CommentsVO comment) {
+        return dao.saveComment(comment);
+    }
+
+    public List<CommentsVO> findAllCommentsByBd(int bd_id) {
+
+        return dao.findAllCommentsByBd(bd_id);
     }
 }

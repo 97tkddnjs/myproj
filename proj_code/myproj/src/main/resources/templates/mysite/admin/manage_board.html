@@ -108,7 +108,7 @@
                 </td>
                 <td class="table_class">${row.class_ymd}</td>
                 <td class="table_class">
-                    <a href="javascript: memberDetail('${row.class_id}')">
+                    <a href="javascript: boardDetail('${row.class_id}', '${row.class_nm}')">
                         <i class="fa fa-arrow-circle-right fa-lg"  >${row.class_nm}</i>
                     </a>
                 </td>
@@ -133,6 +133,12 @@
 
     }
 
+    function boardDetail(classID, clasNm){
+        var url ="/mysite/admin/board/detail/"+classID +"/"+clasNm;
+        $('#MoaModal .modal-content').load(url);
+        $('#MoaModal').modal();
+
+    }
 
     /*]]>*/
 </script>
@@ -140,18 +146,18 @@
 
 <div  class="container my-5">
 
-    <div class="search my-3">
-        <form id="searchdata" class="d-inline-flex" onsubmit="return false;" autocomplete="off">
-            <select id="searchType"  name="searchType"  class="m-1">
-                <option value="">현재 학기</option>
-                <option value="5">수업 연도</option>
-            </select>
-            <input id="keyword" name="keyword" class="form-control me-2"   placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success" onclick="movePage(1);">Search</button>
-        </form>
-        <!-- Button trigger modal -->
+<!--    <div class="search my-3">-->
+<!--        <form id="searchdata" class="d-inline-flex" onsubmit="return false;" autocomplete="off">-->
+<!--            <select id="searchType"  name="searchType"  class="m-1">-->
+<!--                <option value="">현재 학기</option>-->
+<!--                <option value="5">수업 연도</option>-->
+<!--            </select>-->
+<!--            <input id="keyword" name="keyword" class="form-control me-2"   placeholder="Search" aria-label="Search">-->
+<!--            <button class="btn btn-outline-success" onclick="movePage(1);">Search</button>-->
+<!--        </form>-->
+<!--        &lt;!&ndash; Button trigger modal &ndash;&gt;-->
 
-    </div>
+<!--    </div>-->
 
     <table class="table">
         <thead>
@@ -171,7 +177,7 @@
 
 
     <div class="col-md-12">
-        <button class="btn btn-primary float-right" onclick="fnModuleInfo()" >button</button>
+        <button class="btn btn-primary float-right" onclick="fnModuleInfo()" >게시판 종류 등록</button>
     </div>
 
 
@@ -181,7 +187,7 @@
 <!-- Moa Modal Button -->
 <!-- Moa Modal Button -->
 <div class="modal fade" id="MoaModal" tabindex="-1" role="dialog" aria-labelledby="historyModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
 
         </div>

@@ -41,7 +41,7 @@
                 , success : function(result) {
                     if(result=="")
                         alert("yes");
-                    if(result > 0) {
+                    if(result == "ok") {
                         alert(result)
                         alert("게시글 작성 성공");
                     } else {
@@ -62,7 +62,7 @@
 
 <div class="container">
 
-    <h2> board upload</h2>
+    <h2 class="my-5" th:text="|${boardname} 게시물 upload|">  upload</h2>
     <form id="form1">
         <table class="table table-hover">
             <tr>

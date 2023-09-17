@@ -43,7 +43,8 @@
             (SELECT CLASS_NM FROM CLASS_CODE CC WHERE  CC.CLASS_ID = CR.CLASS_ID) AS CLASS_NM		,
             (SELECT  CLASS_YMD FROM CLASS_CODE CC WHERE  CC.CLASS_ID = CR.CLASS_ID) AS CLASS_YMD
         FROM COURSE_REGISTRATION CR
-        WHERE `MEMBER_ID`=#{member_id};
+        WHERE `MEMBER_ID`=#{member_id}
+        AND   CR.`CLASS_ID` = (SELECT CC.`CLASS_ID` FROM CLASS_CODE CC WHERE CC.DEL_YN ='N' AND CC.CLASS_ID = CR.CLASS_ID);
 
 
     </select>
@@ -109,5 +110,46 @@
                        )
 
     </insert>
+    
+    <select id="findBoardDetailById" parameterType="int"
+            resultType="com.dboard.myproj.data.entity.BoardDetailVO">
+        SELECT `BD_ID`
+             , `TITLE`
+             , `MEMBER_ID`
+             , `CONTENTS`
+             , `BD_DT`
+             , `FILE_PATH`
+             , `CB_TYPE`
+             , `BD_SHOW`
+        FROM BOARD_DETAIL
+        WHERE  `BD_ID` = #{bd_id}
 
+    </select>
+
+    <insert id="saveComment" parameterType="com.dboard.myproj.data.entity.CommentsVO">
+        INSERT INTO COMMENTS(
+                `COMMENTS`  ,
+                 `COM_DT`   ,
+                 `BD_ID`    ,
+                 `MEMBER_ID`,
+                 `COM_SHOW`
+        )VALUES (
+                 #{comments}
+                 ,#{com_dt}
+                 ,#{bd_id}
+                 ,#{member_id}
+                 ,true
+                        )
+    </insert>
+    <select id="findAllCommentsByBd" parameterType="int" resultType="com.dboard.myproj.data.entity.CommentsVO">
+        SELECT
+            `COM_ID`
+        ,   `COMMENTS`
+        ,   `COM_DT`
+        ,   `BD_ID`
+        ,   `MEMBER_ID`
+        FROM COMMENTS
+        WHERE COM_SHOW = true
+        AND `BD_ID` = #{bd_id}
+    </select>
 </mapper>

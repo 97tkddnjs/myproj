@@ -3,6 +3,7 @@
 <nav th:replace="~{mysite/admin/common/header :: adminHead}"></nav>
 
 
+
 <script th:inline="javascript">
     /*<![CDATA[*/
 
@@ -194,6 +195,7 @@
 
     /*모달*/
     function fnModuleInfo(){
+        alert("===")
         $('#MoaModal .modal-content').load("/mysite/admin/class/register");
         $('#MoaModal').modal();
 

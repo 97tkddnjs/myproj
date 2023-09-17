@@ -22,4 +22,6 @@ public class ClassBoardTypeDTO {
 
     String cb_show;
 
+
+
 }

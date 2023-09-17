@@ -52,7 +52,7 @@
             `CLASS_NM`,
             `CLASS_YMD`
         FROM CLASS_CODE
-        WHERE DLE_YN = 'N';
+        WHERE DEL_YN = 'N';
     </select>
 
     <insert id="saveCourseReg" parameterType="com.dboard.myproj.data.dto.ClassCodeDTO">

@@ -49,7 +49,7 @@ public class AuthenticationController {
     @PostMapping("/login")
     public String loginPost(
             @ModelAttribute("memberForm") MemberFormDTO memberFormDto,
-            HttpServletRequest request
+            HttpServletRequest request,Model model
             ) {
 
 
@@ -64,7 +64,13 @@ public class AuthenticationController {
 
 
 
-        if(login_member !=null){
+        if(login_member ==null){
+            model.addAttribute("msg","로그인 정보가 없습니다. 확인해주세요");
+            return "login/loginform";
+        }
+
+        else{
+
             HttpSession session = request.getSession(true);
             session.setAttribute(AuthConst.LOGIN_MEMBER, login_member);
 
@@ -74,8 +80,6 @@ public class AuthenticationController {
                 return "redirect:/mysite/user/home";
             }
 
-        }else{
-            return "login/loginform";
         }
     }
 
