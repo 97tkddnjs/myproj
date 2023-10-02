@@ -77,7 +77,8 @@ public class RestAdminController {
     public ResponseEntity boardRegister(@RequestBody String boardnm) {
 
         System.out.println("boardnm = " + boardnm);
-        int flag = service.saveBoardType(boardnm);
+
+        int flag = service.saveBoardType(boardnm.replaceAll("\"", ""));
         if(flag >0){
             return ResponseEntity.ok("ok");
         }
@@ -86,16 +87,21 @@ public class RestAdminController {
     }
     @PostMapping("/board/detail")
     public ResponseEntity updateBoard(
-                                      @RequestBody UpdateBoardDTO boardTypeDTOS){
+            @RequestBody UpdateBoardDTO
+                     boardTypeDTOS
+                                      ){
+        log.info(" = ====== tst"+boardTypeDTOS);
+//
 
-        String classId = boardTypeDTOS.getClass_id();
+        String classId = Integer.toString(boardTypeDTOS.getClass_id());
 
 //        System.out.println("classId = " + classId);
         boardTypeDTOS.getBoardType().forEach(
                 i -> System.out.println("i = " + i)
         );
-
+//
         int flag = service.updateClassBoardType(boardTypeDTOS ,classId);
+
         if(flag >0){
             return ResponseEntity.ok("ok");
         }

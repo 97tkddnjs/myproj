@@ -2,18 +2,14 @@ package com.dboard.myproj.mysite.admin.dao;
 
 
 import com.dboard.myproj.config.page.SearchDto;
-import com.dboard.myproj.data.dto.AdminBoardDTO;
-import com.dboard.myproj.data.dto.AdminMemberDTO;
+import com.dboard.myproj.data.dto.*;
 
-import com.dboard.myproj.data.dto.BoardTypeDTO;
-import com.dboard.myproj.data.dto.ClassCodeDTO;
 import com.dboard.myproj.data.entity.BoardTypeVO;
 import com.dboard.myproj.data.entity.ClassCodeVO;
-import com.dboard.myproj.data.entity.Restrict;
 import org.apache.ibatis.annotations.Mapper;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -39,7 +35,7 @@ public interface AdminDAO {
 
     int saveClassCode(ClassCodeDTO classCodeDTO);
 
-    int saveClassBoardType(ClassCodeDTO classCodeDTO);
+    int saveClassBoardTypeDefault(ClassCodeDTO classCodeDTO);
 
     ClassCodeVO findClassCodeById(String classId);
 
@@ -61,7 +57,13 @@ public interface AdminDAO {
 
     int saveBoardType(String boardnm);
 
-    List<BoardTypeDTO> findClassBoardTypeByClassId(String classId);
+    List<ClassBoardTypeDTO> findClassBoardTypeByClassId(String classId);
+
+    void updateClassBoardTypeById(Map<String,Object> data);
+
+    void saveClassBoardTypeById(Map<String,Object> data);
+
+    List<ClassBoardTypeDTO> countClassBoardTypeByID(Map<String, Object> param);
 
 
     //List<AdminMemberDTO>  searchGroupMemberName(String name,final SearchDto params);

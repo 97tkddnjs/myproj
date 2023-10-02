@@ -43,7 +43,66 @@
 
         }) // register click event
     })
+    function updateboard(){
+        let cb_type = [[${cb_type}]];
 
+        let bd_id = [[${board_detail.bd_id}]];
+        location.href ="/mysite/user/"+cb_type+"/update/"+bd_id;
+    };
+
+    function deleteboard(){
+        if (window.confirm("정말 삭제 하시겠습니까?")) {
+
+            let bd_id = [[${board_detail.bd_id}]];
+            $.ajax({
+                type: "POST",
+                url: "/mysite/user/rest/board/delete/"+bd_id,
+                contentType: false,
+                success: function(response, textStatus, xhr) {
+                    if (xhr.status === 200) {
+                        console.log("성공:", response);
+                        location.href= document.referrer;
+
+                    } else {
+                        console.log("다른 상태 코드:", xhr.status);
+                        // 다른 상태 코드에 대한 처리
+                    }
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    console.log("에러:", xhr.status, errorThrown);
+                    window.goBack();
+                    // 서버로 데이터 전송 중 오류 발생
+                }
+            });
+
+        }else{
+            location.reload();
+        }
+    }
+
+    function deleteComment(com_id){
+
+        $.ajax({
+            type: "POST",
+            url: "/mysite/user/rest/comment/delete/"+com_id,
+            contentType: false,
+            success: function(response, textStatus, xhr) {
+                if (xhr.status === 200) {
+                    console.log("성공:", response);
+                    location.href= document.referrer;
+
+                } else {
+                    console.log("다른 상태 코드:", xhr.status);
+                    // 다른 상태 코드에 대한 처리
+                }
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                console.log("에러:", xhr.status, errorThrown);
+                window.goBack();
+                // 서버로 데이터 전송 중 오류 발생
+            }
+        });
+    }
 </script>
 
     <div class="container my-5">
@@ -59,7 +118,7 @@
                         <h1 class="fw-bolder mb-4" th:text="|${board_detail.title}|">Welcome to Blog Post!</h1>
                         <!-- Post meta content-->
                         <div class="text-muted fst-italic mb-2" th:text="|Posted on  ${board_detail.bd_dt}|">Posted on January 1, 2023 </div>
-                        <div class="text-muted fst-italic mb-2"th:text="|by ${member_id}|"></div>
+                        <div class="text-muted fst-italic mb-2"th:text="|by ${board_detail.member_id}|"></div>
 
                     </header>
                     <!-- Preview image figure-->
@@ -69,57 +128,71 @@
                         <p class="fs-5 mb-4" th:text="${board_detail.contents}">Science is an enterprise that should be cherished as an activity of the free human mind. Because it transforms who we are, how we live, and it gives us an understanding of our place in the universe.</p>
                         <p class="fs-5 mb-4" th:if="${not #strings.isEmpty(board_detail.file_path)}"><a th:href="@{/mysite/user/board/detail/download/{file_path}(file_path=${board_detail.file_path})}"> 다운로드</a></p>
                     </section>
-                    <div class="col mb-5">
-                        <button id="" class="btn btn-primary btn-sm" type="button">
+
+                    <div class="col mb-5"  th:if="${session.get('loginMember').member_id ==board_detail.member_id}" >
+                        <button id="update_board" class="btn btn-primary btn-sm" type="button" onclick="updateboard()">
                             수정</button>
+                        <button id="delete_board" class="btn btn-danger btn-sm" type="button" onclick="deleteboard()" >
+                            삭제</button>
                     </div>
+
                 </article>
 
 
 
-                <section class="mb-5">
-                    <div class="card bg-light">
-                        <div class="card-body">
-                            <!-- Comment form-->
-                            <form class="mb-4">
-                                <textarea id="comments" class="form-control mb-2" rows="3" placeholder="Join the discussion and leave a comment!"></textarea>
-                                <div class="col ">
-                                    <button id="updateBtn" class="btn btn-primary btn-sm" type="button">
-                                        수정</button>
-                                </div>
-                            </form>
-                            <!-- Comment with nested comments-->
-                            <div class="d-flex mb-4">
-                                <!-- Parent comment-->
-                                <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..."></div>
-                                <div class="ms-3">
-                                    <div class="fw-bold">Commenter Name</div>
-                                    If you're going to lead a space frontier, it has to be government; it'll never be private enterprise. Because the space frontier is dangerous, and it's expensive, and it has unquantified risks.
-                                </div>
-                            </div>
-                            <!-- Single comment-->
-                            <div th:each="commentVO : ${comments_list}">
-                                <div class="d-flex mb-4">
-                                    <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..."></div>
-                                    <div class="ms-3" >
-                                        <div class="fw-bold" id="user name" th:text="*{commentVO.member_id}">Commenter Name</div>
-                                        <div id="comment" th:text="*{commentVO.comments}">
-                                            here is comment
-                                        </div>
-                                        <div id="edit" class="mt-2">
-                                            <button class="btn btn-warning btn-sm"
-                                                    th:if="${session.get('loginMember').member_id ==commentVO.member_id}" >delete</button>
-                                        </div>
 
-                                    </div>
-                                </div>
+        </div>
+
+    </div>
+    <div class="container my-5">
+        <section class="mb-5">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <!-- Comment form-->
+                    <div>
+                        <form class="mb-4">
+                            <textarea id="comments" class="form-control mb-2" rows="3" placeholder="Join the discussion and leave a comment!"></textarea>
+                            <div class="col ">
+                                <button id="updateBtn" class="btn btn-primary btn-sm" type="button">
+                                    등록</button>
                             </div>
+                        </form>
+                    </div>
+
+                    <!-- Comment with nested comments-->
+                    <div class="d-flex mb-4">
+                        <!-- Parent comment-->
+                        <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..."></div>
+                        <div class="ms-3">
+                            <div class="fw-bold">test</div>
+                            <div>안녕하세요 해당 게시판을 통해서 CRUD 및 파일 업로드 다운로드 작성자일 경우 삭제등의 행위가 가능합니다.</div>
 
                         </div>
                     </div>
-                </section>
-            </div>
+                    <!-- Single comment-->
+                    <div th:each="commentVO : ${comments_list}">
 
-        </div>
+                        <div class="d-flex mb-4">
+
+                            <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..."></div>
+                            <div class="ms-3" >
+                                <div class="fw-bold" id="user name" th:text="*{commentVO.member_id}">Commenter Name</div>
+                                <div id="comment" th:text="*{commentVO.comments}">
+                                    here is comment
+                                </div>
+                                <div id="edit" class="mt-2">
+                                    <button class="btn btn-warning btn-sm" th:onclick="|deleteComment(${commentVO.com_id})|"
+                                            th:if="${session.get('loginMember').member_id ==commentVO.member_id}" >delete</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </div>
+
 </body>
 </html>

@@ -3,6 +3,9 @@ package com.dboard.myproj.mysite.admin.dao;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class AdminDAOTest {
@@ -19,6 +22,10 @@ class AdminDAOTest {
 
     @Test
     void updateRestrictMember() {
+
+        BigDecimal bigDecimal = new BigDecimal(BigInteger.ZERO);
+
+
     }
 
     @Test

@@ -81,7 +81,7 @@ public class UserController {
 
 
     @GetMapping("{cb_type}/{class_nm}/{board_nm}")
-    public String boardDetail(@ModelAttribute("params") final SearchDto params, @PathVariable String cb_type
+    public String board(@ModelAttribute("params") final SearchDto params, @PathVariable String cb_type
             , @PathVariable String class_nm, @PathVariable String board_nm,
                               HttpServletRequest request, Model model) {
 
@@ -92,11 +92,13 @@ public class UserController {
 
         log.info("====== board ======");
 
+        // 기본 게시판 보여주기 navbar
         List<ClassCodeDTO> userBoardList =  userService.userBoardListById(member_id);
-
+        model.addAttribute("userboardlist", userBoardList);
+        //
 
         model.addAttribute("boardname", class_nm + " " + board_nm);
-        model.addAttribute("userboardlist", userBoardList);
+
 
         PagingResponse<BoardDetailVO> boardDetailVOS =  userService.findAllBoardDetail(cb_type, params);
 
@@ -115,15 +117,19 @@ public class UserController {
         MemberVO attribute = (MemberVO)session.getAttribute(AuthConst.LOGIN_MEMBER);
         String member_id = attribute.getMember_id();
 
+        // 기본 게시판 navbar
+        List<ClassCodeDTO> userBoardList =  userService.userBoardListById(member_id);
+
+        model.addAttribute("userboardlist", userBoardList);
 
         log.info("====== board register ======");
         model.addAttribute("cb_type",cb_type);
         model.addAttribute("boardname", class_nm + " " + board_nm);
         model.addAttribute("member_id", member_id);
 
-        List<ClassCodeDTO> userBoardList =  userService.userBoardListById(member_id);
-
-        model.addAttribute("userboardlist", userBoardList);
+//        List<ClassCodeDTO> userBoardList =  userService.userBoardListById(member_id);
+//
+//        model.addAttribute("userboardlist", userBoardList);
 
 
 
@@ -141,15 +147,17 @@ public class UserController {
         MemberVO attribute = (MemberVO)session.getAttribute(AuthConst.LOGIN_MEMBER);
         String member_id = attribute.getMember_id();
 
+        // 기본 게시판 navbar
+        List<ClassCodeDTO> userBoardList =  userService.userBoardListById(member_id);
+
+        model.addAttribute("userboardlist", userBoardList);
 
         log.info("====== board register ======");
         model.addAttribute("cb_type",cb_type);
         model.addAttribute("boardname", class_nm + " " + board_nm);
         model.addAttribute("member_id", member_id);
 
-        List<ClassCodeDTO> userBoardList =  userService.userBoardListById(member_id);
 
-        model.addAttribute("userboardlist", userBoardList);
 
 
         BoardDetailVO boardDetailVO = userService.findBoardDetailById(bd_id);
@@ -160,6 +168,34 @@ public class UserController {
 
         return "mysite/user/user_board_detail";
     }
+
+
+    @GetMapping("{cb_type}/update/{bdId}")
+    String boardDetailUpdate(@PathVariable String cb_type,
+                             @PathVariable("bdId") int bd_id
+                            , Model model,HttpServletRequest request) {
+
+        HttpSession session = request.getSession();
+        MemberVO attribute = (MemberVO)session.getAttribute(AuthConst.LOGIN_MEMBER);
+        String member_id = attribute.getMember_id();
+
+        // 기본 게시판 navbar
+        List<ClassCodeDTO> userBoardList =  userService.userBoardListById(member_id);
+
+        model.addAttribute("userboardlist", userBoardList);
+
+        // 내용 조회 뿌리기
+        BoardDetailVO boardDetailVO = userService.findBoardDetailById(bd_id);
+
+        model.addAttribute("boardDetail", boardDetailVO);
+        model.addAttribute("cb_type",cb_type);
+        model.addAttribute("bd_id",bd_id);
+
+        return "mysite/user/update_board";
+    }
+
+
+
 
     @GetMapping(value = "board/detail/download/{addpath}")
     public ResponseEntity<UrlResource> fileDownloadApi(@PathVariable("addpath") String addPath) throws IOException {

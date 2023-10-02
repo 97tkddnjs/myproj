@@ -12,11 +12,11 @@
             $(".table-container tbody tr").each(function () {
                 var row = $(this);
                 var isChecked = row.find(".form-check-input").prop("checked");
-
-
+                isChecked = ( isChecked ==true? 1:0);
+                console.log(isChecked)
 
                 var boardData = {
-                    board_id : row.find("td:eq(3)").text(),
+                    board_id : parseInt(row.find("td:eq(3)").text()),
                     board_nm: row.find("td:eq(1)").text(),
                     register: isChecked
                 };
@@ -25,14 +25,17 @@
 
             });
 
+            // class_id : classId,
             var formData = {
-                class_id : classId,
+                class_id :classId,
                 boardType: boardDatas
             };
+            var test ={
+                test :"test"
+            }
             // Javascript 객체로 전달해야해서
-            console.log(formData);
+            console.log(JSON.stringify(formData));
             $.ajax({
-
                 type : "POST"
                 , url:"/mysite/admin/rest/board/detail"
                 , data : JSON.stringify(formData)

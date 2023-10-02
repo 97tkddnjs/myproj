@@ -7,14 +7,12 @@ import com.dboard.myproj.data.dto.*;
 
 import com.dboard.myproj.data.entity.BoardTypeVO;
 import com.dboard.myproj.data.entity.ClassCodeVO;
-import com.dboard.myproj.data.entity.Restrict;
 import com.dboard.myproj.mysite.admin.dao.AdminDAO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.annotation.Target;
 import java.util.*;
 
 /**
@@ -65,7 +63,7 @@ public class AdminService {
 
         dao.saveClassCode(classCodeDTO);
 
-        return dao.saveClassBoardType(classCodeDTO);
+        return dao.saveClassBoardTypeDefault(classCodeDTO);
 
 
     }
@@ -137,7 +135,7 @@ public class AdminService {
     }
 
     public List<BoardTypeDTO> findRegClassByClassId(int classId) {
-
+        log.info("in in ");
 
         return dao.findRegClassByClassId(classId);
     }
@@ -149,35 +147,46 @@ public class AdminService {
     @Transactional
     public int updateClassBoardType(UpdateBoardDTO boardTypeDTOS,String classId) {
 
-        List<BoardTypeDTO> boardType = boardTypeDTOS.getBoardType();
-        List<BoardTypeDTO> regBoardType =  dao.findClassBoardTypeByClassId(classId);
+        List<BoardTypeDTO> boardTypes = boardTypeDTOS.getBoardType();
 
 
-//        Collections.sort(boardType, BoardTypeDTO::compareTo);
-//        Collections.sort(regBoardType, BoardTypeDTO::compareTo);
+        for(BoardTypeDTO boardType: boardTypes ){
+            Map<String, Object > param = new HashMap<>();
+            param.put("classid", classId);
+            param.put("boardid" ,boardType.getBoard_id());
+            List<ClassBoardTypeDTO> data =dao.countClassBoardTypeByID(param);
 
-        List<Integer> flag = new ArrayList<>();
+            // 이미 있는 데 존재 하지 않어야 해~
+            if(data.size()==1 && boardType.getRegister()==0){
+                log.info("case 1 ");
+                Map<String, Object > param1 = new HashMap<>();
+                param1.put("cb_show","Y");
+                param1.put("cb_type",data.get(0).getCb_type());
 
-        for(int i=0 ; i < boardType.size();i++){
+                dao.updateClassBoardTypeById(param1);
 
-            BoardTypeDTO boardTypeDTO = boardType.get(i);
-            for(int j=0; j < regBoardType.size(); j++){
-                BoardTypeDTO regboardTypeDTO = regBoardType.get(j);
-                if(boardTypeDTO.getBoard_id() == regboardTypeDTO.getBoard_id()){
-                    if(boardTypeDTO.getRegister() != regboardTypeDTO.getRegister()){
-                        // update cb_show n
-
-                        boardType.remove(i);
-                    }
-                }
-            }
-            
-            // 처리 안된 부분 처리하기
-            for (BoardTypeDTO data: boardType) {
-                
             }
 
+            if(data.size()==1 && boardType.getRegister()==1){
+                log.info("case 3 ");
+                Map<String, Object > param1 = new HashMap<>();
+                param1.put("cb_show","N");
+                param1.put("cb_type",data.get(0).getCb_type());
+
+                dao.updateClassBoardTypeById(param1);
+
+            }
+
+
+            // 없는 데 존재해야 해~
+            if(data.size()==0 && boardType.getRegister()==1){
+                log.info("case 2");
+                System.out.println("param = " + param);
+                dao.saveClassBoardTypeById(param);
+            }
         }
+
+
         return 1;
 
     }

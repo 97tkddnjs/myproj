@@ -1,0 +1,248 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dboard.myproj.mysite.user.dao.UserDAO">
+
+    <!-- 게시글 검색 -->
+    <sql id="search">
+        <!-- 검색 키워드가 있을 때 -->
+        <if test="params.keyword != null and params.keyword != ''">
+            <choose>
+
+                <!-- 검색 유형이 있을 때 -->
+                <when test="params.searchType != null and params.searchType != ''">
+
+                    <choose>
+                        <when test="1== params.searchType">
+                            AND MEMBER_ID LIKE CONCAT('%', #{params.keyword}, '%')
+                        </when>
+                        <when test="2== params.searchType">
+                            AND TITLE LIKE CONCAT('%', #{params.keyword}, '%')
+                        </when>
+                    </choose>
+                </when>
+
+                <!-- 전체 검색일 때 -->
+                <otherwise>
+                    AND 1=1
+                </otherwise>
+            </choose>
+        </if>
+    </sql>
+
+
+    <select id="findUserMemberByID" parameterType="String"
+            resultType="com.dboard.myproj.data.dto.AdminMemberDTO">
+
+        SELECT
+            `MEMBER_ID`         ,
+            `EMAIL`      ,
+            `PASSWORD`   ,
+            `MEMBER_NM`       ,
+            `PHONE_NUM`      ,
+            `PARTY`         ,
+            `GRADE_ID`      ,
+            `REG_DT`        ,
+            EXISTS  (
+                    select restrict_id
+                    FROM   restrict_member
+                    WHERE  MEMBER_ID = cm.MEMBER_ID
+                      AND    RESTRICT_SHOW=TRUE) as RESTRRICT
+        FROM CLASS_MEMBER cm
+        WHERE `MEMBER_ID` = #{member_id}
+    </select>
+    <select id="findAllClassCode" parameterType="String"
+            resultType="com.dboard.myproj.data.dto.ClassCodeDTO">
+        SELECT
+            `CLASS_ID`  ,
+            `CLASS_NM`  ,
+            `CLASS_YMD` ,
+            EXISTS(SELECT *
+             FROM COURSE_REGISTRATION  CR
+             WHERE CR.`CLASS_ID` = CC.`CLASS_ID`
+               AND CR.`MEMBER_ID` = #{member_id}) AS registerClassYN
+        FROM CLASS_CODE CC
+    </select>
+
+    <select id="userBoardListById" parameterType="String"
+            resultType="com.dboard.myproj.data.dto.ClassCodeDTO">
+
+        SELECT
+            CLASS_ID		,
+            (SELECT CLASS_NM FROM CLASS_CODE CC WHERE  CC.CLASS_ID = CR.CLASS_ID) AS CLASS_NM		,
+            (SELECT  CLASS_YMD FROM CLASS_CODE CC WHERE  CC.CLASS_ID = CR.CLASS_ID) AS CLASS_YMD
+        FROM COURSE_REGISTRATION CR
+        WHERE `MEMBER_ID`=#{member_id}
+        AND   CR.`CLASS_ID` = (SELECT CC.`CLASS_ID` FROM CLASS_CODE CC WHERE CC.DEL_YN ='N' AND CC.CLASS_ID = CR.CLASS_ID);
+
+
+    </select>
+    <select id="findClassBoardTypeByID" parameterType="String"
+            resultType="com.dboard.myproj.data.dto.ClassBoardTypeDTO">
+
+        SELECT
+            `CB_TYPE`   ,
+            `BOARD_ID`  ,
+            `CLASS_ID`  ,
+            (SELECT  CLASS_NM
+             FROM CLASS_CODE
+             WHERE CLASS_ID = CBT.CLASS_ID) AS CLASS_NM,
+            (SELECT BOARD_NM
+             FROM BOARD_TYPE
+             WHERE BOARD_ID = CBT.BOARD_ID) AS BOARD_NM,
+            CB_SHOW
+        FROM CLASS_BOARD_TYPE CBT
+        WHERE CLASS_ID =#{class_id};
+
+    </select>
+
+
+
+    <select id="findAllBoardDetail"  resultType="com.dboard.myproj.data.entity.BoardDetailVO">
+        SELECT `BD_ID`
+             , `TITLE`
+             , `MEMBER_ID`
+             , `CONTENTS`
+             , `BD_DT`
+             , `FILE_PATH`
+             , `CB_TYPE`
+             , `BD_SHOW`
+        FROM BOARD_DETAIL
+        WHERE `CB_TYPE` = #{cb_type}
+        AND BD_SHOW =true
+        <include refid="search" />
+        LIMIT #{params.offset}, #{params.recordSize}
+    </select>
+    <select id="countBoardDetail" resultType="int">
+        SELECT COUNT(*)
+        FROM BOARD_DETAIL
+        WHERE `CB_TYPE` = #{cb_type}
+        AND BD_SHOW =true
+        <include refid="search" />
+        LIMIT #{params.offset}, #{params.recordSize}
+    </select>
+
+    <insert id="savedBoard" parameterType="com.dboard.myproj.data.entity.BoardDetailVO">
+        INSERT INTO BOARD_DETAIL (
+                                `TITLE`
+                                ,`MEMBER_ID`
+                                ,`CONTENTS`
+                                ,`BD_DT`
+                                ,`FILE_PATH`
+                                ,CB_TYPE
+                                ,`BD_SHOW`
+        )values(
+                #{title}
+                ,#{member_id}
+                ,#{contents}
+                ,#{bd_dt}
+                ,#{file_path}
+                ,#{cb_type}
+                ,true
+
+                       )
+
+    </insert>
+    
+    <select id="findBoardDetailById" parameterType="int"
+            resultType="com.dboard.myproj.data.entity.BoardDetailVO">
+        SELECT `BD_ID`
+             , `TITLE`
+             , `MEMBER_ID`
+             , `CONTENTS`
+             , `BD_DT`
+             , `FILE_PATH`
+             , `CB_TYPE`
+             , `BD_SHOW`
+        FROM BOARD_DETAIL
+        WHERE  `BD_ID` = #{bd_id}
+
+    </select>
+
+    <insert id="saveComment" parameterType="com.dboard.myproj.data.entity.CommentsVO">
+        INSERT INTO COMMENTS(
+                `COMMENTS`  ,
+                 `COM_DT`   ,
+                 `BD_ID`    ,
+                 `MEMBER_ID`,
+                 `COM_SHOW`
+        )VALUES (
+                 #{comments}
+                 ,#{com_dt}
+                 ,#{bd_id}
+                 ,#{member_id}
+                 ,true
+                        )
+    </insert>
+    <select id="findAllCommentsByBd" parameterType="int" resultType="com.dboard.myproj.data.entity.CommentsVO">
+        SELECT
+            `COM_ID`
+        ,   `COMMENTS`
+        ,   `COM_DT`
+        ,   `BD_ID`
+        ,   `MEMBER_ID`
+        FROM COMMENTS
+        WHERE COM_SHOW = true
+        AND `BD_ID` = #{bd_id}
+    </select>
+    <update id="updateMemberDetail"
+            parameterType="com.dboard.myproj.data.dto.AdminMemberDTO">
+        UPDATE CLASS_MEMBER SET
+                `EMAIL`  =#{email}     ,
+                `MEMBER_NM` =#{member_nm}      ,
+                `PHONE_NUM` =#{phone_num}     ,
+                `PARTY`     =#{party}
+        WHERE `MEMBER_ID`=#{member_id}
+    </update>
+    <select id="countCourseRegistrationById"
+            parameterType="com.dboard.myproj.data.dto.ClassCodeDTO"
+            resultType="String">
+        SELECT
+            `MEM_CLS_ID`
+        FROM COURSE_REGISTRATION
+        WHERE `CLASS_ID` =#{class_id}
+        AND `MEMBER_ID` = #{member_id}
+    </select>
+
+    <delete id="deleteCourseRegistrationByID"
+            parameterType="String">
+        DELETE FROM COURSE_REGISTRATION
+        WHERE `MEM_CLS_ID`= #{id}
+    </delete>
+    <insert id="saveCourseRegistration"
+            parameterType="com.dboard.myproj.data.dto.ClassCodeDTO">
+        INSERT INTO COURSE_REGISTRATION(
+            `MEMBER_ID`
+            ,`CLASS_ID`
+        )VALUES (
+                  #{member_id}
+                 ,#{class_id}
+                        )
+    </insert>
+    <update id="deleteBoardFilePathById" parameterType="int">
+        UPDATE BOARD_DETAIL SET FILE_PATH =''
+        WHERE `BD_ID` = #{bd_id}
+    </update>
+
+    <update id="updateBoardDetail"
+            parameterType="com.dboard.myproj.data.entity.BoardDetailVO">
+        UPDATE BOARD_DETAIL
+        SET `FILE_PATH` =#{file_path}
+            ,`CONTENTS` = #{contents}
+        WHERE `BD_ID` = #{bd_id}
+    </update>
+
+    <update id="deleteBoardById"
+            parameterType="int">
+        UPDATE BOARD_DETAIL
+        SET `BD_SHOW` = false
+        WHERE `BD_ID` = #{bd_id}
+    </update>
+    <update id="deleteCommentById"
+            parameterType="int">
+        UPDATE COMMENTS
+        SET `COM_SHOW`=false
+        WHERE `COM_ID` =#{com_id}
+    </update>
+
+</mapper>

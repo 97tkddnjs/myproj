@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -174,5 +175,82 @@ public class UserService {
     public List<CommentsVO> findAllCommentsByBd(int bd_id) {
 
         return dao.findAllCommentsByBd(bd_id);
+    }
+
+    public int updateUserInfo(MemberDetailFormDTO memberDetailFormDTO) {
+
+        AdminMemberDTO member = memberDetailFormDTO.getMember();
+        List<ClassCodeDTO> classCodes = memberDetailFormDTO.getClassCodes();
+
+
+        // member 먼저 update 하고
+        dao.updateMemberDetail(member);
+
+        // i 중 course_registration 부분에 없으면 save , 있으면 delete
+
+        for (ClassCodeDTO classCodeDTO: classCodes ) {
+            List<String> data = dao.countCourseRegistrationById(classCodeDTO);
+            // count ==1 이미 있는 데 존재 하지 않어야 해~
+            if(!classCodeDTO.isRegisterClassYN() && data.size()==1){
+
+                String id = data.get(0);
+                //delete
+                dao.deleteCourseRegistrationByID(id);
+
+            }
+
+            // 없는 데 존재해야 해~
+            if(classCodeDTO.isRegisterClassYN() && data.size()==0){
+                // save
+
+                dao.saveCourseRegistration(classCodeDTO);
+            }
+        }
+        return 1;
+    }
+
+    @Transactional
+    public Boolean updateBoard(BoardRegDTO boardRegDTO,int bd_id) throws IOException {
+
+        // 찾아서 정보를 가져와~
+
+        BoardDetailVO boardDetailVO = dao.findBoardDetailById(bd_id);
+        boardDetailVO.setContents(boardRegDTO.getCnts());
+
+
+        // file 도 추가 되었어 ~ 그럼 file 도 업데이트
+        MultipartFile fileInfo = boardRegDTO.getAddFile();
+        String savedFilePath =null;
+        if(!fileInfo.isEmpty()){
+
+            savedFilePath = savedFilePath(fileInfo);
+            boardDetailVO.setFile_path(savedFilePath);
+
+        }
+        //update
+        int flag= dao.updateBoardDetail(boardDetailVO);
+
+        savedFile(fileInfo, savedFilePath);
+
+        if(flag>0){
+            return true;
+        }
+
+        return false;
+    }
+
+    public int deleteFilePathById(int bd_id) {
+
+        return dao.deleteBoardFilePathById(bd_id);
+    }
+
+    public int deleteBoardById(int bd_id) {
+        return dao.deleteBoardById(bd_id);
+    }
+
+    @Transactional
+    public int deleteCommentById(int com_id) {
+
+        return dao.deleteCommentById(com_id);
     }
 }

@@ -2,11 +2,8 @@ package com.dboard.myproj.mysite.user.controller;
 
 
 import com.dboard.myproj.config.AuthConst;
-import com.dboard.myproj.data.dto.BoardRegDTO;
-import com.dboard.myproj.data.dto.ClassBoardTypeDTO;
-import com.dboard.myproj.data.dto.ClassCodeDTO;
+import com.dboard.myproj.data.dto.*;
 
-import com.dboard.myproj.data.dto.SignupDTO;
 import com.dboard.myproj.data.entity.CommentsVO;
 import com.dboard.myproj.data.entity.MemberVO;
 import com.dboard.myproj.mysite.user.service.UserService;
@@ -78,6 +75,42 @@ public class RestUserController {
     }
 
 
+    @PostMapping("/board/update/{bd_id}")
+    public ResponseEntity boardUpdate(@ModelAttribute BoardRegDTO boardRegDTO,
+                                      @PathVariable int bd_id) throws IOException {
+        log.info("========== into the here   " + boardRegDTO);
+        Boolean flag = service.updateBoard(boardRegDTO,bd_id);
+        if(flag){
+            return ResponseEntity.ok("ok");
+        }else{
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("fail");
+        }
+    }
+
+    @PostMapping("/board/delete/file/{bd_id}")
+    public ResponseEntity boardFileDelete(@PathVariable int bd_id) {
+
+        int flag = service.deleteFilePathById(bd_id);
+        if(flag>0){
+            return ResponseEntity.ok("ok");
+        }else{
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("fail");
+        }
+    }
+
+    @PostMapping("/board/delete/{bd_id}")
+    public ResponseEntity boardDelete(@PathVariable int bd_id){
+
+        int flag = service.deleteBoardById(bd_id);
+        if(flag>0){
+            return ResponseEntity.ok("ok");
+        }else{
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("fail");
+        }
+
+    }
+
+
     @PostMapping("/update/comment")
     public ResponseEntity commentUpdate(@RequestBody CommentsVO comment,
                                         HttpServletRequest request){
@@ -101,9 +134,26 @@ public class RestUserController {
 
     }
 
-    public ResponseEntity userInfoUpdate(@ModelAttribute SignupDTO signupDTO){
+    @PostMapping("/comment/delete/{com_id}")
+    public ResponseEntity commentDelete(@PathVariable int com_id){
+        int flag = service.deleteCommentById(com_id);
+        if(flag > 0){
+            return ResponseEntity.ok("ok");
+        }else{
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("fail");
+        }
+    }
 
-        return ResponseEntity.ok("ok");
+    @PostMapping("/update/member")
+    public ResponseEntity userInfoUpdate(@RequestBody MemberDetailFormDTO memberDetailFormDTO){
+
+        int flag = service.updateUserInfo(memberDetailFormDTO);
+
+        if(flag > 0){
+            return ResponseEntity.ok("ok");
+        }else{
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("fail");
+        }
 
     }
 

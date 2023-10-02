@@ -34,4 +34,20 @@ public interface UserDAO {
     int saveComment(CommentsVO comment);
 
     List<CommentsVO> findAllCommentsByBd(int bd_id);
+
+    List<String> countCourseRegistrationById(ClassCodeDTO classCodeDTO);
+
+    void updateMemberDetail(AdminMemberDTO member);
+
+    void deleteCourseRegistrationByID(String id);
+
+    void saveCourseRegistration(ClassCodeDTO classCodeDTO);
+
+    int deleteBoardFilePathById(int bd_id);
+
+    int updateBoardDetail(BoardDetailVO boardDetailVO);
+
+    int deleteBoardById(int bd_id);
+
+    int deleteCommentById(int com_id);
 }

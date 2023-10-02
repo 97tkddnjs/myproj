@@ -14,23 +14,26 @@
 
                     <choose>
                         <when test="1== searchType">
-                            AND MEMBER_ID LIKE CONCAT('%', #{keyword}, '%')
+                            and member_id like concat('%', #{keyword}, '%')
                         </when>
                         <when test="2== searchType">
-                            AND EXISTS  (
+                            and exists  (
                             select restrict_id
-                            FROM   restrict_member
-                            WHERE  MEMBER_ID = cm.MEMBER_ID
-                            AND    RESTRICT_SHOW=TRUE)
+                            from   restrict_member
+                            where  member_id = cm.member_id
+                            and    restrict_show=true)
+
                         </when>
                         <when test="3== searchType">
-                            AND (SELECT MEMBER_ID
-                            FROM course_registration cr
-                            WHERE ( select SUBSTR(CLASS_YMD,1,4)
-                                    from class_code WHERE CLASS_ID= cr.CLASS_ID AND DEL_YN='N') =  #{keyword}) = cm.`MEMBER_ID`
+                            and (select member_id
+                            from course_registration cr
+                            where ( select substr(class_ymd,1,4)
+                            from class_code where class_id= cr.class_id and del_yn='n') =  #{keyword}) = cm.`member_id`
+
                         </when>
                         <when test="4== searchType">
-                            WHERE CLASS_YMD LIKE CONCAT( #{keyword}, '%')
+                            where class_ymd like concat( #{keyword}, '%')
+
                         </when>
                     </choose>
                 </when>
@@ -47,84 +50,89 @@
 
     <select id="findAllUserMember" parameterType="com.dboard.myproj.config.page.SearchDto"
             resultType="com.dboard.myproj.data.dto.AdminMemberDTO">
-        SELECT
-            `MEMBER_ID`         ,
-            `EMAIL`      ,
-            `PASSWORD`   ,
-            `MEMBER_NM`       ,
-            `PHONE_NUM`      ,
-            `PARTY`         ,
-            `GRADE_ID`      ,
-            `REG_DT`        ,
-            EXISTS  (
-                select restrict_id
-                FROM   restrict_member
-                WHERE  MEMBER_ID = cm.MEMBER_ID
-                AND    RESTRICT_SHOW=TRUE) as `RESTRICT`
-        FROM CLASS_MEMBER cm
-        WHERE GRADE_ID= 2
+        select
+        `member_id`         ,
+        `email`      ,
+        `password`   ,
+        `member_nm`       ,
+        `phone_num`      ,
+        `party`         ,
+        `grade_id`      ,
+        `reg_dt`        ,
+        exists  (
+        select restrict_id
+        from   restrict_member
+        where  member_id = cm.member_id
+        and    restrict_show=true) as `restrict`
+        from class_member cm
+        where grade_id= 2
+
         <include refid="search" />
         LIMIT #{offset}, #{recordSize}
     </select>
 
     <select id="countMember" parameterType="com.dboard.myproj.config.page.SearchDto"
             resultType="int">
-        SELECT
-            COUNT(*)
-        FROM CLASS_MEMBER cm
-        WHERE GRADE_ID= 2
+        select
+        count(*)
+        from class_member cm
+        where grade_id= 2
+
         <include refid="search" />
     </select>
 
     <select id="findUserMemberByID" parameterType="String"
             resultType="com.dboard.myproj.data.dto.AdminMemberDTO">
 
-        SELECT
-            `MEMBER_ID`         ,
-            `EMAIL`      ,
-            `PASSWORD`   ,
-            `MEMBER_NM`       ,
-            `PHONE_NUM`      ,
-            `PARTY`         ,
-            `GRADE_ID`      ,
-            `REG_DT`        ,
-            EXISTS  (
+        select
+            `member_id`         ,
+            `email`      ,
+            `password`   ,
+            `member_nm`       ,
+            `phone_num`      ,
+            `party`         ,
+            `grade_id`      ,
+            `reg_dt`        ,
+            exists  (
                     select restrict_id
-                    FROM   restrict_member
-                    WHERE  MEMBER_ID = cm.MEMBER_ID
-                      AND    RESTRICT_SHOW=TRUE) as `RESTRICT`
-        FROM CLASS_MEMBER cm
-        WHERE `MEMBER_ID` = #{member_id}
+                    from   restrict_member
+                    where  member_id = cm.member_id
+                      and    restrict_show=true) as `restrict`
+        from class_member cm
+        where `member_id` = #{member_id}
+
     </select>
 
     <select id="findAllClassCode" parameterType="com.dboard.myproj.config.page.SearchDto"
              resultType="com.dboard.myproj.data.entity.ClassCodeVO">
-        SELECT
-            `CLASS_ID`  ,
-            `CLASS_NM`  ,
-            `CLASS_YMD` ,
-            `DEL_YN`
-        FROM CLASS_CODE
+        select
+        `class_id`  ,
+        `class_nm`  ,
+        `class_ymd` ,
+        `del_yn`
+        from class_code
+
         <include refid="search" />
         LIMIT #{offset}, #{recordSize}
     </select>
 
     <select id="countClassCode" parameterType="com.dboard.myproj.config.page.SearchDto"
             resultType="int">
-        SELECT
-        COUNT(*)
-        FROM CLASS_CODE
+        select
+        count(*)
+        from class_code
+
         <include refid="search" />
     </select>
     
     
     <insert id="saveClassCode" parameterType="com.dboard.myproj.data.dto.ClassCodeDTO">
 
-        INSERT INTO CLASS_CODE (
-            `CLASS_NM`  ,
-            `CLASS_YMD` ,
-            `DEL_YN`)
-        VALUES
+        insert into class_code (
+            `class_nm`  ,
+            `class_ymd` ,
+            `del_yn`)
+        values
             (
              #{class_nm},
              #{class_ymd},
@@ -132,24 +140,25 @@
             )
 
 
+
     </insert>
 
 
-    <insert id="saveClassBoardType" parameterType="com.dboard.myproj.data.dto.ClassCodeDTO">
+    <insert id="saveClassBoardTypeDefault" parameterType="com.dboard.myproj.data.dto.ClassCodeDTO">
 
-        INSERT INTO CLASS_BOARD_TYPE (
-            `CLASS_ID`  ,
-            `BOARD_ID` ,
-            `CB_SHOW`)
-        VALUES
-            (
-                (SELECT `CLASS_ID`
-                FROM CLASS_CODE
-                WHERE `CLASS_NM` = #{class_nm} AND `CLASS_YMD` = #{class_ymd})
-                , 1
-                , 'N'
+        insert into class_board_type (
+                   `class_id`  ,
+                   `board_id` ,
+                   `cb_show`)
+               values
+                   (
+                       (select `class_id`
+                       from class_code
+                       where `class_nm` = #{class_nm} and `class_ymd` = #{class_ymd})
+                       , 1
+                       , 'N'
 
-            )
+                   )
 
 
     </insert>
@@ -159,107 +168,153 @@
             parameterType="String"
             resultType="com.dboard.myproj.data.entity.ClassCodeVO">
 
-        SELECT
-                    `CLASS_ID`  ,
-                    `CLASS_NM`  ,
-                    `CLASS_YMD` ,
-                    `DEL_YN`
-        FROM CLASS_CODE
-        WHERE `CLASS_ID`=#{classId}
+         select
+                    `class_id`  ,
+                    `class_nm`  ,
+                    `class_ymd` ,
+                    `del_yn`
+        from class_code
+        where `class_id`=#{classid}
+
 
     </select>
 
     <update id="updateClassCodeById"
             parameterType="com.dboard.myproj.data.dto.ClassCodeDTO">
-        UPDATE CLASS_CODE
-        SET `DEL_YN` = #{del_yn}
-        WHERE `CLASS_ID`=#{class_id}
+        update class_code
+        set `del_yn` = #{del_yn}
+        where `class_id`=#{class_id}
+
     </update>
 
 
     <select id="findAllBoard" parameterType="com.dboard.myproj.config.page.SearchDto"
             resultType="com.dboard.myproj.data.dto.AdminBoardDTO">
 
-        SELECT
-            cbt.CLASS_ID ,
-            cc.CLASS_YMD,
-            cc.CLASS_NM,
-            (SELECT BOARD_NM from board_type bt where bt.BOARD_ID = cbt.BOARD_ID) as board_nm
-        FROM class_board_type as cbt inner join class_code as cc on cbt.CLASS_ID= cc.CLASS_ID
-        WHERE  cc.DEL_YN ='N' AND CBT.CB_SHOW='N' ;
+        select
+             cbt.class_id ,
+             cc.class_ymd,
+             cc.class_nm,
+             (select board_nm from board_type bt where bt.board_id = cbt.board_id) as board_nm
+         from class_board_type as cbt inner join class_code as cc on cbt.class_id= cc.class_id
+         where  cc.del_yn ='N' and cbt.cb_show='N' ;
+
 
     </select>
 
     <select id="findCourseRegistrationByMemberID" parameterType="String"
             resultType="com.dboard.myproj.data.dto.ClassCodeDTO">
-        SELECT
-            CR.CLASS_ID		,
-            (SELECT CLASS_NM FROM CLASS_CODE CC WHERE  CC.CLASS_ID = CR.CLASS_ID) AS CLASS_NM		,
-            (SELECT  CLASS_YMD FROM CLASS_CODE CC WHERE  CC.CLASS_ID = CR.CLASS_ID) AS CLASS_YMD
-        FROM COURSE_REGISTRATION CR
-        WHERE 1=1
-        AND `MEMBER_ID` = #{memberID} ;
+        select
+            cr.class_id		,
+            (select class_nm from class_code cc where  cc.class_id = cr.class_id) as class_nm		,
+            (select  class_ymd from class_code cc where  cc.class_id = cr.class_id) as class_ymd
+        from course_registration cr
+        where 1=1
+        and `member_id` = #{memberid} ;
+
     </select>
 
     <select id="findRestrictMemberById"
             parameterType="String"
             resultType="int">
+        select count(*)
+        from restrict_member
+        where `member_id` = #{member_id}
 
-        SELECT COUNT(*)
-        FROM RESTRICT_MEMBER
-        WHERE `MEMBER_ID` = #{member_id}
     </select>
 
-    <update id="updateRestrictMember">
-        UPDATE RESTRICT_MEMBER
-        SET `RESTRICT_SHOW` = #{restrict}
-        WHERE `MEMBER_ID` = #{member_id}
+    <update id="updateRestrictMember" parameterType="com.dboard.myproj.data.dto.AdminMemberDTO">
+        update restrict_member
+        set `restrict_show` = #{restrict}
+        where `member_id` = #{member_id}
+
     </update>
     <insert id="saveRestrictMemberById" parameterType="String">
-        INSERT INTO RESTRICT_MEMBER(
-            `MEMBER_ID`
-            ,`RESTRICT_SHOW`
-        )VALUES (
-            #{member_id}
-            , true
-                        )
+        insert into restrict_member(
+              `member_id`
+              ,`restrict_show`
+          )values (
+              #{member_id}
+              , true
+                          )
+
     </insert>
 
     <select id="findAllBoardType"
             resultType="com.dboard.myproj.data.entity.BoardTypeVO">
-        SELECT
-                `BOARD_ID`
-            ,   `BOARD_NM`
-        FROM BOARD_TYPE;
+        select
+                `board_id`
+            ,   `board_nm`
+        from board_type;
+
     </select>
-    <select id="findRegClassByClassId" parameterType="int"
-            resultType="com.dboard.myproj.data.dto.BoardTypeDTO">
-        SELECT
-             `BOARD_ID`
-            ,`BOARD_NM`
-            , EXISTS (
-                SELECT BOARD_ID
-                FROM CLASS_BOARD_TYPE CBT
-                WHERE CLASS_ID=#{classId}
-                  AND CBT.BOARD_ID = BT.BOARD_ID ) AS `REGISTER`
-        FROM BOARD_TYPE BT;
+    <select id="countClassBoardTypeByID" parameterType="map"
+            resultType="com.dboard.myproj.data.dto.ClassBoardTypeDTO">
+        select
+              `cb_type`
+             ,`cb_show`
+        from class_board_type cbt
+        where  `board_id` =#{boardid}
+        and    `class_id` =#{classid};
+
     </select>
 
     <insert id = "saveBoardType" parameterType="String">
-        INSERT INTO BOARD_TYPE(
-                               `BOARD_NM`
-        )VALUES (
+        insert into board_type(
+                               `board_nm`
+        )values (
                  #{boardnm}
                         )
-    </insert>
-    <select id="findClassBoardTypeByClassId" parameterType="int"
-    resultType="com.dboard.myproj.data.dto.BoardTypeDTO">
-        SELECT
-            `BOARD_ID`
-        ,   (SELECT BOARD_NM FROM BOARD_TYPE BT WHERE BT.BOARD_ID = CBT.BOARD_ID) AS `BOARD_NM`
 
-        FROM CLASS_BOARD_TYPE CBT
-        WHERE CBT.CLASS_ID = #{classId}
-        AND CBT.CB_SHOW='N'
+    </insert>
+    <select id="findClassBoardTypeByClassId" parameterType="String"
+    resultType="com.dboard.myproj.data.dto.ClassBoardTypeDTO">
+        select
+            `cb_type`
+        ,   `board_id`
+        ,   (select board_nm from board_type bt where bt.board_id = cbt.board_id) as `board_nm`
+
+        from class_board_type cbt
+        where cbt.class_id = #{classid}
+        and cbt.cb_show='N'
+
     </select>
+    <update id="updateClassBoardTypeById"
+        parameterType="hashmap"
+    >
+        update class_board_type
+        set `cb_show` =#{cb_show}
+        where `cb_type` = #{cb_type}
+
+
+    </update>
+    <insert id="saveClassBoardTypeById">
+        insert into class_board_type (
+            `class_id`  ,
+            `board_id` ,
+            `cb_show`)
+        values
+            (
+            #{classid}
+            , #{boardid}
+            , 'N'
+
+            )
+
+
+    </insert>
+    <select id="findRegClassByClassId" parameterType="int"
+            resultType="com.dboard.myproj.data.dto.BoardTypeDTO">
+        select `board_id`
+             ,`board_nm`
+             , exists (
+                 select board_id
+                 from class_board_type cbt
+                 where class_id=#{classid}
+                   and cbt.board_id = bt.board_id and cbt.cb_show='N' )
+            as `register`
+        from board_type bt;
+
+    </select>
+
 </mapper>

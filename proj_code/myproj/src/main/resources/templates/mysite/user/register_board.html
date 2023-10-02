@@ -48,7 +48,7 @@
                         alert(result)
                         alert("게시글 작성 실패 \n 관리자에게 문의 바랍니다");
                     }
-                    location.href=history.back();
+                    location.href=document.referrer;
                 } //call back function
                 , error : function(xhr) {
                     alert(xhr)

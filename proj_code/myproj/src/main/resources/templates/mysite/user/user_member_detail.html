@@ -89,16 +89,19 @@
                 ,
                 classCodes: classCodeDatas
             };
+            console.log(JSON.stringify(formData));
             // $("#signUpInfo").submit();
             if (window.confirm("정말 변경 하시겠습니까?")) {
                 $.ajax({
                     type: "POST",
-                    url: "/signup",
+                    url: "/mysite/user/rest/update/member",
                     data: JSON.stringify(formData),
                     contentType: "application/json",
                     success: function(response, textStatus, xhr) {
                         if (xhr.status === 200) {
+                            alert("변경 성공")
                             console.log("성공:", response);
+                            location.href = "/mysite/user/home"
                             // 상태 코드가 200 (OK)인 경우에 처리
                         } else {
                             console.log("다른 상태 코드:", xhr.status);
@@ -106,8 +109,9 @@
                         }
                     },
                     error: function(xhr, textStatus, errorThrown) {
+                        alert("error");
                         console.log("에러:", xhr.status, errorThrown);
-                        location.href = "/"
+                        location.href = "/mysite/user/home"
                         // 서버로 데이터 전송 중 오류 발생
                     }
                 });

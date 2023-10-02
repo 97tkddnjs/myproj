@@ -136,10 +136,10 @@ public class AdminController {
     public String boardDetail( @PathVariable("classId") int classId,
             @PathVariable("classNm") String classNm ,Model model) {
 
-        log.info("/mysite/admin/board/detail/"+classId);
+        log.info("/mysite/admin/board/detail/"+classId +"/"+classNm);
 
         List<BoardTypeDTO> boardTypeDTOS= service.findRegClassByClassId(classId);
-
+        log.info("out out");
         model.addAttribute("regclass", classNm);
         model.addAttribute("classId", classId);
         model.addAttribute("regboards",boardTypeDTOS);
